@@ -3,7 +3,12 @@ name: Fetch ENTSO-E data
 on:
   schedule:
     - cron: "23 13 * * *"   # every day, 13:23 UTC (after day-ahead results are published)
-  workflow_dispatch: {}      # "Run workflow" button in the Actions tab
+  workflow_dispatch:         # "Run workflow" button in the Actions tab
+    inputs:
+      only_oil:
+        description: "Only refresh the Oil Bulletin and dashboard files"
+        type: boolean
+        default: false
 
 permissions:
   contents: write            # lets the job commit the updated CSV files
@@ -55,6 +60,7 @@ jobs:
       # Each part is committed as soon as it finishes, so a slow or failed part
       # never throws away what the others downloaded.
       - name: Day-ahead prices
+        if: ${{ !inputs.only_oil }}
         timeout-minutes: 120
         run: python -u src/fetch_entsoe.py prices
       - name: Commit prices
@@ -62,7 +68,7 @@ jobs:
         run: /tmp/commit.sh prices
 
       - name: Generation per type
-        if: always() && steps.when.outputs.weekly == 'true'
+        if: always() && steps.when.outputs.weekly == 'true' && !inputs.only_oil
         timeout-minutes: 150
         run: python -u src/fetch_entsoe.py generation
       - name: Commit generation
@@ -70,7 +76,7 @@ jobs:
         run: /tmp/commit.sh generation
 
       - name: Load
-        if: always() && steps.when.outputs.weekly == 'true'
+        if: always() && steps.when.outputs.weekly == 'true' && !inputs.only_oil
         timeout-minutes: 100
         run: python -u src/fetch_entsoe.py load
       - name: Commit load

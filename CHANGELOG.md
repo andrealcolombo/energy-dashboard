@@ -5,6 +5,8 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-11
 
+- **Fix: Oil Bulletin EU average** (Claude). The source file has both EU27 (`EU_`) and euro-area (`EUR_`)
+  averages; both were labelled EU. Euro area is now `EA`. Workflow can be run for the Oil Bulletin only.
 - **Dashboard published and weekly update scheduled** (asked by Andrea). The app is a private Claude
   dashboard; a scheduled Claude task refreshes it every Tuesday after the DG ENER newsletter arrives
   (instructions in `ops/weekly_update_prompt.md`).

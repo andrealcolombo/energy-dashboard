@@ -65,7 +65,7 @@ def parse(book: dict[str, pd.DataFrame]) -> pd.DataFrame:
                 if prod not in PRODUCTS:
                     continue
                 cc = m.group("cc").upper()
-                cc = "EU" if cc in ("EU", "EUR") else cc
+                cc = "EA" if cc == "EUR" else cc  # EU_ = EU27 average, EUR_ = euro area average
                 vals = pd.to_numeric(body.iloc[:, j], errors="coerce")
                 rows.append(pd.DataFrame({"date": dates, "country": cc,
                                           "product": PRODUCTS[prod], "eur_per_litre": vals / 1000}))
