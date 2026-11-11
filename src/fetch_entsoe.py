@@ -27,7 +27,7 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent))
 import config  # noqa: E402
 
-DATA = Path(__file__).resolve().parent.parent / "data"
+DATA = Path(os.environ.get("DATA_DIR") or Path(__file__).resolve().parent.parent / "data")
 PRICES = DATA / "prices_daily.csv"
 GEN = DATA / "generation_monthly.csv"
 LOAD = DATA / "load_monthly.csv"
@@ -176,6 +176,10 @@ class _Skip(Exception):
 
 
 def run(client, parts=("prices", "generation", "load")) -> dict:
+    only = [c.strip() for c in os.environ.get("ONLY_COUNTRIES", "").split(",") if c.strip()]
+    if only:  # used by the parallel backfill workflow: one country per job
+        config.COUNTRIES = {c: n for c, n in config.COUNTRIES.items() if c in only}
+        config.PRICE_ZONES = {z: c for z, c in config.PRICE_ZONES.items() if c in only}
     DATA.mkdir(exist_ok=True)
     tz = config.LOCAL_TZ
     start0 = pd.Timestamp(config.START_DATE, tz=tz)
