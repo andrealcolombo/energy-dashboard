@@ -28,6 +28,17 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # Prices every day; generation mix and load only on Sundays (or when run by hand),
+      # since they move slowly and are ready for the Monday update of the app.
+      - name: Weekly or daily?
+        id: when
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || [ "$(date -u +%u)" = "7" ]; then
+            echo "weekly=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "weekly=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up git
         run: |
           git config user.name "github-actions[bot]"
@@ -51,23 +62,23 @@ jobs:
         run: /tmp/commit.sh prices
 
       - name: Generation per type
-        if: always()
+        if: always() && steps.when.outputs.weekly == 'true'
         timeout-minutes: 150
         run: python -u src/fetch_entsoe.py generation
       - name: Commit generation
-        if: always()
+        if: always() && steps.when.outputs.weekly == 'true'
         run: /tmp/commit.sh generation
 
       - name: Load
-        if: always()
+        if: always() && steps.when.outputs.weekly == 'true'
         timeout-minutes: 100
         run: python -u src/fetch_entsoe.py load
       - name: Commit load
-        if: always()
+        if: always() && steps.when.outputs.weekly == 'true'
         run: /tmp/commit.sh load
 
       - name: EC Weekly Oil Bulletin
-        if: always()
+        if: always() && steps.when.outputs.weekly == 'true'
         continue-on-error: true
         timeout-minutes: 15
         run: python src/fetch_oil_bulletin.py

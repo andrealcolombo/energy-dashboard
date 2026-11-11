@@ -18,7 +18,7 @@ Days and months follow Brussels time (CET/CEST).
 1. Settings → Secrets and variables → Actions → New repository secret: `ENTSOE_API_KEY`.
 2. Actions → *Fetch ENTSO-E data* → *Run workflow*. The first run backfills from 2021.
 
-The workflow then runs every day at 13:23 UTC. Each run refetches the last 10 days of prices
+The workflow runs every day at 13:23 UTC for prices; generation, load and the Oil Bulletin are updated on Sundays.
 and the last two months of generation and load, so later corrections by TSOs are picked up.
 
 Countries, zones and start date are set in `src/config.py`.
