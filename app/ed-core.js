@@ -1,10 +1,9 @@
 // ---------- shared helpers (no writes outside drawings) ----------
 window.ED = (function () {
-  const fmt1 = d3.format(',.1f'), fmt0 = d3.format(',.0f'), fmt2 = d3.format(',.2f');
   const it = d3.formatLocale({decimal: ',', thousands: '.', grouping: [3], currency: ['€', '']});
   const f = {n0: it.format(',.0f'), n1: it.format(',.1f'), n2: it.format(',.2f'), n3: it.format(',.3f'), p1: it.format('+,.1f'), p0: it.format('+,.0f')};
   const parseDay = d3.utcParse('%Y-%m-%d'), parseMonth = d3.utcParse('%Y-%m');
-  const dayFmt = d3.utcFormat('%d/%m/%Y'), monthFmt = d3.utcFormat('%b %Y');
+  const dayFmt = d3.utcFormat('%d/%m/%Y');
   const MESI = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
   const mLabel = (d) => MESI[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
   const NAMES = {EU27:'UE27', AT:'Austria', BE:'Belgio', BG:'Bulgaria', HR:'Croazia', CY:'Cipro', CZ:'Cechia', DK:'Danimarca', EE:'Estonia', FI:'Finlandia', FR:'Francia', DE:'Germania', GR:'Grecia', HU:'Ungheria', IE:'Irlanda', IT:'Italia', LV:'Lettonia', LT:'Lituania', LU:'Lussemburgo', MT:'Malta', NL:'Paesi Bassi', PL:'Polonia', PT:'Portogallo', RO:'Romania', SK:'Slovacchia', SI:'Slovenia', ES:'Spagna', SE:'Svezia', EU:'UE'};
@@ -27,7 +26,7 @@ window.ED = (function () {
     else if (msg) { const p = document.createElement('p'); p.className = 'muted'; p.textContent = msg; el.append(p); }
   }
 
-  // Multi-series line chart. series: [{key, label, color, values:[{x:Date, y:Number}], dash?}]
+  // Multi-series line chart. series: [{label, color, values:[{x:Date, y:Number}], dash?, width?}]
   function lineChart(el, series, o = {}) {
     el.replaceChildren();
     const W = Math.max(280, el.clientWidth), H = o.height || 260;
@@ -60,7 +59,6 @@ window.ED = (function () {
       svg.append('path').datum(s.values).attr('fill', 'none').style('stroke', s.color).attr('stroke-width', s.width || 1.6).attr('stroke-dasharray', s.dash || null).attr('d', line);
       if (s.values.length === 1) svg.append('circle').attr('cx', x(s.values[0].x)).attr('cy', y(s.values[0].y)).attr('r', 4).style('fill', s.color);
     });
-    // tooltip
     const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
     const rule = svg.append('line').attr('y1', m.t).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-reference)').style('display', 'none');
     const xs = Array.from(new Set(all.map((d) => +d.x))).sort((a, b) => a - b);
@@ -79,7 +77,7 @@ window.ED = (function () {
       .on('pointerleave', () => { tip.hidden = true; rule.style('display', 'none'); });
   }
 
-  // Stacked monthly shares. rows: [{x:Date, parts:{group:value}}]
+  // Stacked monthly shares. rows: [{x:Date, parts:{group:value}, total}]
   function stackChart(el, rows, groups, colors, o = {}) {
     el.replaceChildren();
     if (!rows.length) { placeholder(el, 'empty', 'Nessun dato'); return; }
@@ -105,7 +103,7 @@ window.ED = (function () {
       .on('pointerleave', () => { tip.hidden = true; });
   }
 
-  // Horizontal grouped bars for categories. data: [{cat, a, b}] with labels
+  // Horizontal paired bars by category. data: [{cat, a, b}]
   function pairBars(el, data, la, lb, ca, cb) {
     el.replaceChildren();
     if (!data.length) { placeholder(el, 'empty', 'Nessun dato'); return; }
@@ -113,7 +111,7 @@ window.ED = (function () {
     [[la, ca], [lb, cb]].forEach(([l, c]) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = c; sp.append(i, document.createTextNode(l)); leg.append(sp); });
     el.append(leg);
     const W = Math.max(280, el.clientWidth), rowH = 26, H = data.length * rowH + 10, lw = 150;
-    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
     const x = d3.scaleLinear().domain([0, d3.max(data, (d) => Math.max(d.a || 0, d.b || 0)) || 1]).range([lw, W - 50]);
     data.forEach((d, i) => {
       const g = svg.append('g').attr('transform', `translate(0,${i * rowH + 4})`);
@@ -128,5 +126,5 @@ window.ED = (function () {
   return {f, parseDay, parseMonth, dayFmt, mLabel, name, MIXC, MIXORDER, num, chgSpan, placeholder, lineChart, stackChart, pairBars};
 })();
 
-// page state (not data): selections
+// page state (not data): what the reader has selected
 window.EDS = {areas: ['EU27', 'IT', 'HU', 'DE'], range: 365, mixCountry: 'EU27', nl: 'gas_ttf', fuels: ['EU', 'IT', 'HU'], country: 'IT'};
