@@ -1,0 +1,20 @@
+{
+  "last_run_utc": "2026-11-11T22:10:42Z",
+  "rows": {
+    "prices_daily": 72822,
+    "generation_monthly": 19852,
+    "load_monthly": 1775
+  },
+  "latest": {
+    "prices_daily": "2026-11-12",
+    "generation_monthly": "2026-11",
+    "load_monthly": "2026-11"
+  },
+  "failures": [],
+  "parts": [
+    "prices"
+  ],
+  "failures_by_part": {
+    "prices": []
+  }
+}
