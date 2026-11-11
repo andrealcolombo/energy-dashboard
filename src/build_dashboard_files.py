@@ -89,8 +89,12 @@ def prices(load: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     return recent.drop(columns="month"), monthly
 
 
+CURRENT_MONTH = pd.Timestamp.now(tz="Europe/Brussels").strftime("%Y-%m")
+
+
 def mix() -> pd.DataFrame:
     g = pd.read_csv(DATA / "generation_monthly.csv")
+    g = g[g["month"] < CURRENT_MONTH]  # the running month is incomplete
     g["group"] = g["source"].map(GROUPS).fillna("Altro")
     g = g.groupby(["country", "month", "group"], as_index=False)["gwh"].sum()
     # EU27 only for months where (almost) all countries reported
@@ -107,6 +111,7 @@ def mix() -> pd.DataFrame:
 
 def loadm() -> pd.DataFrame:
     l = pd.read_csv(DATA / "load_monthly.csv")
+    l = l[l["month"] < CURRENT_MONTH]
     n = l.groupby("month")["country"].nunique()
     eu = l[l["month"].isin(n[n >= 25].index)].groupby("month", as_index=False).agg(gwh=("gwh", "sum"))
     eu["country"] = "EU27"
