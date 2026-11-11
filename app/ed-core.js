@@ -44,7 +44,7 @@ window.ED = (function () {
     const yAxis = svg.append('g');
     yAxis.call(d3.axisLeft(y).ticks(5).tickFormat(o.yFmt || f.n0));
     let ml = 8; yAxis.selectAll('text').each(function () { ml = Math.max(ml, this.getComputedTextLength() + 10); });
-    const m = {t: 8, r: 12, b: 22, l: ml};
+    const m = {t: 8, r: 28, b: 22, l: ml};
     x.range([m.l, W - m.r]); y.range([H - m.b, m.t]);
     yAxis.attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(o.yFmt || f.n0));
     yAxis.select('.domain').remove();

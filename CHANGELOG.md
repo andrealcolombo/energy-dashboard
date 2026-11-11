@@ -5,6 +5,9 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-11
 
+- **Dashboard published and weekly update scheduled** (asked by Andrea). The app is a private Claude
+  dashboard; a scheduled Claude task refreshes it every Tuesday after the DG ENER newsletter arrives
+  (instructions in `ops/weekly_update_prompt.md`).
 - **Fix: generation by source** (Claude, found while checking the first full dataset). Two issues inflated
   "Other" and deflated hydro: ENTSO-E labels run-of-river hydro "pondage" (not "poundage"), and for some
   countries/years generation came as (type, Aggregated/Consumption) pairs, so pumping and storage charging
