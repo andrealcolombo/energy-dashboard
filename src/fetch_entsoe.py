@@ -31,6 +31,8 @@ DATA = Path(os.environ.get("DATA_DIR") or Path(__file__).resolve().parent.parent
 PRICES = DATA / "prices_daily.csv"
 GEN = DATA / "generation_monthly.csv"
 LOAD = DATA / "load_monthly.csv"
+GEN_DAILY = DATA / "generation_daily.csv"
+DAILY_KEEP_DAYS = 120  # daily generation is kept only for recent weeks
 STATUS = DATA / "status.json"
 
 PRICE_REFETCH_DAYS = 10  # daily prices: refetch the last N days on every run
@@ -155,6 +157,31 @@ def monthly_generation(df: pd.DataFrame, country: str) -> pd.DataFrame:
     return out[["country", "month", "source", "gwh"]]
 
 
+def daily_generation(df: pd.DataFrame, country: str) -> pd.DataFrame:
+    """Daily GWh per production type, for the recent-weeks view of the mix."""
+    if df is None or df.empty:
+        return pd.DataFrame()
+    if isinstance(df, pd.Series):
+        df = df.to_frame()
+    if isinstance(df.columns, pd.MultiIndex):
+        level1 = df.columns.get_level_values(1)
+        df = df.loc[:, level1 == "Actual Aggregated"]
+        df.columns = df.columns.get_level_values(0)
+    df = to_local(df)
+    cutoff = pd.Timestamp.now(tz=config.LOCAL_TZ).normalize() - pd.Timedelta(days=DAILY_KEEP_DAYS)
+    df = df[df.index >= cutoff]
+    if df.empty:
+        return pd.DataFrame()
+    hrs = interval_hours(df.index)
+    energy = df.mul(hrs, axis=0) / 1000
+    energy["date"] = energy.index.strftime("%Y-%m-%d")
+    out = energy.groupby("date").sum(min_count=1).reset_index().melt(id_vars="date", var_name="source", value_name="gwh")
+    out = out.dropna(subset=["gwh"])
+    out["gwh"] = out["gwh"].round(3)
+    out.insert(0, "country", country)
+    return out[["country", "date", "source", "gwh"]]
+
+
 def monthly_load(obj, country: str) -> pd.DataFrame:
     if obj is None or len(obj) == 0:
         return pd.DataFrame()
@@ -201,6 +228,7 @@ def run(client, parts=("prices", "generation", "load")) -> dict:
 
     # Generation per production type and total load, by country
     gen = read_csv(GEN)
+    gen_daily = read_csv(GEN_DAILY)
     load = read_csv(LOAD)
     back = pd.DateOffset(months=MONTHLY_REFETCH_MONTHS - 1)
     for cc in config.COUNTRIES:
@@ -210,6 +238,7 @@ def run(client, parts=("prices", "generation", "load")) -> dict:
                 raise _Skip
             df = with_retry(client.query_generation, cc, start=start, end=end, psr_type=None)
             gen = merge(gen, monthly_generation(df, cc), ["country", "month", "source"])
+            gen_daily = merge(gen_daily, daily_generation(df, cc), ["country", "date", "source"])
             print(f"generation {cc:8s} ok  from {start.date()}")
         except _Skip:
             pass
@@ -217,6 +246,10 @@ def run(client, parts=("prices", "generation", "load")) -> dict:
             failures.append(f"generation {cc}: {type(exc).__name__}: {str(exc)[:150]}")
             print(f"generation {cc:8s} FAIL {type(exc).__name__}")
         save(gen, GEN)
+        if not gen_daily.empty:
+            keep = (pd.Timestamp.now() - pd.Timedelta(days=DAILY_KEEP_DAYS)).strftime("%Y-%m-%d")
+            gen_daily = gen_daily[gen_daily["date"] >= keep]
+            save(gen_daily, GEN_DAILY)
 
         start = month_floor(window_start(load, "country", cc, "month", start0, back))
         try:

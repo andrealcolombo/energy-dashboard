@@ -109,6 +109,39 @@ def mix() -> pd.DataFrame:
     return g[["country", "month", "group", "renewable", "gwh", "share_pct"]]
 
 
+def mix_weekly() -> pd.DataFrame:
+    """Mix of the last 7 complete days and of the 28 days before, by country and EU27."""
+    f = DATA / "generation_daily.csv"
+    if not f.exists():
+        return pd.DataFrame()
+    g = pd.read_csv(f)
+    g["group"] = g["source"].map(GROUPS).fillna("Altro")
+    today = pd.Timestamp.now(tz="Europe/Brussels").strftime("%Y-%m-%d")
+    g = g[g["date"] < today]  # today is incomplete
+    # Generation is published with a lag: use days that most countries have already reported.
+    per_day = g.groupby("date")["country"].nunique()
+    days = sorted(per_day[per_day >= max(1, int(0.8 * per_day.max()))].index)
+    if len(days) < 35:
+        return pd.DataFrame()
+    last7, prev28 = days[-7:], days[-35:-7]
+    out = []
+    for label, sel in (("ultimi_7", last7), ("prec_28", prev28)):
+        w = g[g["date"].isin(sel)].groupby(["country", "group"], as_index=False)["gwh"].sum()
+        n = g[g["date"].isin(sel)].groupby("country")["date"].nunique()
+        w = w[w["country"].isin(n[n == len(sel)].index)]  # only countries with every day
+        eu = w.groupby("group", as_index=False)["gwh"].sum()
+        eu["country"] = "EU27"
+        w = pd.concat([eu, w], ignore_index=True) if w["country"].nunique() >= 22 else w
+        w["share_pct"] = (100 * w["gwh"] / w.groupby("country")["gwh"].transform("sum")).round(2)
+        w["period"] = label
+        w["from"], w["to"] = sel[0], sel[-1]
+        out.append(w)
+    o = pd.concat(out, ignore_index=True)
+    o["renewable"] = o["group"].isin(RENEWABLE)
+    o["gwh"] = o["gwh"].round(1)
+    return o[["country", "period", "from", "to", "group", "renewable", "gwh", "share_pct"]]
+
+
 def loadm() -> pd.DataFrame:
     l = pd.read_csv(DATA / "load_monthly.csv")
     l = l[l["month"] < CURRENT_MONTH]
@@ -127,6 +160,9 @@ def main():
     m.to_csv(OUT / "prices_monthly.csv", index=False)
     mix().to_csv(OUT / "mix_monthly.csv", index=False)
     loadm().to_csv(OUT / "load_monthly.csv", index=False)
+    mw = mix_weekly()
+    if not mw.empty:
+        mw.to_csv(OUT / "mix_weekly.csv", index=False)
     f = DATA / "oil_bulletin_weekly.csv"
     if f.exists():
         fu = pd.read_csv(f)
