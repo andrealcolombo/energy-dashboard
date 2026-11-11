@@ -5,6 +5,9 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-11
 
+- **Recovery workflow `merge-run.yml`** (Claude, after a GitHub outage). The backfill had downloaded
+  all countries, but artifact uploads failed for 7 of them and the merge job never ran. This workflow merges
+  the artifacts of a given run; the 7 countries were downloaded again.
 - **Weekly mix view** (asked by Andrea). The pipeline keeps 120 days of daily generation per source;
   the app compares the last 7 published days with the 4 weeks before. Why: price spikes are usually
   explained by the short-term mix (less wind or solar, more gas).

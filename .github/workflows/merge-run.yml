@@ -1,0 +1,41 @@
+name: Merge artifacts of an earlier backfill run
+
+# Recovery tool: when a backfill run downloaded data but its merge job did not run,
+# this merges the artifacts that run uploaded and commits them.
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "ID of the backfill run whose artifacts to merge"
+        required: true
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          path: parts
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: ls parts && python src/merge_parts.py parts
+      - run: python src/build_dashboard_files.py
+        continue-on-error: true
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet && exit 0
+          git commit -m "Merge backfill artifacts of run ${{ inputs.run_id }}"
+          git pull --rebase origin main
+          git push
