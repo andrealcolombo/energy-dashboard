@@ -5,6 +5,11 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-11
 
+- **Fix: generation by source** (Claude, found while checking the first full dataset). Two issues inflated
+  "Other" and deflated hydro: ENTSO-E labels run-of-river hydro "pondage" (not "poundage"), and for some
+  countries/years generation came as (type, Aggregated/Consumption) pairs, so pumping and storage charging
+  were counted as generation. Consumption is now dropped and labels normalised. EU27 Oct 2026 after the fix:
+  wind 22%, nuclear 21%, gas 17%, hydro 8%, other 4% (was 21%).
 - **Recovery workflow `merge-run.yml`** (Claude, after a GitHub outage). The backfill had downloaded
   all countries, but artifact uploads failed for 7 of them and the merge job never ran. This workflow merges
   the artifacts of a given run; the 7 countries were downloaded again.

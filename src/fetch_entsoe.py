@@ -135,16 +135,32 @@ def daily_prices(series: pd.Series, zone: str) -> pd.DataFrame:
     return out
 
 
+def generation_only(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep "Actual Aggregated" columns and name them by production type.
+
+    Some countries report generation and consumption (pumping, storage charging) per
+    type. entsoe-py then returns (type, kind) pairs, as a MultiIndex or, when years
+    are concatenated, as plain tuples next to single-level names.
+    """
+    keep, names = [], []
+    for col in df.columns:
+        if isinstance(col, tuple):
+            if len(col) > 1 and col[1] != "Actual Aggregated":
+                continue
+            keep.append(col); names.append(col[0])
+        else:
+            keep.append(col); names.append(col)
+    out = df.loc[:, keep].copy()
+    out.columns = names
+    return out.T.groupby(level=0).sum(min_count=1).T  # merge duplicate names
+
+
 def monthly_generation(df: pd.DataFrame, country: str) -> pd.DataFrame:
     if df is None or df.empty:
         return pd.DataFrame()
     if isinstance(df, pd.Series):
         df = df.to_frame()
-    if isinstance(df.columns, pd.MultiIndex):
-        # Some countries report both generation and consumption (e.g. pumped storage).
-        level1 = df.columns.get_level_values(1)
-        df = df.loc[:, level1 == "Actual Aggregated"]
-        df.columns = df.columns.get_level_values(0)
+    df = generation_only(df)
     df = to_local(df)
     hrs = interval_hours(df.index)
     energy = df.mul(hrs, axis=0) / 1000  # MW x h -> GWh
@@ -163,10 +179,7 @@ def daily_generation(df: pd.DataFrame, country: str) -> pd.DataFrame:
         return pd.DataFrame()
     if isinstance(df, pd.Series):
         df = df.to_frame()
-    if isinstance(df.columns, pd.MultiIndex):
-        level1 = df.columns.get_level_values(1)
-        df = df.loc[:, level1 == "Actual Aggregated"]
-        df.columns = df.columns.get_level_values(0)
+    df = generation_only(df)
     df = to_local(df)
     cutoff = pd.Timestamp.now(tz=config.LOCAL_TZ).normalize() - pd.Timedelta(days=DAILY_KEEP_DAYS)
     df = df[df.index >= cutoff]

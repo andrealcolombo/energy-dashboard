@@ -31,7 +31,8 @@ GROUPS = {
     "Fossil Hard coal": "Carbone e lignite", "Fossil Brown coal/Lignite": "Carbone e lignite",
     "Fossil Peat": "Carbone e lignite", "Fossil Oil shale": "Carbone e lignite",
     "Fossil Oil": "Petrolio",
-    "Hydro Run-of-river and poundage": "Idroelettrico", "Hydro Water Reservoir": "Idroelettrico",
+    "Hydro Run-of-river and poundage": "Idroelettrico", "Hydro Run-of-river and pondage": "Idroelettrico",
+    "Hydro Water Reservoir": "Idroelettrico",
     "Hydro Pumped Storage": "Pompaggi",
     "Wind Onshore": "Eolico", "Wind Offshore": "Eolico",
     "Solar": "Solare",
@@ -41,6 +42,21 @@ GROUPS = {
 }
 RENEWABLE = {"Idroelettrico", "Eolico", "Solare", "Bio, geotermia e altre rinnovabili"}
 FUEL_COUNTRIES = {"EU", "IT", "HU", "DE", "FR", "ES", "AT", "PL"}
+
+
+def clean_sources(g: pd.DataFrame) -> pd.DataFrame:
+    """Normalise ENTSO-E production-type labels.
+
+    For some countries and years entsoe-py returns (type, "Actual Aggregated" |
+    "Actual Consumption") pairs, which end up as text like "('Solar', 'Actual Aggregated')".
+    Keep generation only: consumption (pumping, storage charging) is not generation.
+    """
+    pat = g["source"].str.extract(r"^\('(?P<name>.+)', '(?P<kind>[^']+)'\)$")
+    is_pair = pat["name"].notna()
+    g = g[~(is_pair & (pat["kind"] != "Actual Aggregated"))].copy()
+    g.loc[is_pair, "source"] = pat.loc[g.index[is_pair[g.index]], "name"]
+    keys = [c for c in g.columns if c != "gwh"]
+    return g.groupby(keys, as_index=False)["gwh"].sum()
 
 
 def prices(load: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -93,7 +109,7 @@ CURRENT_MONTH = pd.Timestamp.now(tz="Europe/Brussels").strftime("%Y-%m")
 
 
 def mix() -> pd.DataFrame:
-    g = pd.read_csv(DATA / "generation_monthly.csv")
+    g = clean_sources(pd.read_csv(DATA / "generation_monthly.csv"))
     g = g[g["month"] < CURRENT_MONTH]  # the running month is incomplete
     g["group"] = g["source"].map(GROUPS).fillna("Altro")
     g = g.groupby(["country", "month", "group"], as_index=False)["gwh"].sum()
@@ -114,7 +130,7 @@ def mix_weekly() -> pd.DataFrame:
     f = DATA / "generation_daily.csv"
     if not f.exists():
         return pd.DataFrame()
-    g = pd.read_csv(f)
+    g = clean_sources(pd.read_csv(f))
     g["group"] = g["source"].map(GROUPS).fillna("Altro")
     today = pd.Timestamp.now(tz="Europe/Brussels").strftime("%Y-%m-%d")
     g = g[g["date"] < today]  # today is incomplete
