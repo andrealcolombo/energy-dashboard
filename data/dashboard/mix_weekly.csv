@@ -1,0 +1,437 @@
+country,period,from,to,group,renewable,gwh,share_pct
+EU27,ultimi_7,2026-11-04,2026-11-10,Altro,False,1462.8,2.97
+EU27,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,1634.2,3.32
+EU27,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,6783.3,13.77
+EU27,ultimi_7,2026-11-04,2026-11-10,Eolico,True,7253.1,14.73
+EU27,ultimi_7,2026-11-04,2026-11-10,Gas,False,13427.5,27.27
+EU27,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,3725.4,7.56
+EU27,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,10495.8,21.31
+EU27,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,172.0,0.35
+EU27,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,964.2,1.96
+EU27,ultimi_7,2026-11-04,2026-11-10,Solare,True,3329.3,6.76
+AT,ultimi_7,2026-11-04,2026-11-10,Altro,False,20.5,1.97
+AT,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,35.5,3.42
+AT,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,0.0,0.0
+AT,ultimi_7,2026-11-04,2026-11-10,Eolico,True,99.1,9.55
+AT,ultimi_7,2026-11-04,2026-11-10,Gas,False,366.8,35.33
+AT,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,330.0,31.79
+AT,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.0,0.0
+AT,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,130.3,12.55
+AT,ultimi_7,2026-11-04,2026-11-10,Solare,True,56.0,5.4
+BE,ultimi_7,2026-11-04,2026-11-10,Altro,False,114.7,7.21
+BE,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,32.2,2.03
+BE,ultimi_7,2026-11-04,2026-11-10,Eolico,True,152.0,9.55
+BE,ultimi_7,2026-11-04,2026-11-10,Gas,False,830.4,52.17
+BE,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,0.5,0.03
+BE,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,318.9,20.03
+BE,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,9.1,0.57
+BE,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,18.3,1.15
+BE,ultimi_7,2026-11-04,2026-11-10,Solare,True,115.6,7.26
+BG,ultimi_7,2026-11-04,2026-11-10,Altro,False,90.0,10.87
+BG,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,2.5,0.3
+BG,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,282.5,34.13
+BG,ultimi_7,2026-11-04,2026-11-10,Eolico,True,37.3,4.5
+BG,ultimi_7,2026-11-04,2026-11-10,Gas,False,48.3,5.84
+BG,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,57.8,6.99
+BG,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,164.7,19.9
+BG,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,9.5,1.15
+BG,ultimi_7,2026-11-04,2026-11-10,Solare,True,135.2,16.33
+CZ,ultimi_7,2026-11-04,2026-11-10,Altro,False,16.9,1.01
+CZ,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,96.6,5.78
+CZ,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,780.2,46.73
+CZ,ultimi_7,2026-11-04,2026-11-10,Eolico,True,12.6,0.76
+CZ,ultimi_7,2026-11-04,2026-11-10,Gas,False,211.3,12.66
+CZ,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,17.4,1.04
+CZ,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,449.1,26.9
+CZ,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.7,0.04
+CZ,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,26.0,1.56
+CZ,ultimi_7,2026-11-04,2026-11-10,Solare,True,58.9,3.53
+DE,ultimi_7,2026-11-04,2026-11-10,Altro,False,175.1,2.11
+DE,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,658.6,7.92
+DE,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,2549.7,30.66
+DE,ultimi_7,2026-11-04,2026-11-10,Eolico,True,1648.1,19.82
+DE,ultimi_7,2026-11-04,2026-11-10,Gas,False,2276.2,27.37
+DE,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,171.1,2.06
+DE,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,38.7,0.47
+DE,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,177.8,2.14
+DE,ultimi_7,2026-11-04,2026-11-10,Solare,True,621.2,7.47
+EE,ultimi_7,2026-11-04,2026-11-10,Altro,False,6.2,4.37
+EE,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,14.3,10.11
+EE,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,56.9,40.35
+EE,ultimi_7,2026-11-04,2026-11-10,Eolico,True,41.6,29.48
+EE,ultimi_7,2026-11-04,2026-11-10,Gas,False,12.0,8.51
+EE,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,0.1,0.09
+EE,ultimi_7,2026-11-04,2026-11-10,Solare,True,10.0,7.09
+ES,ultimi_7,2026-11-04,2026-11-10,Altro,False,43.1,0.94
+ES,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,78.0,1.71
+ES,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,21.5,0.47
+ES,ultimi_7,2026-11-04,2026-11-10,Eolico,True,793.5,17.37
+ES,ultimi_7,2026-11-04,2026-11-10,Gas,False,1509.8,33.04
+ES,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,271.7,5.95
+ES,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,886.2,19.4
+ES,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,2.7,0.06
+ES,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,225.5,4.94
+ES,ultimi_7,2026-11-04,2026-11-10,Solare,True,737.0,16.13
+FI,ultimi_7,2026-11-04,2026-11-10,Altro,False,47.1,2.6
+FI,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,139.6,7.7
+FI,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,25.6,1.41
+FI,ultimi_7,2026-11-04,2026-11-10,Eolico,True,861.9,47.55
+FI,ultimi_7,2026-11-04,2026-11-10,Gas,False,2.8,0.15
+FI,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,287.3,15.85
+FI,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,439.8,24.26
+FI,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.4,0.02
+FI,ultimi_7,2026-11-04,2026-11-10,Solare,True,8.2,0.45
+FR,ultimi_7,2026-11-04,2026-11-10,Altro,False,77.1,0.77
+FR,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,45.2,0.45
+FR,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,66.9,0.67
+FR,ultimi_7,2026-11-04,2026-11-10,Eolico,True,605.4,6.04
+FR,ultimi_7,2026-11-04,2026-11-10,Gas,False,1076.3,10.74
+FR,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,742.0,7.4
+FR,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,6832.3,68.17
+FR,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,21.2,0.21
+FR,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,159.7,1.59
+FR,ultimi_7,2026-11-04,2026-11-10,Solare,True,395.8,3.95
+GR,ultimi_7,2026-11-04,2026-11-10,Altro,False,10.7,0.92
+GR,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,72.8,6.26
+GR,ultimi_7,2026-11-04,2026-11-10,Eolico,True,253.3,21.77
+GR,ultimi_7,2026-11-04,2026-11-10,Gas,False,539.2,46.32
+GR,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,57.1,4.9
+GR,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.0,0.0
+GR,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,16.8,1.44
+GR,ultimi_7,2026-11-04,2026-11-10,Solare,True,214.1,18.39
+HR,ultimi_7,2026-11-04,2026-11-10,Altro,False,2.1,0.95
+HR,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,17.3,7.71
+HR,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,9.3,4.17
+HR,ultimi_7,2026-11-04,2026-11-10,Eolico,True,68.4,30.58
+HR,ultimi_7,2026-11-04,2026-11-10,Gas,False,72.8,32.56
+HR,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,38.9,17.39
+HR,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.0,0.0
+HR,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,4.1,1.84
+HR,ultimi_7,2026-11-04,2026-11-10,Solare,True,10.7,4.79
+HU,ultimi_7,2026-11-04,2026-11-10,Altro,False,13.5,1.92
+HU,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,37.3,5.32
+HU,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,48.1,6.87
+HU,ultimi_7,2026-11-04,2026-11-10,Eolico,True,3.9,0.55
+HU,ultimi_7,2026-11-04,2026-11-10,Gas,False,249.5,35.62
+HU,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,1.7,0.24
+HU,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,239.7,34.22
+HU,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.6,0.09
+HU,ultimi_7,2026-11-04,2026-11-10,Solare,True,106.1,15.15
+IE,ultimi_7,2026-11-04,2026-11-10,Altro,False,4.0,0.95
+IE,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,19.3,4.55
+IE,ultimi_7,2026-11-04,2026-11-10,Eolico,True,161.8,38.1
+IE,ultimi_7,2026-11-04,2026-11-10,Gas,False,165.9,39.09
+IE,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,8.2,1.92
+IE,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,59.1,13.92
+IE,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,6.2,1.46
+IE,ultimi_7,2026-11-04,2026-11-10,Solare,True,0.0,0.0
+IT,ultimi_7,2026-11-04,2026-11-10,Altro,False,359.1,6.88
+IT,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,212.2,4.07
+IT,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,6.4,0.12
+IT,ultimi_7,2026-11-04,2026-11-10,Eolico,True,267.2,5.12
+IT,ultimi_7,2026-11-04,2026-11-10,Gas,False,3696.1,70.83
+IT,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,293.8,5.63
+IT,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.1,0.0
+IT,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,29.2,0.56
+IT,ultimi_7,2026-11-04,2026-11-10,Solare,True,354.1,6.79
+LT,ultimi_7,2026-11-04,2026-11-10,Altro,False,48.9,22.59
+LT,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,3.1,1.44
+LT,ultimi_7,2026-11-04,2026-11-10,Eolico,True,103.7,47.96
+LT,ultimi_7,2026-11-04,2026-11-10,Gas,False,19.6,9.08
+LT,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,5.3,2.47
+LT,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,12.0,5.57
+LT,ultimi_7,2026-11-04,2026-11-10,Solare,True,23.5,10.89
+LU,ultimi_7,2026-11-04,2026-11-10,Altro,False,1.9,11.34
+LU,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,3.4,20.59
+LU,ultimi_7,2026-11-04,2026-11-10,Eolico,True,7.5,45.23
+LU,ultimi_7,2026-11-04,2026-11-10,Gas,False,1.1,6.64
+LU,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,0.3,1.77
+LU,ultimi_7,2026-11-04,2026-11-10,Solare,True,2.4,14.44
+LV,ultimi_7,2026-11-04,2026-11-10,Altro,False,4.6,3.23
+LV,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,6.8,4.75
+LV,ultimi_7,2026-11-04,2026-11-10,Eolico,True,19.8,13.93
+LV,ultimi_7,2026-11-04,2026-11-10,Gas,False,66.7,46.87
+LV,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,32.1,22.53
+LV,ultimi_7,2026-11-04,2026-11-10,Solare,True,12.4,8.68
+NL,ultimi_7,2026-11-04,2026-11-10,Altro,False,78.8,3.54
+NL,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,82.9,3.72
+NL,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,531.3,23.84
+NL,ultimi_7,2026-11-04,2026-11-10,Eolico,True,246.1,11.04
+NL,ultimi_7,2026-11-04,2026-11-10,Gas,False,1205.7,54.11
+NL,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,0.0,0.0
+NL,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,80.9,3.63
+NL,ultimi_7,2026-11-04,2026-11-10,Solare,True,2.6,0.12
+PL,ultimi_7,2026-11-04,2026-11-10,Altro,False,72.1,2.15
+PL,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,79.9,2.39
+PL,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,2136.4,63.74
+PL,ultimi_7,2026-11-04,2026-11-10,Eolico,True,194.7,5.81
+PL,ultimi_7,2026-11-04,2026-11-10,Gas,False,516.2,15.4
+PL,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,18.1,0.54
+PL,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,30.2,0.9
+PL,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,31.0,0.92
+PL,ultimi_7,2026-11-04,2026-11-10,Solare,True,273.2,8.15
+PT,ultimi_7,2026-11-04,2026-11-10,Altro,False,1.3,0.14
+PT,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,47.8,5.17
+PT,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,0.0,0.0
+PT,ultimi_7,2026-11-04,2026-11-10,Eolico,True,380.5,41.14
+PT,ultimi_7,2026-11-04,2026-11-10,Gas,False,178.9,19.34
+PT,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,128.8,13.93
+PT,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,101.1,10.93
+PT,ultimi_7,2026-11-04,2026-11-10,Solare,True,86.5,9.35
+RO,ultimi_7,2026-11-04,2026-11-10,Altro,False,14.1,1.68
+RO,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,11.4,1.35
+RO,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,94.0,11.19
+RO,ultimi_7,2026-11-04,2026-11-10,Eolico,True,184.1,21.93
+RO,ultimi_7,2026-11-04,2026-11-10,Gas,False,251.0,29.89
+RO,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,189.6,22.58
+RO,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,27.7,3.3
+RO,ultimi_7,2026-11-04,2026-11-10,Solare,True,67.8,8.07
+SE,ultimi_7,2026-11-04,2026-11-10,Altro,False,237.7,7.96
+SE,ultimi_7,2026-11-04,2026-11-10,Eolico,True,1110.0,37.16
+SE,ultimi_7,2026-11-04,2026-11-10,Gas,False,1.4,0.05
+SE,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,1013.4,33.93
+SE,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,611.1,20.46
+SE,ultimi_7,2026-11-04,2026-11-10,Solare,True,13.4,0.45
+SI,ultimi_7,2026-11-04,2026-11-10,Altro,False,0.0,0.01
+SI,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,4.5,1.55
+SI,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,80.3,27.62
+SI,ultimi_7,2026-11-04,2026-11-10,Eolico,True,0.4,0.13
+SI,ultimi_7,2026-11-04,2026-11-10,Gas,False,33.0,11.36
+SI,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,35.2,12.12
+SI,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,116.4,40.03
+SI,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,0.1,0.04
+SI,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,6.0,2.06
+SI,ultimi_7,2026-11-04,2026-11-10,Solare,True,14.8,5.08
+SK,ultimi_7,2026-11-04,2026-11-10,Altro,False,23.2,4.38
+SK,ultimi_7,2026-11-04,2026-11-10,"Bio, geotermia e altre rinnovabili",True,25.2,4.75
+SK,ultimi_7,2026-11-04,2026-11-10,Carbone e lignite,False,2.0,0.37
+SK,ultimi_7,2026-11-04,2026-11-10,Eolico,True,0.1,0.02
+SK,ultimi_7,2026-11-04,2026-11-10,Gas,False,96.2,18.15
+SK,ultimi_7,2026-11-04,2026-11-10,Idroelettrico,True,24.9,4.69
+SK,ultimi_7,2026-11-04,2026-11-10,Nucleare,False,329.0,62.05
+SK,ultimi_7,2026-11-04,2026-11-10,Petrolio,False,9.2,1.73
+SK,ultimi_7,2026-11-04,2026-11-10,Pompaggi,False,10.7,2.02
+SK,ultimi_7,2026-11-04,2026-11-10,Solare,True,9.7,1.83
+EU27,prec_28,2026-10-07,2026-11-03,Altro,False,6378.7,3.36
+EU27,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,7191.6,3.79
+EU27,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,22418.8,11.8
+EU27,prec_28,2026-10-07,2026-11-03,Eolico,True,44439.9,23.4
+EU27,prec_28,2026-10-07,2026-11-03,Gas,False,31937.9,16.81
+EU27,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,14401.0,7.58
+EU27,prec_28,2026-10-07,2026-11-03,Nucleare,False,40006.8,21.06
+EU27,prec_28,2026-10-07,2026-11-03,Petrolio,False,857.0,0.45
+EU27,prec_28,2026-10-07,2026-11-03,Pompaggi,False,3358.8,1.77
+EU27,prec_28,2026-10-07,2026-11-03,Solare,True,18954.2,9.98
+AT,prec_28,2026-10-07,2026-11-03,Altro,False,82.1,2.11
+AT,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,135.7,3.48
+AT,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,0.0,0.0
+AT,prec_28,2026-10-07,2026-11-03,Eolico,True,791.2,20.29
+AT,prec_28,2026-10-07,2026-11-03,Gas,False,1055.0,27.05
+AT,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,1259.8,32.31
+AT,prec_28,2026-10-07,2026-11-03,Petrolio,False,0.0,0.0
+AT,prec_28,2026-10-07,2026-11-03,Pompaggi,False,266.6,6.84
+AT,prec_28,2026-10-07,2026-11-03,Solare,True,309.1,7.93
+BE,prec_28,2026-10-07,2026-11-03,Altro,False,450.6,9.32
+BE,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,147.6,3.05
+BE,prec_28,2026-10-07,2026-11-03,Eolico,True,1425.3,29.49
+BE,prec_28,2026-10-07,2026-11-03,Gas,False,1524.2,31.53
+BE,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,5.3,0.11
+BE,prec_28,2026-10-07,2026-11-03,Nucleare,False,590.3,12.21
+BE,prec_28,2026-10-07,2026-11-03,Petrolio,False,44.1,0.91
+BE,prec_28,2026-10-07,2026-11-03,Pompaggi,False,75.6,1.56
+BE,prec_28,2026-10-07,2026-11-03,Solare,True,570.8,11.81
+BG,prec_28,2026-10-07,2026-11-03,Altro,False,388.4,12.54
+BG,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,10.2,0.33
+BG,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,1063.7,34.33
+BG,prec_28,2026-10-07,2026-11-03,Eolico,True,141.8,4.58
+BG,prec_28,2026-10-07,2026-11-03,Gas,False,147.9,4.77
+BG,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,156.3,5.05
+BG,prec_28,2026-10-07,2026-11-03,Nucleare,False,622.4,20.09
+BG,prec_28,2026-10-07,2026-11-03,Pompaggi,False,23.1,0.75
+BG,prec_28,2026-10-07,2026-11-03,Solare,True,544.6,17.58
+CY,prec_28,2026-10-07,2026-11-03,Eolico,True,5.5,1.85
+CY,prec_28,2026-10-07,2026-11-03,Gas,False,0.0,0.0
+CY,prec_28,2026-10-07,2026-11-03,Petrolio,False,280.4,94.78
+CY,prec_28,2026-10-07,2026-11-03,Solare,True,10.0,3.37
+CZ,prec_28,2026-10-07,2026-11-03,Altro,False,67.6,1.13
+CZ,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,358.3,6.0
+CZ,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,2527.9,42.33
+CZ,prec_28,2026-10-07,2026-11-03,Eolico,True,62.7,1.05
+CZ,prec_28,2026-10-07,2026-11-03,Gas,False,336.5,5.63
+CZ,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,62.6,1.05
+CZ,prec_28,2026-10-07,2026-11-03,Nucleare,False,2189.0,36.65
+CZ,prec_28,2026-10-07,2026-11-03,Petrolio,False,2.4,0.04
+CZ,prec_28,2026-10-07,2026-11-03,Pompaggi,False,95.9,1.61
+CZ,prec_28,2026-10-07,2026-11-03,Solare,True,269.1,4.51
+DE,prec_28,2026-10-07,2026-11-03,Altro,False,652.3,1.77
+DE,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,2829.2,7.69
+DE,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,8293.2,22.53
+DE,prec_28,2026-10-07,2026-11-03,Eolico,True,14181.2,38.53
+DE,prec_28,2026-10-07,2026-11-03,Gas,False,5253.6,14.28
+DE,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,733.9,1.99
+DE,prec_28,2026-10-07,2026-11-03,Petrolio,False,179.5,0.49
+DE,prec_28,2026-10-07,2026-11-03,Pompaggi,False,716.0,1.95
+DE,prec_28,2026-10-07,2026-11-03,Solare,True,3963.7,10.77
+DK,prec_28,2026-10-07,2026-11-03,Altro,False,130.6,4.35
+DK,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,791.5,26.39
+DK,prec_28,2026-10-07,2026-11-03,Eolico,True,1721.9,57.41
+DK,prec_28,2026-10-07,2026-11-03,Gas,False,68.9,2.3
+DK,prec_28,2026-10-07,2026-11-03,Petrolio,False,4.8,0.16
+DK,prec_28,2026-10-07,2026-11-03,Solare,True,281.4,9.38
+EE,prec_28,2026-10-07,2026-11-03,Altro,False,23.0,7.04
+EE,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,36.2,11.09
+EE,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,105.4,32.25
+EE,prec_28,2026-10-07,2026-11-03,Eolico,True,115.5,35.34
+EE,prec_28,2026-10-07,2026-11-03,Gas,False,38.4,11.75
+EE,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,0.5,0.15
+EE,prec_28,2026-10-07,2026-11-03,Solare,True,7.8,2.38
+ES,prec_28,2026-10-07,2026-11-03,Altro,False,186.2,0.95
+ES,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,318.9,1.63
+ES,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,54.2,0.28
+ES,prec_28,2026-10-07,2026-11-03,Eolico,True,3581.5,18.36
+ES,prec_28,2026-10-07,2026-11-03,Gas,False,4481.9,22.97
+ES,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,973.2,4.99
+ES,prec_28,2026-10-07,2026-11-03,Nucleare,False,4363.5,22.36
+ES,prec_28,2026-10-07,2026-11-03,Petrolio,False,17.4,0.09
+ES,prec_28,2026-10-07,2026-11-03,Pompaggi,False,806.6,4.13
+ES,prec_28,2026-10-07,2026-11-03,Solare,True,4727.2,24.23
+FI,prec_28,2026-10-07,2026-11-03,Altro,False,192.5,3.11
+FI,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,541.6,8.75
+FI,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,69.9,1.13
+FI,prec_28,2026-10-07,2026-11-03,Eolico,True,2545.5,41.12
+FI,prec_28,2026-10-07,2026-11-03,Gas,False,16.0,0.26
+FI,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,1327.4,21.45
+FI,prec_28,2026-10-07,2026-11-03,Nucleare,False,1441.7,23.29
+FI,prec_28,2026-10-07,2026-11-03,Petrolio,False,2.1,0.03
+FI,prec_28,2026-10-07,2026-11-03,Solare,True,52.9,0.86
+FR,prec_28,2026-10-07,2026-11-03,Altro,False,313.3,0.83
+FR,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,191.6,0.51
+FR,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,15.5,0.04
+FR,prec_28,2026-10-07,2026-11-03,Eolico,True,5102.9,13.55
+FR,prec_28,2026-10-07,2026-11-03,Gas,False,1611.4,4.28
+FR,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,2129.3,5.66
+FR,prec_28,2026-10-07,2026-11-03,Nucleare,False,25666.8,68.17
+FR,prec_28,2026-10-07,2026-11-03,Petrolio,False,34.9,0.09
+FR,prec_28,2026-10-07,2026-11-03,Pompaggi,False,453.0,1.2
+FR,prec_28,2026-10-07,2026-11-03,Solare,True,2134.0,5.67
+GR,prec_28,2026-10-07,2026-11-03,Altro,False,54.7,1.34
+GR,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,284.7,6.95
+GR,prec_28,2026-10-07,2026-11-03,Eolico,True,755.1,18.43
+GR,prec_28,2026-10-07,2026-11-03,Gas,False,1793.8,43.79
+GR,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,262.9,6.42
+GR,prec_28,2026-10-07,2026-11-03,Petrolio,False,0.0,0.0
+GR,prec_28,2026-10-07,2026-11-03,Pompaggi,False,62.1,1.52
+GR,prec_28,2026-10-07,2026-11-03,Solare,True,882.9,21.55
+HR,prec_28,2026-10-07,2026-11-03,Altro,False,7.8,0.88
+HR,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,67.5,7.63
+HR,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,19.4,2.2
+HR,prec_28,2026-10-07,2026-11-03,Eolico,True,355.9,40.23
+HR,prec_28,2026-10-07,2026-11-03,Gas,False,239.3,27.04
+HR,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,123.9,14.0
+HR,prec_28,2026-10-07,2026-11-03,Petrolio,False,0.0,0.0
+HR,prec_28,2026-10-07,2026-11-03,Pompaggi,False,13.1,1.48
+HR,prec_28,2026-10-07,2026-11-03,Solare,True,57.8,6.54
+HU,prec_28,2026-10-07,2026-11-03,Altro,False,83.9,3.75
+HU,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,136.2,6.09
+HU,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,132.8,5.94
+HU,prec_28,2026-10-07,2026-11-03,Eolico,True,43.2,1.93
+HU,prec_28,2026-10-07,2026-11-03,Gas,False,523.2,23.38
+HU,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,3.5,0.16
+HU,prec_28,2026-10-07,2026-11-03,Nucleare,False,857.6,38.33
+HU,prec_28,2026-10-07,2026-11-03,Petrolio,False,1.0,0.05
+HU,prec_28,2026-10-07,2026-11-03,Solare,True,456.1,20.38
+IE,prec_28,2026-10-07,2026-11-03,Altro,False,3.2,0.17
+IE,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,41.0,2.2
+IE,prec_28,2026-10-07,2026-11-03,Eolico,True,1068.6,57.3
+IE,prec_28,2026-10-07,2026-11-03,Gas,False,568.2,30.47
+IE,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,34.8,1.87
+IE,prec_28,2026-10-07,2026-11-03,Petrolio,False,122.3,6.56
+IE,prec_28,2026-10-07,2026-11-03,Pompaggi,False,26.9,1.44
+IE,prec_28,2026-10-07,2026-11-03,Solare,True,0.0,0.0
+IT,prec_28,2026-10-07,2026-11-03,Altro,False,1371.4,8.05
+IT,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,763.3,4.48
+IT,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,113.9,0.67
+IT,prec_28,2026-10-07,2026-11-03,Eolico,True,2098.6,12.33
+IT,prec_28,2026-10-07,2026-11-03,Gas,False,8863.7,52.06
+IT,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,1372.3,8.06
+IT,prec_28,2026-10-07,2026-11-03,Petrolio,False,22.6,0.13
+IT,prec_28,2026-10-07,2026-11-03,Pompaggi,False,135.5,0.8
+IT,prec_28,2026-10-07,2026-11-03,Solare,True,2285.1,13.42
+LT,prec_28,2026-10-07,2026-11-03,Altro,False,145.0,18.47
+LT,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,11.9,1.51
+LT,prec_28,2026-10-07,2026-11-03,Eolico,True,448.3,57.1
+LT,prec_28,2026-10-07,2026-11-03,Gas,False,12.9,1.64
+LT,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,20.8,2.64
+LT,prec_28,2026-10-07,2026-11-03,Pompaggi,False,46.0,5.86
+LT,prec_28,2026-10-07,2026-11-03,Solare,True,100.3,12.77
+LU,prec_28,2026-10-07,2026-11-03,Altro,False,7.8,7.68
+LU,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,13.5,13.24
+LU,prec_28,2026-10-07,2026-11-03,Eolico,True,57.2,56.15
+LU,prec_28,2026-10-07,2026-11-03,Gas,False,3.0,2.92
+LU,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,1.1,1.12
+LU,prec_28,2026-10-07,2026-11-03,Solare,True,19.2,18.89
+LV,prec_28,2026-10-07,2026-11-03,Altro,False,15.6,3.54
+LV,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,21.4,4.87
+LV,prec_28,2026-10-07,2026-11-03,Eolico,True,59.3,13.5
+LV,prec_28,2026-10-07,2026-11-03,Gas,False,80.9,18.4
+LV,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,189.5,43.11
+LV,prec_28,2026-10-07,2026-11-03,Solare,True,72.9,16.58
+NL,prec_28,2026-10-07,2026-11-03,Altro,False,1109.4,14.59
+NL,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,178.6,2.35
+NL,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,1661.1,21.85
+NL,prec_28,2026-10-07,2026-11-03,Eolico,True,2181.4,28.69
+NL,prec_28,2026-10-07,2026-11-03,Gas,False,2135.0,28.08
+NL,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,0.0,0.0
+NL,prec_28,2026-10-07,2026-11-03,Nucleare,False,321.2,4.22
+NL,prec_28,2026-10-07,2026-11-03,Solare,True,15.5,0.2
+PL,prec_28,2026-10-07,2026-11-03,Altro,False,345.6,2.66
+PL,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,278.1,2.14
+PL,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,7487.9,57.64
+PL,prec_28,2026-10-07,2026-11-03,Eolico,True,1989.5,15.32
+PL,prec_28,2026-10-07,2026-11-03,Gas,False,1423.9,10.96
+PL,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,69.5,0.53
+PL,prec_28,2026-10-07,2026-11-03,Petrolio,False,114.0,0.88
+PL,prec_28,2026-10-07,2026-11-03,Pompaggi,False,113.8,0.88
+PL,prec_28,2026-10-07,2026-11-03,Solare,True,1168.0,8.99
+PT,prec_28,2026-10-07,2026-11-03,Altro,False,4.5,0.16
+PT,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,198.5,7.24
+PT,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,0.0,0.0
+PT,prec_28,2026-10-07,2026-11-03,Eolico,True,693.4,25.31
+PT,prec_28,2026-10-07,2026-11-03,Gas,False,518.0,18.91
+PT,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,317.0,11.57
+PT,prec_28,2026-10-07,2026-11-03,Pompaggi,False,464.0,16.94
+PT,prec_28,2026-10-07,2026-11-03,Solare,True,544.3,19.87
+RO,prec_28,2026-10-07,2026-11-03,Altro,False,58.2,1.76
+RO,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,40.0,1.21
+RO,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,469.2,14.14
+RO,prec_28,2026-10-07,2026-11-03,Eolico,True,894.0,26.95
+RO,prec_28,2026-10-07,2026-11-03,Gas,False,850.9,25.65
+RO,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,732.3,22.08
+RO,prec_28,2026-10-07,2026-11-03,Nucleare,False,0.0,0.0
+RO,prec_28,2026-10-07,2026-11-03,Solare,True,272.7,8.22
+SE,prec_28,2026-10-07,2026-11-03,Altro,False,613.1,5.34
+SE,prec_28,2026-10-07,2026-11-03,Eolico,True,4119.2,35.88
+SE,prec_28,2026-10-07,2026-11-03,Gas,False,3.1,0.03
+SE,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,4348.5,37.87
+SE,prec_28,2026-10-07,2026-11-03,Nucleare,False,2321.7,20.22
+SE,prec_28,2026-10-07,2026-11-03,Solare,True,76.0,0.66
+SI,prec_28,2026-10-07,2026-11-03,Altro,False,0.1,0.01
+SI,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,18.2,1.95
+SI,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,79.0,8.48
+SI,prec_28,2026-10-07,2026-11-03,Eolico,True,0.9,0.09
+SI,prec_28,2026-10-07,2026-11-03,Gas,False,97.8,10.49
+SI,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,158.9,17.04
+SI,prec_28,2026-10-07,2026-11-03,Nucleare,False,467.5,50.15
+SI,prec_28,2026-10-07,2026-11-03,Petrolio,False,0.0,0.0
+SI,prec_28,2026-10-07,2026-11-03,Pompaggi,False,16.9,1.82
+SI,prec_28,2026-10-07,2026-11-03,Solare,True,93.0,9.97
+SK,prec_28,2026-10-07,2026-11-03,Altro,False,71.7,3.84
+SK,prec_28,2026-10-07,2026-11-03,"Bio, geotermia e altre rinnovabili",True,103.8,5.57
+SK,prec_28,2026-10-07,2026-11-03,Carbone e lignite,False,0.1,0.01
+SK,prec_28,2026-10-07,2026-11-03,Eolico,True,0.4,0.02
+SK,prec_28,2026-10-07,2026-11-03,Gas,False,290.6,15.59
+SK,prec_28,2026-10-07,2026-11-03,Idroelettrico,True,117.8,6.32
+SK,prec_28,2026-10-07,2026-11-03,Nucleare,False,1165.1,62.5
+SK,prec_28,2026-10-07,2026-11-03,Petrolio,False,31.4,1.68
+SK,prec_28,2026-10-07,2026-11-03,Pompaggi,False,43.6,2.34
+SK,prec_28,2026-10-07,2026-11-03,Solare,True,39.7,2.13
