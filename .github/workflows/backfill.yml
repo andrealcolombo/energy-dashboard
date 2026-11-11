@@ -65,6 +65,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: parts
+      - name: Get the latest data before merging
+        run: git pull --ff-only origin main
       - run: python src/merge_parts.py parts
       - run: python src/build_dashboard_files.py
         continue-on-error: true
@@ -75,5 +77,4 @@ jobs:
           git add data/
           git diff --cached --quiet && exit 0
           git commit -m "Backfill generation and load ($(date -u +%Y-%m-%d))"
-          git pull --rebase origin main
           git push
