@@ -21,7 +21,7 @@ Days and months follow Brussels time (CET/CEST).
 The workflow runs every day at 13:23 UTC for prices; generation, load and the Oil Bulletin are updated on Sundays.
 and the last two months of generation and load, so later corrections by TSOs are picked up.
 
-Countries, zones and start date are set in `src/config.py`.
+Countries, zones and start date are set in `src/config.py`. The dashboard page is in `app/`. Changes are logged in `CHANGELOG.md`; rules for contributors are in `CLAUDE.md`.
 
 ## Known gaps
 
