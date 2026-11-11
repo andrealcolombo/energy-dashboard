@@ -1,5 +1,5 @@
 {
-  "last_run_utc": "2026-11-11T22:24:22Z",
+  "last_run_utc": "2026-11-11T22:47:31Z",
   "rows": {
     "prices_daily": 72822,
     "generation_monthly": 19948,
@@ -11,15 +11,20 @@
     "load_monthly": "2026-11"
   },
   "failures": [
-    "generation MT: NoMatchingDataError: "
+    "load CY: HTTPError: 400 Client Error: Bad Request for url: https://web-api.tp.entsoe.eu/api?documentType=A65&processType=A16&outBiddingZone_Domain=10YCY-1001A0003J&out_Do",
+    "load MT: NoMatchingDataError: "
   ],
   "parts": [
-    "generation"
+    "load"
   ],
   "failures_by_part": {
     "prices": [],
     "generation": [
       "generation MT: NoMatchingDataError: "
+    ],
+    "load": [
+      "load CY: HTTPError: 400 Client Error: Bad Request for url: https://web-api.tp.entsoe.eu/api?documentType=A65&processType=A16&outBiddingZone_Domain=10YCY-1001A0003J&out_Do",
+      "load MT: NoMatchingDataError: "
     ]
   }
 }
