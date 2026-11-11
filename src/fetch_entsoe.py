@@ -171,7 +171,11 @@ def monthly_load(obj, country: str) -> pd.DataFrame:
 
 # ---------------------------------------------------------------- main
 
-def run(client) -> dict:
+class _Skip(Exception):
+    pass
+
+
+def run(client, parts=("prices", "generation", "load")) -> dict:
     DATA.mkdir(exist_ok=True)
     tz = config.LOCAL_TZ
     start0 = pd.Timestamp(config.START_DATE, tz=tz)
@@ -180,7 +184,7 @@ def run(client) -> dict:
 
     # Day-ahead prices
     prices = read_csv(PRICES)
-    for zone in config.PRICE_ZONES:
+    for zone in (config.PRICE_ZONES if "prices" in parts else []):
         start = window_start(prices, "zone", zone, "date", start0, pd.DateOffset(days=PRICE_REFETCH_DAYS))
         try:
             s = with_retry(client.query_day_ahead_prices, zone, start=start, end=end)
@@ -198,9 +202,13 @@ def run(client) -> dict:
     for cc in config.COUNTRIES:
         start = month_floor(window_start(gen, "country", cc, "month", start0, back))
         try:
+            if "generation" not in parts:
+                raise _Skip
             df = with_retry(client.query_generation, cc, start=start, end=end, psr_type=None)
             gen = merge(gen, monthly_generation(df, cc), ["country", "month", "source"])
             print(f"generation {cc:8s} ok  from {start.date()}")
+        except _Skip:
+            pass
         except Exception as exc:  # noqa: BLE001
             failures.append(f"generation {cc}: {type(exc).__name__}: {str(exc)[:150]}")
             print(f"generation {cc:8s} FAIL {type(exc).__name__}")
@@ -208,9 +216,13 @@ def run(client) -> dict:
 
         start = month_floor(window_start(load, "country", cc, "month", start0, back))
         try:
+            if "load" not in parts:
+                raise _Skip
             obj = with_retry(client.query_load, cc, start=start, end=end)
             load = merge(load, monthly_load(obj, cc), ["country", "month"])
             print(f"load       {cc:8s} ok  from {start.date()}")
+        except _Skip:
+            pass
         except Exception as exc:  # noqa: BLE001
             failures.append(f"load {cc}: {type(exc).__name__}: {str(exc)[:150]}")
             print(f"load       {cc:8s} FAIL {type(exc).__name__}")
@@ -226,6 +238,10 @@ def run(client) -> dict:
         },
         "failures": failures,
     }
+    old = json.loads(STATUS.read_text()) if STATUS.exists() else {}
+    status["parts"] = list(parts)
+    status["failures_by_part"] = {**old.get("failures_by_part", {}),
+                                  **{p: [f for f in failures if f.startswith(p)] for p in parts}}
     STATUS.write_text(json.dumps(status, indent=2))
     return status
 
@@ -236,9 +252,11 @@ def main():
         sys.exit("ENTSOE_API_KEY is not set (GitHub: Settings > Secrets and variables > Actions).")
     from entsoe import EntsoePandasClient
 
-    status = run(EntsoePandasClient(api_key=key))
+    parts = tuple(sys.argv[1:]) or ("prices", "generation", "load")
+    status = run(EntsoePandasClient(api_key=key), parts)
     print(json.dumps(status, indent=2))
-    total = len(config.PRICE_ZONES) + 2 * len(config.COUNTRIES)
+    total = (len(config.PRICE_ZONES) if "prices" in parts else 0) + \
+        len(config.COUNTRIES) * (("generation" in parts) + ("load" in parts))
     if len(status["failures"]) == total:
         sys.exit("Every query failed: check the API key and the log above.")
 

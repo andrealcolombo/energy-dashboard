@@ -15,7 +15,9 @@ concurrency:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 340     # the first run backfills from 2021 and can take a few hours
+    timeout-minutes: 350
+    env:
+      ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -26,20 +28,53 @@ jobs:
 
       - run: pip install -r requirements.txt
 
-      - name: Download from ENTSO-E
-        env:
-          ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
-        run: python src/fetch_entsoe.py
-
-      - name: Commit updated data
-        if: always()         # keep partial progress even if the script stopped early
+      - name: Set up git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          cat > /tmp/commit.sh <<'SH'
           git add data/
-          if git diff --cached --quiet; then
-            echo "No changes"
-          else
-            git commit -m "Data update $(date -u +%Y-%m-%d)"
-            git push
-          fi
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Data update $(date -u +%Y-%m-%d) ($1)"
+          git pull --rebase -X ours origin main || true
+          git push
+          SH
+          chmod +x /tmp/commit.sh
+
+      # Each part is committed as soon as it finishes, so a slow or failed part
+      # never throws away what the others downloaded.
+      - name: Day-ahead prices
+        timeout-minutes: 120
+        run: python src/fetch_entsoe.py prices
+      - name: Commit prices
+        if: always()
+        run: /tmp/commit.sh prices
+
+      - name: Generation per type
+        if: always()
+        timeout-minutes: 150
+        run: python src/fetch_entsoe.py generation
+      - name: Commit generation
+        if: always()
+        run: /tmp/commit.sh generation
+
+      - name: Load
+        if: always()
+        timeout-minutes: 100
+        run: python src/fetch_entsoe.py load
+      - name: Commit load
+        if: always()
+        run: /tmp/commit.sh load
+
+      - name: EC Weekly Oil Bulletin
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 15
+        run: python src/fetch_oil_bulletin.py
+      - name: Build dashboard files
+        if: always()
+        continue-on-error: true
+        run: python src/build_dashboard_files.py
+      - name: Commit oil bulletin and dashboard files
+        if: always()
+        run: /tmp/commit.sh "oil bulletin, dashboard files"
