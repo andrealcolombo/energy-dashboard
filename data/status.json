@@ -1,8 +1,8 @@
 {
-  "last_run_utc": "2026-11-11T22:10:42Z",
+  "last_run_utc": "2026-11-11T22:24:22Z",
   "rows": {
     "prices_daily": 72822,
-    "generation_monthly": 19852,
+    "generation_monthly": 19948,
     "load_monthly": 1775
   },
   "latest": {
@@ -10,11 +10,16 @@
     "generation_monthly": "2026-11",
     "load_monthly": "2026-11"
   },
-  "failures": [],
+  "failures": [
+    "generation MT: NoMatchingDataError: "
+  ],
   "parts": [
-    "prices"
+    "generation"
   ],
   "failures_by_part": {
-    "prices": []
+    "prices": [],
+    "generation": [
+      "generation MT: NoMatchingDataError: "
+    ]
   }
 }
