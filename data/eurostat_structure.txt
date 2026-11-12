@@ -1,0 +1,2 @@
+nrg_pc_204: dims=['freq', 'siec', 'nrg_cons', 'unit', 'tax', 'currency', 'geo', 'time'] sizes=[1, 1, 1, 1, 1, 1, 43, 11] rows=451 periods=['2025-S1', '2025-S2', '2026-S1']
+nrg_pc_202: dims=['freq', 'siec', 'nrg_cons', 'unit', 'tax', 'currency', 'geo', 'time'] sizes=[1, 1, 1, 1, 1, 1, 37, 11] rows=361 periods=['2025-S1', '2025-S2', '2026-S1']
