@@ -8,17 +8,13 @@
   .ed .lede { color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); max-width: 75ch; }
   .ed .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
   .ed .note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: var(--cds-gap-xs) 0 0; max-width: 85ch; }
-  .ed .top { position: sticky; top: 0; z-index: 4; background: var(--color-bg); padding: var(--cds-pad-xs) 0 0; }
-  .ed .ticker { display: flex; flex-wrap: wrap; align-items: stretch; background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); margin: 0; }
-  .ed .tnote { margin: 4px 0 var(--cds-gap-sm); max-width: none; font-size: 11px; }
-  .ed .ticker .tsel { display: flex; flex-direction: column; justify-content: center; gap: 2px; padding: 8px 10px; border-right: 1px solid var(--color-border-line); }
-  .ed .ticker .ti { flex: 1 1 112px; padding: 8px 10px; border-right: 1px solid var(--color-border-line); min-width: 0; }
-  .ed .ticker .ti:last-child { border-right: 0; }
+  .ed .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--cds-gap-sm); }
+  .ed .ti { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
   .ed .ti .lab { font-size: 11px; line-height: 1.3; color: var(--color-fg-muted); }
-  .ed .ti .v { font-family: var(--font-anthropic-serif); font-size: 21px; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ed .ti .v { font-family: var(--font-anthropic-serif); font-size: 22px; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .ed .ti .u { font-size: 11px; color: var(--color-fg-muted); margin-left: 2px; font-family: var(--font-anthropic-sans); }
   .ed .ti .c { font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .ed .tabs { display:flex; gap: var(--cds-gap-xs); flex-wrap: wrap; padding: 0 0 var(--cds-pad-xs); border-bottom: 1px solid var(--color-border-line); }
+  .ed .tabs { display:flex; gap: var(--cds-gap-xs); flex-wrap: wrap; padding: 0 0 var(--cds-pad-xs); margin-bottom: var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
   .ed .tab, .ed .chip { border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: var(--cds-font-size-caption); cursor: pointer; }
   .ed .tab[aria-selected="true"], .ed .chip[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
   .ed .chip.sel::after { content: " ×"; opacity: .7; }
@@ -51,31 +47,51 @@
   <h1>EU energy markets</h1>
   <p class="lede" data-draw="headline">—</p>
 
-  <div class="top">
-    <div class="ticker" id="ticker">
-      <div class="tsel">
-        <label class="muted" for="country">Country</label>
-        <select id="country" class="dash-select" data-draw="country-select" data-source="prices_daily" aria-label="Country"></select>
-      </div>
-      <div class="ti" id="t-whole"><div class="lab">Wholesale electricity · <span data-draw="t-whole-date">—</span></div><div class="v"><span data-draw="t-whole" data-source="kpi_power" data-field="last_day" data-where="area=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-whole-chg">—</div></div>
-      <div class="ti" id="t-relec"><div class="lab">Household electricity · <span data-draw="t-relec-per">—</span></div><div class="v"><span data-draw="t-relec" data-source="retail_latest" data-field="elec_eur_mwh" data-where="geo=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-relec-chg">—</div></div>
-      <div class="ti" id="t-ttf"><div class="lab">Gas TTF · EU · <span data-draw="t-ttf-per">—</span></div><div class="v"><span data-draw="t-ttf" data-source="nl_latest" data-field="value" data-where="indicator=gas_ttf">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-ttf-chg">—</div></div>
-      <div class="ti" id="t-rgas"><div class="lab">Household gas · <span data-draw="t-rgas-per">—</span></div><div class="v"><span data-draw="t-rgas" data-source="retail_latest" data-field="gas_eur_mwh" data-where="geo=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-rgas-chg">—</div></div>
-      <div class="ti" id="t-dsl"><div class="lab">Diesel · <span data-draw="t-dsl-per">—</span></div><div class="v"><span data-draw="t-dsl" data-source="fuels_latest" data-field="diesel" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-dsl-chg">—</div></div>
-      <div class="ti" id="t-sto"><div class="lab">Gas storage · EU · <span data-draw="t-sto-per">—</span></div><div class="v"><span data-draw="t-sto" data-source="nl_latest" data-field="value" data-where="indicator=gas_storage">—</span><span class="u">% full</span></div><div class="c" data-draw="t-sto-chg">—</div></div>
-    </div>
-    <p class="note tnote">▲▼ change on: the previous day (d/d) for wholesale electricity; the previous week (w/w) for TTF gas, diesel and gas storage; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. H1/H2 = first/second half of the year. TTF and gas storage are EU-wide.</p>
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button class="tab" role="tab" data-tab="latest" aria-selected="true">Latest</button>
+    <button class="tab" role="tab" data-tab="prices" aria-selected="false">Electricity prices</button>
+    <button class="tab" role="tab" data-tab="mix" aria-selected="false">Generation mix</button>
+    <button class="tab" role="tab" data-tab="profile" aria-selected="false">Country profile</button>
+    <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>
+  </nav>
 
-    <nav class="tabs" role="tablist" aria-label="Sections">
-      <button class="tab" role="tab" data-tab="prices" aria-selected="true">Electricity prices</button>
-      <button class="tab" role="tab" data-tab="mix" aria-selected="false">Generation mix</button>
-      <button class="tab" role="tab" data-tab="profile" aria-selected="false">Country profile</button>
-      <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>
-    </nav>
-  </div>
+  <!-- ============ LATEST ============ -->
+  <section id="latest" data-section>
+    <div class="row">
+      <label class="muted" for="country">Country</label>
+      <select id="country" class="dash-select" data-draw="country-select" data-source="prices_daily" aria-label="Country"></select>
+    </div>
+
+    <h3 id="latest-elec">Electricity · wholesale (day-ahead) and household</h3>
+    <div class="kpis">
+      <div class="ti" id="t-whole"><div class="lab">Day-ahead · <span data-draw="t-whole-date">—</span></div><div class="v"><span data-draw="t-whole" data-source="kpi_power" data-field="last_day" data-where="area=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-whole-chg">—</div></div>
+      <div class="ti" id="t-w7"><div class="lab">7-day average · <span data-draw="t-w7-per">—</span></div><div class="v"><span data-draw="t-w7" data-source="kpi_power" data-field="avg7" data-where="area=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-w7-chg">—</div></div>
+      <div class="ti" id="t-relec"><div class="lab">Household · <span data-draw="t-relec-per">—</span></div><div class="v"><span data-draw="t-relec" data-source="retail_latest" data-field="elec_eur_mwh" data-where="geo=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-relec-chg">—</div></div>
+    </div>
+
+    <h3 id="latest-gas">Gas · wholesale (TTF), storage and household</h3>
+    <div class="kpis">
+      <div class="ti" id="t-ttf"><div class="lab">TTF · EU · <span data-draw="t-ttf-per">—</span></div><div class="v"><span data-draw="t-ttf" data-source="nl_latest" data-field="value" data-where="indicator=gas_ttf">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-ttf-chg">—</div></div>
+      <div class="ti" id="t-sto"><div class="lab">Storage · EU · <span data-draw="t-sto-per">—</span></div><div class="v"><span data-draw="t-sto" data-source="nl_latest" data-field="value" data-where="indicator=gas_storage">—</span><span class="u">% full</span></div><div class="c" data-draw="t-sto-chg">—</div></div>
+      <div class="ti" id="t-rgas"><div class="lab">Household · <span data-draw="t-rgas-per">—</span></div><div class="v"><span data-draw="t-rgas" data-source="retail_latest" data-field="gas_eur_mwh" data-where="geo=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-rgas-chg">—</div></div>
+    </div>
+
+    <h3 id="latest-fuels">Road fuels, pump price with taxes</h3>
+    <div class="kpis">
+      <div class="ti" id="t-dsl"><div class="lab">Diesel · <span data-draw="t-dsl-per">—</span></div><div class="v"><span data-draw="t-dsl" data-source="fuels_latest" data-field="diesel" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-dsl-chg">—</div></div>
+      <div class="ti" id="t-pet"><div class="lab">Petrol 95 · <span data-draw="t-pet-per">—</span></div><div class="v"><span data-draw="t-pet" data-source="fuels_latest" data-field="petrol_95" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-pet-chg">—</div></div>
+    </div>
+    <p class="note">▲▼ change on: the previous day (d/d) for the day-ahead price; the previous week (w/w) for 7-day averages, TTF, storage and pump prices; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. H1/H2 = first/second half of the year. TTF and gas storage are EU-wide. Household prices: Eurostat, all taxes included.</p>
+
+    <h2 id="latest-mix">Generation mix · last 7 days <span class="muted" data-draw="wk-period">—</span></h2>
+    <div class="grid2">
+      <div class="chart short" data-draw="week-pie" data-source="mix_weekly" role="img" aria-label="Generation mix over the last 7 days"></div>
+      <div><div class="legend" data-draw="wk-legend"></div><p class="note" data-draw="week-note">—</p></div>
+    </div>
+  </section>
 
   <!-- ============ PRICES ============ -->
-  <section id="prices" data-section>
+  <section id="prices" data-section hidden>
     <h2 id="prices-areas">Compare countries and bidding zones</h2>
     <div class="row" data-draw="area-chips" data-source="prices_daily"></div>
     <p class="note">Up to six areas. Click an area to remove it.</p>
@@ -121,12 +137,6 @@
 
     <h2 id="mix-load">Monthly electricity demand (TWh) · vs the year before</h2>
     <div class="chart short" data-draw="load-chart" data-source="load_monthly" role="img" aria-label="Monthly electricity demand, this year and the year before"></div>
-
-    <h2 id="mix-week">Last 7 days <span class="muted" data-draw="wk-period">—</span></h2>
-    <div class="grid2">
-      <div class="chart short" data-draw="week-pie" data-source="mix_weekly" role="img" aria-label="Generation mix over the last 7 days"></div>
-      <p class="note" data-draw="week-note">—</p>
-    </div>
   </section>
 
   <!-- ============ PROFILE ============ -->

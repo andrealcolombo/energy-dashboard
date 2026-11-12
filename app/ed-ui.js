@@ -30,7 +30,7 @@ window.EDL = {
   const {f, chgSpan} = ED, {row} = EDL;
   const C = () => EDS.country;
   const fk = () => (C() === 'EU27' ? 'EU' : C());
-  const TICK = ['t-whole', 't-whole-date', 't-whole-chg', 't-relec', 't-relec-per', 't-relec-chg', 't-rgas', 't-rgas-per', 't-rgas-chg', 't-dsl', 't-dsl-per', 't-dsl-chg'];
+  const TICK = ['t-whole', 't-whole-date', 't-whole-chg', 't-w7', 't-w7-per', 't-w7-chg', 't-relec', 't-relec-per', 't-relec-chg', 't-rgas', 't-rgas-per', 't-rgas-chg', 't-dsl', 't-dsl-per', 't-dsl-chg', 't-pet', 't-pet-per', 't-pet-chg', 'wk-period', 'week-pie', 'week-note', 'wk-legend'];
 
   dash.draw('country-select', (sel) => {
     sel.replaceChildren(...EDL.countries().map((c) => new Option(ED.name(c), c)));
@@ -52,6 +52,9 @@ window.EDL = {
   dash.draw('t-whole', (el) => { el.dataset.where = 'area=' + C(); const r = kp(); el.textContent = r && r.last_day !== null ? f.n1(r.last_day) : '—'; });
   dash.draw('t-whole-date', (el) => { const r = kp(); el.textContent = r ? ED.dayShort(ED.parseDay(r.last_date)) : '—'; });
   dash.draw('t-whole-chg', (el) => { const r = kp(); chgSpan(el, r ? r.day_chg_pct : NaN, {suffix: 'd/d'}); el.classList.add('c'); });
+  dash.draw('t-w7', (el) => { el.dataset.where = 'area=' + C(); const r = kp(); el.textContent = r && r.avg7 !== null ? f.n1(r.avg7) : '—'; });
+  dash.draw('t-w7-per', (el) => { const r = kp(); el.textContent = r ? 'to ' + ED.dayShort(ED.parseDay(r.last_date)) : '—'; });
+  dash.draw('t-w7-chg', (el) => { const r = kp(); chgSpan(el, r ? r.chg_pct : NaN, {suffix: 'w/w'}); el.classList.add('c'); });
 
   const rt = () => row('retail_latest', 'geo', C());
   dash.draw('t-relec', (el) => { el.dataset.where = 'geo=' + C(); const r = rt(); el.textContent = r && r.elec_eur_mwh !== null ? f.n0(r.elec_eur_mwh) : '—'; });
@@ -65,6 +68,9 @@ window.EDL = {
   dash.draw('t-dsl', (el) => { el.dataset.where = 'country=' + fk(); const r = fu(); el.textContent = r && r.diesel !== null ? f.n2(r.diesel) : '—'; });
   dash.draw('t-dsl-per', (el) => { const r = fu(); el.textContent = r ? ED.dayShort(ED.parseDay(r.date)) : '—'; });
   dash.draw('t-dsl-chg', (el) => { const r = fu(); chgSpan(el, r ? r.diesel_wow_pct : NaN, {suffix: 'w/w'}); el.classList.add('c'); });
+  dash.draw('t-pet', (el) => { el.dataset.where = 'country=' + fk(); const r = fu(); el.textContent = r && r.petrol_95 !== null ? f.n2(r.petrol_95) : '—'; });
+  dash.draw('t-pet-per', (el) => { const r = fu(); el.textContent = r ? ED.dayShort(ED.parseDay(r.date)) : '—'; });
+  dash.draw('t-pet-chg', (el) => { const r = fu(); chgSpan(el, r ? r.petrol_wow_pct : NaN, {suffix: 'w/w'}); el.classList.add('c'); });
 
   const nl = (k) => row('nl_latest', 'indicator', k);
   const wk = (r) => (r ? 'w/e ' + ED.dayShort(ED.parseDay(r.week_end)) : '—');
@@ -74,6 +80,25 @@ window.EDL = {
   dash.draw('t-sto', (el) => { const r = nl('gas_storage'); el.textContent = r ? f.n0(+r.value) : '—'; });
   dash.draw('t-sto-per', (el) => { el.textContent = wk(nl('gas_storage')); });
   dash.draw('t-sto-chg', (el) => { const r = nl('gas_storage'); chgSpan(el, r ? ED.num(r.wow_pct) : NaN, {unit: ' pp', suffix: 'w/w', upIsGood: true}); el.classList.add('c'); });
+  const wkm = () => { const d = dash.data('mix_weekly'); return d.status === 'ok' ? d.data.filter((r) => r.country === EDS.country) : []; };
+  dash.draw('wk-period', (el) => { const r = wkm().find((x) => x.period === 'last_7'); el.textContent = r ? '· ' + ED.dayShort(ED.parseDay(r.from)) + '–' + ED.dayFmt(ED.parseDay(r.to)) : ''; });
+  dash.draw('week-pie', (el) => {
+    const d = dash.data('mix_weekly');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const v = wkm().filter((r) => r.period === 'last_7');
+    ED.pie(el, ED.MIXORDER.map((g) => { const r = v.find((x) => x.group === g); return {label: g, value: r ? +r.share_pct : 0, color: ED.MIXC[g]}; }), {center: 'last 7 days', empty: 'No recent data for this country'});
+  });
+  dash.draw('week-note', (el) => {
+    const v = wkm(); const sh = (p, gs) => d3.sum(v.filter((r) => r.period === p && gs.includes(r.group)), (r) => +r.share_pct);
+    if (!v.length) { el.textContent = '—'; return; }
+    const dr = sh('last_7', ED.RES) - sh('prev_28', ED.RES), dg = sh('last_7', ['Gas']) - sh('prev_28', ['Gas']);
+    el.textContent = `Renewables ${ED.f.n0(sh('last_7', ED.RES))}% (${ED.f.p1(dr)} pp on the previous 4 weeks), gas ${ED.f.n0(sh('last_7', ['Gas']))}% (${ED.f.p1(dg)} pp). Less wind and sun and more gas usually explain a price rise.`;
+  });
+  dash.draw('wk-legend', (el) => {
+    el.replaceChildren();
+    const v = wkm().filter((r) => r.period === 'last_7');
+    ED.MIXORDER.forEach((g) => { const r = v.find((x) => x.group === g); if (!r || +r.share_pct < 0.5) return; const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = ED.MIXC[g]; sp.append(i, document.createTextNode(g + ' ' + ED.f.n0(+r.share_pct) + '%')); el.append(sp); });
+  });
 })();
 
 // ---------- Electricity prices ----------
@@ -133,7 +158,7 @@ window.EDL = {
 // ---------- Generation mix ----------
 (function () {
   const C = () => EDS.mix;
-  const MIX = ['mix-country', 'ytd-period', 'pie-cur-title', 'pie-2021-title', 'pie-cur', 'pie-2021', 'mix-stack', 'load-chart', 'wk-period', 'week-pie', 'week-note'];
+  const MIX = ['mix-country', 'ytd-period', 'pie-cur-title', 'pie-2021-title', 'pie-cur', 'pie-2021', 'mix-stack', 'load-chart'];
   dash.draw('mix-select', (sel) => {
     const d = dash.data('mix_monthly');
     const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.country))) : ['EU27'];
@@ -181,20 +206,6 @@ window.EDL = {
     ED.lineChart(el, ser, {height: 200, unit: 'TWh', zero: false, tipX: (x) => ED.mLabel(x)});
   });
 
-  const wk = () => { const d = dash.data('mix_weekly'); return d.status === 'ok' ? d.data.filter((r) => r.country === C()) : []; };
-  dash.draw('wk-period', (el) => { const r = wk().find((x) => x.period === 'last_7'); el.textContent = r ? '· ' + ED.dayShort(ED.parseDay(r.from)) + '–' + ED.dayFmt(ED.parseDay(r.to)) : ''; });
-  dash.draw('week-pie', (el) => {
-    const d = dash.data('mix_weekly');
-    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
-    const v = wk().filter((r) => r.period === 'last_7');
-    ED.pie(el, ED.MIXORDER.map((g) => { const r = v.find((x) => x.group === g); return {label: g, value: r ? +r.share_pct : 0, color: ED.MIXC[g]}; }), {center: 'last 7 days', empty: 'No recent data for this country'});
-  });
-  dash.draw('week-note', (el) => {
-    const v = wk(); const sh = (p, gs) => d3.sum(v.filter((r) => r.period === p && gs.includes(r.group)), (r) => +r.share_pct);
-    if (!v.length) { el.textContent = '—'; return; }
-    const dr = sh('last_7', ED.RES) - sh('prev_28', ED.RES), dg = sh('last_7', ['Gas']) - sh('prev_28', ['Gas']);
-    el.textContent = `Renewables ${ED.f.n0(sh('last_7', ED.RES))}% (${ED.f.p1(dr)} pp on the previous 4 weeks), gas ${ED.f.n0(sh('last_7', ['Gas']))}% (${ED.f.p1(dg)} pp). Less wind and sun and more gas usually explain a price rise.`;
-  });
 })();
 
 // ---------- Country profile ----------

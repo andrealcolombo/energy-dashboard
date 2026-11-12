@@ -5,6 +5,10 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-12
 
+- **Dashboard v3.2** (asked by Andrea). The always-visible price bar at the top is gone: it looked bad on phones.
+  Its indicators moved to a new first tab, *Latest*, as cards grouped by electricity, gas and road fuels, with
+  two additions (wholesale 7-day average, petrol 95). The last-7-days generation pie moved from *Generation mix*
+  to *Latest* and follows the *Latest* country selector.
 - **Dashboard v3.1** (asked by Andrea). Ticker footnote moved right under the ticker, with the abbreviations
   explained (d/d, w/w, y/y, w/e, H1/H2); "power" renamed "electricity". *Generation mix*: own country selector,
   change-since-2021 chart removed. *Country profile*: table removed, a reading guide and per-indicator
