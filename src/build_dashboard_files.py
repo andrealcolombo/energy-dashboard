@@ -41,7 +41,7 @@ GROUPS = {
     "Waste": "Altro", "Other": "Altro", "Energy storage": "Altro",
 }
 RENEWABLE = {"Idroelettrico", "Eolico", "Solare", "Bio, geotermia e altre rinnovabili"}
-FUEL_COUNTRIES = {"EU", "IT", "HU", "DE", "FR", "ES", "AT", "PL"}
+FUEL_COUNTRIES = None  # all EU27 countries plus the EU average (EA, the euro area, is left out)
 
 
 def clean_sources(g: pd.DataFrame) -> pd.DataFrame:
@@ -182,7 +182,11 @@ def main():
     f = DATA / "oil_bulletin_weekly.csv"
     if f.exists():
         fu = pd.read_csv(f)
-        fu[fu["country"].isin(FUEL_COUNTRIES)].to_csv(OUT / "fuels_weekly.csv", index=False)
+        fu[fu["country"] != "EA"].to_csv(OUT / "fuels_weekly.csv", index=False)
+    r = DATA / "retail_semiannual.csv"
+    if r.exists():
+        rt = pd.read_csv(r)
+        rt[rt["geo"].isin(set(config.COUNTRIES) | {"EU27"})].to_csv(OUT / "retail_semiannual.csv", index=False)
     for p in sorted(OUT.glob("*.csv")):
         print(p.name, len(pd.read_csv(p)), "rows", round(p.stat().st_size / 1024), "KB")
 

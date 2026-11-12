@@ -3,6 +3,12 @@
 Every change to the data pipeline or to the dashboard is recorded here, newest first.
 Each entry says who asked, what changed and why. Git history has the line-by-line detail.
 
+## 2026-11-12
+
+- **Household retail prices by country** (asked by Andrea: retail electricity in the first two sheets).
+  Eurostat semi-annual prices, all taxes included: electricity band DC (nrg_pc_204), gas band D2 (nrg_pc_202).
+- **Fuel prices for all EU27 countries** (asked by Andrea: country selector on every sheet).
+
 ## 2026-11-11
 
 - **Fix: Oil Bulletin EU average** (Claude). The source file has both EU27 (`EU_`) and euro-area (`EUR_`)

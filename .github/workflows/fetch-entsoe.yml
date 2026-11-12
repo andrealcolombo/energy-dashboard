@@ -6,7 +6,7 @@ on:
   workflow_dispatch:         # "Run workflow" button in the Actions tab
     inputs:
       only_oil:
-        description: "Only refresh the Oil Bulletin and dashboard files"
+        description: "Only refresh Oil Bulletin, Eurostat and dashboard files"
         type: boolean
         default: false
 
@@ -88,6 +88,11 @@ jobs:
         continue-on-error: true
         timeout-minutes: 15
         run: python src/fetch_oil_bulletin.py
+      - name: Eurostat household retail prices
+        if: always() && steps.when.outputs.weekly == 'true'
+        continue-on-error: true
+        timeout-minutes: 10
+        run: python src/fetch_eurostat.py
       - name: Build dashboard files
         if: always()
         continue-on-error: true
