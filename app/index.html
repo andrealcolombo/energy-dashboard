@@ -67,21 +67,21 @@
     <div class="kpis">
       <div class="card kpi"><div class="lab">All'ingrosso · media 7 giorni</div><div class="val"><span data-draw="s-w7" data-source="kpi_power" data-field="avg7" data-where="area=EU27">—</span><span class="unit">€/MWh</span></div><div class="chg" data-draw="s-w7-chg">—</div></div>
       <div class="card kpi"><div class="lab">All'ingrosso · <span data-draw="s-w1-date">ultimo giorno</span></div><div class="val"><span data-draw="s-w1" data-source="kpi_power" data-field="last_day" data-where="area=EU27">—</span><span class="unit">€/MWh</span></div><div class="chg muted" data-draw="s-w1-note">—</div></div>
-      <div class="card kpi"><div class="lab">Al dettaglio · famiglie</div><div class="val"><span data-draw="s-re" data-source="snap_retail" data-field="elec_eur_mwh" data-row="0">—</span><span class="unit">€/MWh</span></div><div class="chg" data-draw="s-re-chg">—</div></div>
+      <div class="card kpi"><div class="lab">Al dettaglio · famiglie</div><div class="val"><span data-draw="s-re" data-source="retail_latest" data-field="elec_eur_mwh" data-where="geo=EU27">—</span><span class="unit">€/MWh</span></div><div class="chg" data-draw="s-re-chg">—</div></div>
     </div>
 
     <h2 id="oggi-gas">Gas</h2>
     <div class="kpis">
       <div class="card kpi"><div class="lab">TTF day-ahead · riferimento UE</div><div class="val"><span data-draw="k-ttf" data-source="nl_latest" data-field="value" data-where="indicator=gas_ttf">—</span><span class="unit">€/MWh</span></div><div class="chg" data-draw="k-ttf-chg">—</div></div>
-      <div class="card kpi"><div class="lab">Al dettaglio · famiglie</div><div class="val"><span data-draw="s-rg" data-source="snap_retail" data-field="gas_eur_mwh" data-row="0">—</span><span class="unit">€/MWh</span></div><div class="chg" data-draw="s-rg-chg">—</div></div>
+      <div class="card kpi"><div class="lab">Al dettaglio · famiglie</div><div class="val"><span data-draw="s-rg" data-source="retail_latest" data-field="gas_eur_mwh" data-where="geo=EU27">—</span><span class="unit">€/MWh</span></div><div class="chg" data-draw="s-rg-chg">—</div></div>
       <div class="card kpi"><div class="lab">Stoccaggi · UE</div><div class="val"><span data-draw="k-sto" data-source="nl_latest" data-field="value" data-where="indicator=gas_storage">—</span><span class="unit">% capacità</span></div><div class="chg" data-draw="k-sto-chg">—</div></div>
     </div>
 
     <h2 id="oggi-petrolio">Petrolio e carburanti</h2>
     <div class="kpis">
       <div class="card kpi"><div class="lab">Brent future</div><div class="val"><span data-draw="k-brent" data-source="nl_latest" data-field="value" data-where="indicator=brent_future">—</span><span class="unit">USD/bbl</span></div><div class="chg" data-draw="k-brent-chg">—</div></div>
-      <div class="card kpi"><div class="lab">Diesel alla pompa</div><div class="val"><span data-draw="s-dsl" data-source="snap_fuels" data-field="diesel" data-row="0">—</span><span class="unit">€/l</span></div><div class="chg" data-draw="s-dsl-chg">—</div></div>
-      <div class="card kpi"><div class="lab">Benzina 95 alla pompa</div><div class="val"><span data-draw="s-pet" data-source="snap_fuels" data-field="petrol_95" data-row="0">—</span><span class="unit">€/l</span></div><div class="chg" data-draw="s-pet-chg">—</div></div>
+      <div class="card kpi"><div class="lab">Diesel alla pompa</div><div class="val"><span data-draw="s-dsl" data-source="fuels_latest" data-field="diesel" data-where="country=EU">—</span><span class="unit">€/l</span></div><div class="chg" data-draw="s-dsl-chg">—</div></div>
+      <div class="card kpi"><div class="lab">Benzina 95 alla pompa</div><div class="val"><span data-draw="s-pet" data-source="fuels_latest" data-field="petrol_95" data-where="country=EU">—</span><span class="unit">€/l</span></div><div class="chg" data-draw="s-pet-chg">—</div></div>
     </div>
 
     <h2 id="oggi-co2">CO₂</h2>
@@ -89,7 +89,7 @@
       <div class="card kpi"><div class="lab">EUA (ETS1)</div><div class="val"><span data-draw="k-eua" data-source="nl_latest" data-field="value" data-where="indicator=eua">—</span><span class="unit">€/tCO₂</span></div><div class="chg" data-draw="k-eua-chg">—</div></div>
       <div class="card kpi"><div class="lab">Clean spark spread UE</div><div class="val"><span data-draw="k-css" data-source="spark" data-field="clean_spark" data-row="0">—</span><span class="unit">€/MWh</span></div><div class="chg muted">margine indicativo di una centrale a gas</div></div>
     </div>
-    <p class="note">Variazioni sulla settimana precedente; per i prezzi al dettaglio sull'anno precedente. In rosso un aumento di prezzo. TTF, stoccaggi, Brent ed EUA sono riferimenti europei, uguali per tutti i paesi.</p>
+    <p class="note">Variazioni sulla settimana precedente; per i prezzi al dettaglio sull'anno precedente. In rosso un aumento di prezzo. TTF, stoccaggi, Brent ed EUA sono riferimenti europei, uguali per tutti i paesi. Prezzi al dettaglio: Eurostat, ultimo semestre, tutte le tasse incluse.</p>
 
     <div class="grid2">
       <div>
@@ -237,7 +237,7 @@
     <summary>Fonti e metodo</summary>
     <p>Prezzi day-ahead (aggiornati ogni giorno), generazione per fonte e domanda (ogni domenica): ENTSO-E Transparency Platform. Le medie giornaliere sono ponderate per la durata degli intervalli (orari fino a settembre 2025, poi quarti d'ora). Giorni e mesi seguono l'ora di Bruxelles.</p>
     <p>Prezzo di un paese con più zone (Italia, Danimarca, Svezia): media semplice delle zone, non il PUN. Prezzo UE27: media dei prezzi nazionali pesata per la domanda mensile di ciascun paese. Cipro e Malta non hanno un mercato day-ahead accoppiato.</p>
-    <p>Gas, CO₂, petrolio, stoccaggi e prezzi al dettaglio: newsletter settimanale DG ENER, letta ogni lunedì. Carburanti per paese: Weekly Oil Bulletin della Commissione.</p>
+    <p>Prezzi al dettaglio per paese: Eurostat (nrg_pc_204 e nrg_pc_202), semestrali, tutte le tasse incluse. Gas, CO₂, petrolio e stoccaggi: newsletter settimanale DG ENER. Carburanti per paese: Weekly Oil Bulletin della Commissione.</p>
   </details>
 </div>
 
