@@ -7,11 +7,11 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
    - `git clone --depth 1 https://github.com/andrealcolombo/energy-dashboard` (read-only is enough).
    - Check `data/status.json` and the last runs of `fetch-entsoe.yml` (gh api .../actions/runs).
    - Upload with upload_asset every file in `data/dashboard/`: prices_daily.csv, prices_monthly.csv,
-     mix_monthly.csv, load_monthly.csv, mix_weekly.csv, fuels_weekly.csv (those that exist).
+     mix_monthly.csv, load_monthly.csv, mix_weekly.csv, fuels_weekly.csv, retail_semiannual.csv (those that exist).
      Copy them under /home/claude first (files under /tmp are refused).
    - For each, `update` datasets/<same id> (ifVersion from db_get): source.url = new /_blob/ url,
      updated = {at: now UTC, by: "Claude (aggiornamento settimanale)"}, edit = {via: "claude", at: now}.
-     If a dataset doc does not exist yet (mix_weekly, fuels_weekly), create it with `set`
+     If a dataset doc does not exist yet, create it with `set`
      (title, description, source {kind: file, url, name, format: csv}, updated, schedule, staleAfterHours: 336, edit).
 2. DG ENER newsletter (internal: never write it to GitHub).
    - Gmail: search `subject:"WEEKLY PRICES" newer_than:8d`, read the newest message (PLAIN_TEXT).
