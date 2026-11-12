@@ -46,6 +46,7 @@
   .ed .news { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-sm); }
   .ed .news article { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
   .ed .news .meta { font-size: 11px; color: var(--color-fg-muted); margin: 0 0 4px; }
+  .ed .tag.beta { font-size: 11px; font-weight: var(--cds-font-weight-medium); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 1px 7px; vertical-align: 3px; color: var(--color-fg-muted); }
   .ed .news .tag { display: inline-block; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 0 6px; margin-right: 4px; }
   .ed .news h4 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 0 0 4px; line-height: 1.35; }
   .ed .news h4 a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 2px; }
@@ -101,8 +102,8 @@
       <div><div class="legend" data-draw="wk-legend"></div><p class="note" data-draw="week-note">—</p></div>
     </div>
 
-    <h2 id="latest-news">News that may help explain the moves</h2>
-    <p class="note wide">Selected and summarised by Claude from public sources, updated weekly. These are possible links to the figures above, not proven causes. Up to nine items: news for the selected country first, then EU-wide news. Bidding zones use the news of their country.</p>
+    <h2 id="latest-news">News that may help explain the moves <span class="tag beta">Beta</span></h2>
+    <p class="note wide">Selected and summarised by Claude from public sources, updated weekly. These are possible links to the figures above, not proven causes. Six items: news about the selected country first, then EU-wide news if there are fewer than six. For the EU27, EU-wide news only. Bidding zones use the news of their country.</p>
     <div class="news" data-draw="news-list" data-source="news"></div>
   </section>
 
@@ -195,6 +196,7 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-12</td><td>Andrea</td><td>Claude</td><td>News feed v3.5: marked Beta; six items, country news first; more country sources</td></tr>
           <tr><td>2026-11-12</td><td>Andrea</td><td>Claude</td><td>Dashboard v3.4: news feed on <i>Latest</i>; change log at the bottom of the page</td></tr>
           <tr><td>2026-11-12</td><td>Andrea</td><td>Claude</td><td>Dashboard v3.3: layout uses the full width; household price chart removed</td></tr>
           <tr><td>2026-11-12</td><td>Andrea</td><td>Claude</td><td>Dashboard v3.2: fixed price bar replaced by a new <i>Latest</i> tab</td></tr>

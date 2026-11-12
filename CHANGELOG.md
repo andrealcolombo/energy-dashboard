@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-12 | Andrea | Claude | News feed v3.5: marked Beta; six items, country news first; more country sources |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.4: news feed on *Latest*; change log at the bottom of the page |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.3: layout uses the full width; household price chart removed |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.2: fixed price bar replaced by a new *Latest* tab |
@@ -35,6 +36,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-12
 
+- **News feed v3.5** (asked by Andrea). The feed is marked Beta and shows six items: news about the selected
+  country first, EU-wide news only to fill the rest (EU27 shows EU-wide news only). New country items for DE, CZ,
+  PL, ES, IT. The weekly task now prefers recognised outlets (Reuters, Bloomberg, FT, Montel, national agencies
+  and newspapers) and official sources such as the Commission press corner.
 - **Dashboard v3.4** (asked by Andrea). *Latest* gets a news feed: up to nine items that may help explain the
   week's moves, for the selected country first and then EU-wide, each with a short summary and a link. Claude
   selects them from public sources; the weekly task refreshes them (step 3 of `ops/weekly_update_prompt.md`).

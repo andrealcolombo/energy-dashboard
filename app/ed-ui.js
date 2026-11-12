@@ -103,7 +103,7 @@ window.EDL = {
     const own = c === 'EU27' ? [] : d.data.filter((r) => tags(r).includes(c));
     const eu = d.data.filter((r) => tags(r).includes('EU') && !own.includes(r));
     const byDate = (a, b) => (a.date < b.date ? 1 : -1);
-    const list = own.sort(byDate).concat(eu.sort(byDate)).slice(0, 9);
+    const list = own.sort(byDate).concat(eu.sort(byDate)).slice(0, 6);
     if (!list.length) { ED.placeholder(el, 'empty', 'No news selected yet.'); return; }
     list.forEach((r) => {
       const a = document.createElement('article');

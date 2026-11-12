@@ -31,13 +31,22 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
      or YYYY-MM if the day is unknown), date_label (shown as is, e.g. "9 Nov 2026" or "Sep 2026 · background"),
      countries (ISO codes separated by ";", EU = shown for every country), topic (Electricity, Gas, Oil, Retail,
      Policy, Carbon), title, summary, source, url.
-   - Search the web for the past 7 days: EU gas/TTF and storage, EU power prices and weather (wind, solar,
-     dunkelflaute), oil/Brent, carbon/EUA, EU energy policy; then country news for Italy and Hungary always, and for
-     any country whose weekly price move on the dashboard is unusual (more than about ±20% w/w or the top/bottom 3).
-   - Add 5–10 new items. Only items whose link you have actually seen in search or fetch results; never build a URL.
+   - Sources, in order of preference: Reuters, Bloomberg, FT, Montel News (montelnews.com), AFP/ANSA and other
+     national news agencies, recognised European newspapers (Il Sole 24 Ore, Handelsblatt, Les Echos, Le Monde,
+     El País, Expansión, Portfolio.hu, Notes from Poland...), Euronews, Politico Europe, Euractiv; official sources
+     (European Commission press corner https://ec.europa.eu/commission/presscorner, DG ENER news, ACER, IEA,
+     national regulators and TSOs); think tanks (Ember, Bruegel, OIES). Avoid blogs, price-comparison sites and
+     aggregators; when a story is syndicated, name the original agency in `source`, e.g. "Arab News (Reuters)".
+   - Search the past 7 days: first country news explaining that country's price or mix moves, for Italy and Hungary
+     always, then for the countries with the largest weekly price moves on the dashboard and the main markets
+     (DE, FR, ES, PL, NL, AT, CZ, RO). Then EU-wide news: gas/TTF and storage, weather (wind, solar, dunkelflaute),
+     oil/Brent, carbon/EUA, EU energy policy. Tag a story with every country it plausibly affects.
+   - The app shows six items per country: country news first, then EU-wide. Aim for at least two recent
+     country items for IT and HU, and keep about eight current EU-wide items.
+   - Add the new items. Only items whose link you have actually seen in search or fetch results; never build a URL.
      Title and summary in your own words (no quotes over 15 words), 2–3 sentences, saying what happened and the
      plausible link to prices or the mix. Write links as possible, not proven, causes. State numbers only as the source gives them.
-   - Drop items older than 8 weeks, except up to 3 marked "background". Keep at most 40 rows.
+   - Drop items older than 8 weeks, except up to 3 marked "background". Keep at most 60 rows.
    - Upload and update datasets/news as in step 1.
 4. Check: db_list data/users/<id from db_whoami> for `check`/`runs`; fix only obvious data faults.
 5. Report to Andrea with SendUserMessage, in Italian (the dashboard itself is in English), 4–6 lines: what was updated (including how many news items were added), the week's headline
