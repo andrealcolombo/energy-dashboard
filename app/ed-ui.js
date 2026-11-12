@@ -97,7 +97,7 @@ window.EDL = {
   dash.draw('wk-legend', (el) => {
     el.replaceChildren();
     const v = wkm().filter((r) => r.period === 'last_7');
-    ED.MIXORDER.forEach((g) => { const r = v.find((x) => x.group === g); if (!r || +r.share_pct < 0.5) return; const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = ED.MIXC[g]; sp.append(i, document.createTextNode(g + ' ' + ED.f.n0(+r.share_pct) + '%')); el.append(sp); });
+    ED.MIXORDER.forEach((g) => { const r = v.find((x) => x.group === g); if (!r || !(+r.share_pct > 0)) return; const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = ED.MIXC[g]; sp.append(i, document.createTextNode(g)); el.append(sp); });
   });
 })();
 
@@ -105,7 +105,7 @@ window.EDL = {
 (function () {
   const {label} = EDL;
   const colorFor = (a) => { const i = EDS.areas.indexOf(a); return dash.colors[i % dash.colors.length]; };
-  const redraw = () => ['area-chips', 'price-daily', 'price-monthly', 'price-neg', 'retail-chart'].forEach((n) => dash.draw(n));
+  const redraw = () => ['area-chips', 'price-daily', 'price-monthly', 'price-neg'].forEach((n) => dash.draw(n));
 
   dash.draw('area-chips', (el) => {
     el.replaceChildren();
@@ -137,14 +137,6 @@ window.EDL = {
     const ser = EDS.areas.map((a) => ({label: label(a), color: colorFor(a), width: a === 'EU27' ? 2.2 : 1.4, values: d.data.filter((r) => r.area === a).map((r) => ({x: ED.parseMonth(r.month), y: +r.avg_eur_mwh}))}));
     const ref = d3.mean(d.data.filter((r) => r.area === 'EU27' && r.month >= '2021-01' && r.month <= '2021-06'), (r) => +r.avg_eur_mwh);
     ED.lineChart(el, ser, {unit: '€/MWh', legend: true, refY: ref, tipX: (x) => ED.mLabel(x), empty: 'Pick at least one area'});
-  });
-
-  dash.draw('retail-chart', (el) => {
-    const d = dash.data('retail_semiannual');
-    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
-    const toDate = (p) => new Date(Date.UTC(+p.slice(0, 4), p.endsWith('S1') ? 0 : 6, 1));
-    const ser = EDS.areas.filter((a) => !a.includes('_')).map((a) => ({label: label(a), color: colorFor(a), width: a === 'EU27' ? 2.2 : 1.4, values: d.data.filter((r) => r.geo === a && r.product === 'electricity').map((r) => ({x: toDate(r.period), y: 1000 * Number(r.eur_per_kwh)})).sort((x, y) => x.x - y.x)}));
-    ED.lineChart(el, ser, {height: 200, unit: '€/MWh', legend: true, tipX: (x) => (x.getUTCMonth() ? 'H2 ' : 'H1 ') + x.getUTCFullYear(), xTick: (x) => (x.getUTCMonth() === 0 ? String(x.getUTCFullYear()) : ''), empty: 'No country selected (bidding zones have no retail price)'});
   });
 
   dash.draw('price-neg', (el) => {
@@ -272,7 +264,7 @@ window.EDL = {
     axes().forEach((a) => {
       const dt = document.createElement('dt'); dt.textContent = a.label + ' (' + a.unit + ')';
       const dd = document.createElement('dd'); dd.textContent = a.def + ' ' + ED.name(P()) + ': ' + (Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a') + ' · EU27: ' + (Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a') + '.';
-      el.append(dt, dd);
+      const w = document.createElement('div'); w.append(dt, dd); el.append(w);
     });
   });
 })();

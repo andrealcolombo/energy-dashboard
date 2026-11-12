@@ -8,7 +8,7 @@
   .ed .lede { color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); max-width: 75ch; }
   .ed .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
   .ed .note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: var(--cds-gap-xs) 0 0; max-width: 85ch; }
-  .ed .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: var(--cds-gap-sm); }
+  .ed .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--cds-gap-sm); }
   .ed .ti { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
   .ed .ti .lab { font-size: 11px; line-height: 1.3; color: var(--color-fg-muted); }
   .ed .ti .v { font-family: var(--font-anthropic-serif); font-size: 22px; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -33,13 +33,16 @@
   .ed th:first-child, .ed td:first-child { text-align: left; }
   .ed th { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); }
   .ed .up { color: var(--color-bad); } .ed .down { color: var(--color-ok); } .ed .flat { color: var(--color-fg-muted); }
-  .ed .notes p { margin: 0 0 var(--cds-gap-sm); max-width: 85ch; line-height: 1.5; }
+  .ed .notes { columns: 340px; column-gap: var(--cds-gap-lg); }
+  .ed .notes p { margin: 0 0 var(--cds-gap-sm); line-height: 1.5; break-inside: avoid; }
   .ed .notes b { font-weight: var(--cds-font-weight-medium); }
   .ed select.dash-select { background-color: var(--color-panel); }
   .ed [data-dash-source-state=refreshing] { opacity: .5; }
   .ed .pick { font-size: var(--cds-font-size-body); margin: var(--cds-gap-xs) 0 0; min-height: 22px; }
-  .ed .defs { margin: 0; font-size: var(--cds-font-size-caption); max-width: 90ch; }
-  .ed .defs dt { font-weight: var(--cds-font-weight-medium); margin-top: 6px; }
+  .ed .defs { margin: 0; font-size: var(--cds-font-size-caption); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--cds-gap-sm); }
+  .ed .defs > div { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 8px 10px; }
+  .ed .defs dt { font-weight: var(--cds-font-weight-medium); }
+  .ed .note.wide { max-width: none; }
   .ed .defs dd { margin: 0; color: var(--color-fg-muted); }
 </style>
 
@@ -81,7 +84,7 @@
       <div class="ti" id="t-dsl"><div class="lab">Diesel · <span data-draw="t-dsl-per">—</span></div><div class="v"><span data-draw="t-dsl" data-source="fuels_latest" data-field="diesel" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-dsl-chg">—</div></div>
       <div class="ti" id="t-pet"><div class="lab">Petrol 95 · <span data-draw="t-pet-per">—</span></div><div class="v"><span data-draw="t-pet" data-source="fuels_latest" data-field="petrol_95" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-pet-chg">—</div></div>
     </div>
-    <p class="note">▲▼ change on: the previous day (d/d) for the day-ahead price; the previous week (w/w) for 7-day averages, TTF, storage and pump prices; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. H1/H2 = first/second half of the year. TTF and gas storage are EU-wide. Household prices: Eurostat, all taxes included.</p>
+    <p class="note wide">▲▼ change on: the previous day (d/d) for the day-ahead price; the previous week (w/w) for 7-day averages, TTF, storage and pump prices; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. H1/H2 = first/second half of the year. TTF and gas storage are EU-wide. Household prices: Eurostat, all taxes included.</p>
 
     <h2 id="latest-mix">Generation mix · last 7 days <span class="muted" data-draw="wk-period">—</span></h2>
     <div class="grid2">
@@ -107,10 +110,6 @@
     <h3 id="prices-monthly">Wholesale · monthly average since 2021 (€/MWh)</h3>
     <div class="chart" data-draw="price-monthly" data-source="prices_monthly" role="img" aria-label="Monthly day-ahead prices since 2021 for the selected areas"></div>
     <p class="note">Dashed line: EU27 average in the first half of 2021, before the crisis.</p>
-
-    <h3 id="prices-retail">Household electricity price, by half-year (€/MWh)</h3>
-    <div class="chart short" data-draw="retail-chart" data-source="retail_semiannual" role="img" aria-label="Household electricity prices by half-year for the selected countries"></div>
-    <p class="note">Eurostat, households using 2,500–4,999 kWh a year, all taxes included. Countries only: bidding zones have no retail price.</p>
 
     <h3 id="prices-neg">Hours with negative prices, by month</h3>
     <div class="chart short" data-draw="price-neg" data-source="prices_monthly" role="img" aria-label="Monthly hours with negative day-ahead prices for the selected areas"></div>
@@ -150,7 +149,7 @@
     <div class="row" data-draw="ind-chips" data-source="profile"></div>
     <div class="chart" data-draw="spider" data-source="profile" role="img" aria-label="Country indicators relative to the EU27 average"></div>
     <p class="pick" data-draw="spider-pick">—</p>
-    <p class="note">How to read it: each axis is the country value divided by the EU27 value. The grey shape is the EU27 (1×); the rings mark 0.5×, 1.5×, 2× and 2.5×. A point outside the grey shape means the country is above the EU27 average on that indicator; inside means below. Values above 2.5× are capped (▲). Hover or click a point for the actual values.</p>
+    <p class="note wide">How to read it: each axis is the country value divided by the EU27 value. The grey shape is the EU27 (1×); the rings mark 0.5×, 1.5×, 2× and 2.5×. A point outside the grey shape means the country is above the EU27 average on that indicator; inside means below. Values above 2.5× are capped (▲). Hover or click a point for the actual values.</p>
     <h3 id="profile-legend">The indicators shown</h3>
     <dl class="defs" data-draw="ind-legend" data-source="profile"></dl>
   </section>

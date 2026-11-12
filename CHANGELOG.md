@@ -5,6 +5,10 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-12
 
+- **Dashboard v3.3** (asked by Andrea). Layout rebalanced to use the full width: *Latest* cards stretch across
+  the row, *Country profile* definitions are a grid of cards, the *DG ENER weekly* summary flows in two columns.
+  Percentages removed from the 7-day mix legend (shown on the pie). Household electricity chart removed from
+  *Electricity prices*; household prices stay on *Latest* and *Country profile*.
 - **Dashboard v3.2** (asked by Andrea). The always-visible price bar at the top is gone: it looked bad on phones.
   Its indicators moved to a new first tab, *Latest*, as cards grouped by electricity, gas and road fuels, with
   two additions (wholesale 7-day average, petrol 95). The last-7-days generation pie moved from *Generation mix*
