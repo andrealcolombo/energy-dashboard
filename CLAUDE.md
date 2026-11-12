@@ -4,8 +4,9 @@ Owner: Andrea Colombo. The app is a private Claude dashboard built from `app/ind
 and the CSV files in `data/dashboard/`.
 
 ## Every change must be traceable
-1. Add an entry at the top of `CHANGELOG.md` (newest first, under today's date): who asked,
-   what changed, why. Plain language, two to four lines.
+1. Record it in `CHANGELOG.md` in two places, newest first:
+   - one row at the top of the Summary table: date, requested by, made by, the change in under 15 words;
+   - an entry under today's date in Details: who asked, what changed, why. Plain language, two to four lines.
 2. Commit with a message that summarises the request in one line, then what changed.
 3. Changes by colleagues go through a pull request that Andrea reviews. Do not push to `main`
    on someone else's behalf without their request.

@@ -1,9 +1,38 @@
 # Changelog
 
 Every change to the data pipeline or to the dashboard is recorded here, newest first.
-Each entry says who asked, what changed and why. Git history has the line-by-line detail.
+The summary table gives one line per change. The details below say what changed and why.
+Git history has the line-by-line detail. Routine data updates are not listed.
 
-## 2026-11-12
+## Summary
+
+| Date | Requested by | Made by | Change |
+|---|---|---|---|
+| 2026-11-12 | Andrea | Claude | Dashboard v3.3: layout uses the full width; household price chart removed |
+| 2026-11-12 | Andrea | Claude | Dashboard v3.2: fixed price bar replaced by a new *Latest* tab |
+| 2026-11-12 | Andrea | Claude | Dashboard v3.1: abbreviations explained; mix country selector; battery storage indicator |
+| 2026-11-12 | Andrea | Claude | Dashboard v3: English, price ticker, four tabs, country profile (spider chart) |
+| 2026-11-12 | Andrea | Claude | Sheets 1–3 redesigned: country selector, zone comparison, year-to-date pies |
+| 2026-11-12 | Andrea | Claude | Household electricity and gas prices by country (Eurostat) |
+| 2026-11-12 | Andrea | Claude | Fuel prices for all EU27 countries |
+| 2026-11-11 | Claude | Claude | Fix: Oil Bulletin EU average no longer mixed with the euro area |
+| 2026-11-11 | Andrea | Claude | Dashboard published; weekly update every Tuesday |
+| 2026-11-11 | Claude | Claude | Fix: generation by source (hydro label, storage charging counted as output) |
+| 2026-11-11 | Claude | Claude | Recovery workflow after a GitHub outage |
+| 2026-11-11 | Andrea | Claude | Weekly mix view: last 7 days vs the 4 weeks before |
+| 2026-11-11 | Andrea | Claude | Year-to-date mix compared with last year and 2021 |
+| 2026-11-11 | Andrea | Claude | Prices daily; generation, demand and Oil Bulletin weekly |
+| 2026-11-11 | Claude | Claude | Parallel download of the 2021–2026 history |
+| 2026-11-11 | Claude | Claude | Daily workflow saves each part as soon as it finishes |
+| 2026-11-11 | Andrea | Claude | EC Weekly Oil Bulletin added (diesel, petrol) |
+| 2026-11-11 | Andrea | Claude | Dashboard app, first version |
+| 2026-11-11 | Andrea | Claude | ENTSO-E data pipeline, first version |
+
+"Requested by: Claude" means a fix Claude found and made while working on another request.
+
+## Details
+
+### 2026-11-12
 
 - **Dashboard v3.3** (asked by Andrea). Layout rebalanced to use the full width: *Latest* cards stretch across
   the row, *Country profile* definitions are a grid of cards, the *DG ENER weekly* summary flows in two columns.
@@ -33,7 +62,7 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
   Eurostat semi-annual prices, all taxes included: electricity band DC (nrg_pc_204), gas band D2 (nrg_pc_202).
 - **Fuel prices for all EU27 countries** (asked by Andrea: country selector on every sheet).
 
-## 2026-11-11
+### 2026-11-11
 
 - **Fix: Oil Bulletin EU average** (Claude). The source file has both EU27 (`EU_`) and euro-area (`EUR_`)
   averages; both were labelled EU. Euro area is now `EA`. Workflow can be run for the Oil Bulletin only.
