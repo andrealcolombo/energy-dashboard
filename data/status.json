@@ -1,21 +1,18 @@
 {
-  "last_run_utc": "2026-11-11T22:47:31Z",
+  "last_run_utc": "2026-11-12T21:09:53Z",
   "rows": {
-    "prices_daily": 72822,
+    "prices_daily": 72857,
     "generation_monthly": 19948,
     "load_monthly": 1775
   },
   "latest": {
-    "prices_daily": "2026-11-12",
+    "prices_daily": "2026-11-13",
     "generation_monthly": "2026-11",
     "load_monthly": "2026-11"
   },
-  "failures": [
-    "load CY: HTTPError: 400 Client Error: Bad Request for url: https://web-api.tp.entsoe.eu/api?documentType=A65&processType=A16&outBiddingZone_Domain=10YCY-1001A0003J&out_Do",
-    "load MT: NoMatchingDataError: "
-  ],
+  "failures": [],
   "parts": [
-    "load"
+    "prices"
   ],
   "failures_by_part": {
     "prices": [],
