@@ -1,15 +1,16 @@
 // ---------- shared helpers (no writes outside drawings) ----------
 window.ED = (function () {
-  const it = d3.formatLocale({decimal: ',', thousands: '.', grouping: [3], currency: ['€', '']});
+  const it = d3.formatLocale({decimal: '.', thousands: ',', grouping: [3], currency: ['€', ''], minus: '−'});
   const f = {n0: it.format(',.0f'), n1: it.format(',.1f'), n2: it.format(',.2f'), n3: it.format(',.3f'), p1: it.format('+,.1f'), p0: it.format('+,.0f')};
   const parseDay = d3.utcParse('%Y-%m-%d'), parseMonth = d3.utcParse('%Y-%m');
-  const dayFmt = d3.utcFormat('%d/%m/%Y');
-  const MESI = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+  const dayFmt = d3.utcFormat('%-d %b %Y'), dayShort = d3.utcFormat('%-d %b');
+  const MESI = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const mLabel = (d) => MESI[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
-  const NAMES = {EU27:'UE27', AT:'Austria', BE:'Belgio', BG:'Bulgaria', HR:'Croazia', CY:'Cipro', CZ:'Cechia', DK:'Danimarca', EE:'Estonia', FI:'Finlandia', FR:'Francia', DE:'Germania', GR:'Grecia', HU:'Ungheria', IE:'Irlanda', IT:'Italia', LV:'Lettonia', LT:'Lituania', LU:'Lussemburgo', MT:'Malta', NL:'Paesi Bassi', PL:'Polonia', PT:'Portogallo', RO:'Romania', SK:'Slovacchia', SI:'Slovenia', ES:'Spagna', SE:'Svezia', EU:'UE'};
-  const name = (c) => NAMES[c] || c.replace('_', ' ');
-  const MIXC = {'Solare':'var(--c-solar)','Eolico':'var(--c-wind)','Idroelettrico':'var(--c-hydro)','Bio, geotermia e altre rinnovabili':'var(--c-bio)','Nucleare':'var(--c-nuc)','Gas':'var(--c-gas)','Carbone e lignite':'var(--c-coal)','Petrolio':'var(--c-oil)','Pompaggi':'var(--c-pump)','Altro':'var(--c-other)'};
-  const MIXORDER = ['Solare','Eolico','Idroelettrico','Bio, geotermia e altre rinnovabili','Nucleare','Gas','Carbone e lignite','Petrolio','Pompaggi','Altro'];
+  const NAMES = {EU27:'EU27', AT:'Austria', BE:'Belgium', BG:'Bulgaria', HR:'Croatia', CY:'Cyprus', CZ:'Czechia', DK:'Denmark', EE:'Estonia', FI:'Finland', FR:'France', DE:'Germany', GR:'Greece', HU:'Hungary', IE:'Ireland', IT:'Italy', LV:'Latvia', LT:'Lithuania', LU:'Luxembourg', MT:'Malta', NL:'Netherlands', PL:'Poland', PT:'Portugal', RO:'Romania', SK:'Slovakia', SI:'Slovenia', ES:'Spain', SE:'Sweden', EU:'EU'};
+  const name = (c) => (c === 'IE_SEM' ? 'Ireland (SEM)' : NAMES[c] || c.replace('_', ' '));
+  const MIXC = {'Solar':'var(--c-solar)','Wind':'var(--c-wind)','Hydro':'var(--c-hydro)','Bio & other renewables':'var(--c-bio)','Nuclear':'var(--c-nuc)','Gas':'var(--c-gas)','Coal & lignite':'var(--c-coal)','Oil':'var(--c-oil)','Pumped storage':'var(--c-pump)','Other':'var(--c-other)'};
+  const MIXORDER = ['Solar','Wind','Hydro','Bio & other renewables','Nuclear','Gas','Coal & lignite','Oil','Pumped storage','Other'];
+  const RES = ['Solar', 'Wind', 'Hydro', 'Bio & other renewables'];
   const num = (v) => (v === null || v === undefined || v === '' ? NaN : +v);
 
   function chgSpan(el, pct, opts = {}) {
@@ -22,7 +23,7 @@ window.ED = (function () {
 
   function placeholder(el, st, msg) {
     el.replaceChildren();
-    if (st === 'error') { const p = document.createElement('p'); p.className = 'muted'; p.textContent = 'Caricamento non riuscito'; el.append(p); }
+    if (st === 'error') { const p = document.createElement('p'); p.className = 'muted'; p.textContent = 'Failed to load'; el.append(p); }
     else if (msg) { const p = document.createElement('p'); p.className = 'muted'; p.textContent = msg; el.append(p); }
   }
 
@@ -31,7 +32,7 @@ window.ED = (function () {
     el.replaceChildren();
     const W = Math.max(280, el.clientWidth), H = o.height || 260;
     const all = series.flatMap((s) => s.values).filter((d) => isFinite(d.y));
-    if (!all.length) { placeholder(el, 'empty', o.empty || 'Nessun dato'); return; }
+    if (!all.length) { placeholder(el, 'empty', o.empty || 'No data'); return; }
     const leg = document.createElement('div'); leg.className = 'legend';
     series.forEach((s) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = s.color; sp.append(i, document.createTextNode(s.label)); leg.append(sp); });
     if (series.length > 1 || o.legend) el.append(leg);
@@ -80,7 +81,7 @@ window.ED = (function () {
   // Stacked monthly shares. rows: [{x:Date, parts:{group:value}, total}]
   function stackChart(el, rows, groups, colors, o = {}) {
     el.replaceChildren();
-    if (!rows.length) { placeholder(el, 'empty', 'Nessun dato'); return; }
+    if (!rows.length) { placeholder(el, 'empty', 'No data'); return; }
     const W = Math.max(280, el.clientWidth), H = o.height || 280;
     const m = {t: 8, r: 8, b: 22, l: 34};
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
@@ -103,23 +104,20 @@ window.ED = (function () {
       .on('pointerleave', () => { tip.hidden = true; });
   }
 
-  // Horizontal paired bars by category. data: [{cat, a, b}]
-  function pairBars(el, data, la, lb, ca, cb) {
+  // Diverging horizontal bars. data: [{label, value, color}] (value can be negative)
+  function divBars(el, data, o = {}) {
     el.replaceChildren();
-    if (!data.length) { placeholder(el, 'empty', 'Nessun dato'); return; }
-    const leg = document.createElement('div'); leg.className = 'legend';
-    [[la, ca], [lb, cb]].forEach(([l, c]) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = c; sp.append(i, document.createTextNode(l)); leg.append(sp); });
-    el.append(leg);
-    const W = Math.max(280, el.clientWidth), rowH = 26, H = data.length * rowH + 10, lw = 150;
+    if (!data.length) { placeholder(el, 'empty', 'No data'); return; }
+    const W = Math.max(280, el.clientWidth), rowH = 24, H = data.length * rowH + 8, lw = Math.min(170, W * 0.36);
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
-    const x = d3.scaleLinear().domain([0, d3.max(data, (d) => Math.max(d.a || 0, d.b || 0)) || 1]).range([lw, W - 50]);
+    const ext = d3.max(data, (d) => Math.abs(d.value)) || 1;
+    const x = d3.scaleLinear().domain([-ext, ext]).range([lw + 44, W - 64]);
+    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).style('stroke', 'var(--cds-chart-reference)');
     data.forEach((d, i) => {
-      const g = svg.append('g').attr('transform', `translate(0,${i * rowH + 4})`);
-      g.append('text').attr('x', 0).attr('y', 13).text(d.cat.length > 22 ? d.cat.slice(0, 21) + '…' : d.cat);
-      g.append('rect').attr('x', lw).attr('y', 2).attr('height', 9).attr('width', Math.max(0, x(d.a || 0) - lw)).style('fill', ca);
-      g.append('rect').attr('x', lw).attr('y', 12).attr('height', 9).attr('width', Math.max(0, x(d.b || 0) - lw)).style('fill', cb);
-      g.append('text').attr('x', x(d.a || 0) + 4).attr('y', 10).text(f.n1(d.a || 0));
-      g.append('text').attr('x', x(d.b || 0) + 4).attr('y', 21).text(f.n1(d.b || 0));
+      const y = i * rowH + 4;
+      svg.append('text').attr('x', 0).attr('y', y + 13).text(d.label);
+      svg.append('rect').attr('x', Math.min(x(0), x(d.value))).attr('y', y + 3).attr('height', 14).attr('width', Math.abs(x(d.value) - x(0))).style('fill', d.color);
+      svg.append('text').attr('x', d.value >= 0 ? x(d.value) + 4 : x(d.value) - 4).attr('y', y + 14).attr('text-anchor', d.value >= 0 ? 'start' : 'end').text((d.value > 0 ? '+' : '') + f.n1(d.value) + (o.unit || ''));
     });
   }
 
@@ -127,7 +125,7 @@ window.ED = (function () {
   function pie(el, parts, o = {}) {
     el.replaceChildren();
     parts = parts.filter((p) => p.value > 0);
-    if (!parts.length) { placeholder(el, 'empty', o.empty || 'Nessun dato'); return; }
+    if (!parts.length) { placeholder(el, 'empty', o.empty || 'No data'); return; }
     const W = Math.max(220, el.clientWidth), H = o.height || 230, R = Math.min(H / 2 - 6, W / 2 - 6), r0 = R * 0.52;
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
     const g = svg.append('g').attr('transform', `translate(${W / 2},${H / 2})`);
@@ -141,8 +139,44 @@ window.ED = (function () {
     if (o.center) g.append('text').attr('text-anchor', 'middle').attr('dy', '0.35em').style('font-size', '13px').style('fill', 'var(--color-fg)').text(o.center);
   }
 
-  return {f, parseDay, parseMonth, dayFmt, mLabel, name, MIXC, MIXORDER, num, chgSpan, placeholder, lineChart, stackChart, pairBars, pie};
+  // Spider (radar) chart of ratios to a reference (1 = reference).
+  // axes: [{id, label, ratio, text}] ; onPick(axis) called on click.
+  function spider(el, axes, o = {}) {
+    el.replaceChildren();
+    if (axes.length < 3) { placeholder(el, 'empty', o.empty || 'Pick at least three indicators'); return; }
+    const W = Math.max(300, el.clientWidth), H = o.height || Math.min(520, Math.max(360, W * 0.75));
+    const R = Math.min(W / 2 - 110, H / 2 - 40), max = o.max || 2.5;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const g = svg.append('g').attr('transform', `translate(${W / 2},${H / 2})`);
+    const r = d3.scaleLinear().domain([0, max]).range([0, R]);
+    const ang = (i) => (2 * Math.PI * i) / axes.length - Math.PI / 2;
+    const pt = (i, v) => [Math.cos(ang(i)) * r(Math.min(max, Math.max(0, v))), Math.sin(ang(i)) * r(Math.min(max, Math.max(0, v)))];
+    [0.5, 1.5, 2, 2.5].filter((v) => v <= max).forEach((v) => g.append('circle').attr('r', r(v)).style('fill', 'none').style('stroke', 'var(--cds-chart-grid)'));
+    axes.forEach((a, i) => {
+      const [x, y] = pt(i, max);
+      g.append('line').attr('x1', 0).attr('y1', 0).attr('x2', x).attr('y2', y).style('stroke', 'var(--cds-chart-grid)');
+      const [lx, ly] = [Math.cos(ang(i)) * (R + 14), Math.sin(ang(i)) * (R + 14)];
+      const t = g.append('text').attr('x', lx).attr('y', ly).attr('dy', '0.35em').attr('text-anchor', Math.abs(lx) < 5 ? 'middle' : lx > 0 ? 'start' : 'end').style('cursor', 'pointer').text(a.label);
+      t.on('click', () => o.onPick && o.onPick(a));
+    });
+    const ref = axes.map((a, i) => pt(i, 1));
+    g.append('path').attr('d', d3.line().curve(d3.curveLinearClosed)(ref)).style('fill', 'var(--cds-chart-muted)').style('fill-opacity', 0.35).style('stroke', 'var(--cds-chart-muted)').attr('stroke-width', 1.5);
+    const vals = axes.map((a, i) => pt(i, Number.isFinite(a.ratio) ? a.ratio : 0));
+    g.append('path').attr('d', d3.line().curve(d3.curveLinearClosed)(vals)).style('fill', o.color).style('fill-opacity', 0.15).style('stroke', o.color).attr('stroke-width', 2);
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
+    axes.forEach((a, i) => {
+      if (!Number.isFinite(a.ratio)) return;
+      const [x, y] = vals[i];
+      g.append('circle').attr('cx', x).attr('cy', y).attr('r', 6).style('fill', o.color).style('stroke', 'var(--color-panel)').attr('stroke-width', 2).style('cursor', 'pointer')
+        .on('pointerenter', (ev) => { tip.textContent = a.text; tip.hidden = false; const bw = el.clientWidth, s = bw / W; tip.style.left = Math.min(Math.max(0, (W / 2 + x) * s + 10), bw - tip.offsetWidth) + 'px'; tip.style.top = Math.max(0, (H / 2 + y) * s - 30) + 'px'; })
+        .on('pointerleave', () => { tip.hidden = true; })
+        .on('click', () => o.onPick && o.onPick(a));
+      if (a.ratio > max) g.append('text').attr('x', x).attr('y', y - 10).attr('text-anchor', 'middle').text('▲');
+    });
+  }
+
+  return {f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider};
 })();
 
 // page state (not data): what the reader has selected
-window.EDS = {snap: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, mixCountry: 'EU27', nl: 'gas_ttf', fuels: ['EU', 'IT', 'HU'], country: 'IT'};
+window.EDS = {country: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};

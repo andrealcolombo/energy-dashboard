@@ -26,21 +26,21 @@ DATA = Path(__file__).resolve().parent.parent / "data"
 OUT = DATA / "dashboard"
 
 GROUPS = {
-    "Nuclear": "Nucleare",
+    "Nuclear": "Nuclear",
     "Fossil Gas": "Gas", "Fossil Coal-derived gas": "Gas",
-    "Fossil Hard coal": "Carbone e lignite", "Fossil Brown coal/Lignite": "Carbone e lignite",
-    "Fossil Peat": "Carbone e lignite", "Fossil Oil shale": "Carbone e lignite",
-    "Fossil Oil": "Petrolio",
-    "Hydro Run-of-river and poundage": "Idroelettrico", "Hydro Run-of-river and pondage": "Idroelettrico",
-    "Hydro Water Reservoir": "Idroelettrico",
-    "Hydro Pumped Storage": "Pompaggi",
-    "Wind Onshore": "Eolico", "Wind Offshore": "Eolico",
-    "Solar": "Solare",
-    "Biomass": "Bio, geotermia e altre rinnovabili", "Geothermal": "Bio, geotermia e altre rinnovabili",
-    "Other renewable": "Bio, geotermia e altre rinnovabili", "Marine": "Bio, geotermia e altre rinnovabili",
-    "Waste": "Altro", "Other": "Altro", "Energy storage": "Altro",
+    "Fossil Hard coal": "Coal & lignite", "Fossil Brown coal/Lignite": "Coal & lignite",
+    "Fossil Peat": "Coal & lignite", "Fossil Oil shale": "Coal & lignite",
+    "Fossil Oil": "Oil",
+    "Hydro Run-of-river and poundage": "Hydro", "Hydro Run-of-river and pondage": "Hydro",
+    "Hydro Water Reservoir": "Hydro",
+    "Hydro Pumped Storage": "Pumped storage",
+    "Wind Onshore": "Wind", "Wind Offshore": "Wind",
+    "Solar": "Solar",
+    "Biomass": "Bio & other renewables", "Geothermal": "Bio & other renewables",
+    "Other renewable": "Bio & other renewables", "Marine": "Bio & other renewables",
+    "Waste": "Other", "Other": "Other", "Energy storage": "Other",
 }
-RENEWABLE = {"Idroelettrico", "Eolico", "Solare", "Bio, geotermia e altre rinnovabili"}
+RENEWABLE = {"Hydro", "Wind", "Solar", "Bio & other renewables"}
 FUEL_COUNTRIES = None  # all EU27 countries plus the EU average (EA, the euro area, is left out)
 
 
@@ -63,14 +63,14 @@ def prices(load: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     p = pd.read_csv(DATA / "prices_daily.csv")
     p = p[p["hours_covered"] >= 20]  # drop incomplete days (e.g. tomorrow before publication)
     zones = p.rename(columns={"zone": "area"})
-    zones["level"] = "zona"
+    zones["level"] = "zone"
 
     split = p.groupby("country")["zone"].transform("nunique") > 1
     ctry = (p.groupby(["country", "date"], as_index=False)
               .agg(avg_eur_mwh=("avg_eur_mwh", "mean"), min_eur_mwh=("min_eur_mwh", "min"),
                    max_eur_mwh=("max_eur_mwh", "max"), negative_hours=("negative_hours", "mean")))
     ctry_all = ctry.rename(columns={"country": "area"})
-    ctry_all["level"] = "paese"
+    ctry_all["level"] = "country"
     ctry_all["country"] = ctry_all["area"]
 
     # EU27: load-weighted average of country prices
@@ -82,7 +82,7 @@ def prices(load: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
                                  min_eur_mwh=("avg_eur_mwh", "min"), max_eur_mwh=("avg_eur_mwh", "max"))
             .reset_index())
     eu = eu[eu["n"] >= 20]
-    eu = pd.DataFrame({"area": "EU27", "country": "EU27", "level": "UE", "date": eu["date"],
+    eu = pd.DataFrame({"area": "EU27", "country": "EU27", "level": "EU", "date": eu["date"],
                        "avg_eur_mwh": (eu["wp"] / eu["w"]).round(2),
                        "min_eur_mwh": eu["min_eur_mwh"], "max_eur_mwh": eu["max_eur_mwh"]})
 
@@ -111,7 +111,7 @@ CURRENT_MONTH = pd.Timestamp.now(tz="Europe/Brussels").strftime("%Y-%m")
 def mix() -> pd.DataFrame:
     g = clean_sources(pd.read_csv(DATA / "generation_monthly.csv"))
     g = g[g["month"] < CURRENT_MONTH]  # the running month is incomplete
-    g["group"] = g["source"].map(GROUPS).fillna("Altro")
+    g["group"] = g["source"].map(GROUPS).fillna("Other")
     g = g.groupby(["country", "month", "group"], as_index=False)["gwh"].sum()
     # EU27 only for months where (almost) all countries reported
     n = g.groupby("month")["country"].nunique()
@@ -131,7 +131,7 @@ def mix_weekly() -> pd.DataFrame:
     if not f.exists():
         return pd.DataFrame()
     g = clean_sources(pd.read_csv(f))
-    g["group"] = g["source"].map(GROUPS).fillna("Altro")
+    g["group"] = g["source"].map(GROUPS).fillna("Other")
     today = pd.Timestamp.now(tz="Europe/Brussels").strftime("%Y-%m-%d")
     g = g[g["date"] < today]  # today is incomplete
     # Generation is published with a lag: use days that most countries have already reported.
@@ -141,7 +141,7 @@ def mix_weekly() -> pd.DataFrame:
         return pd.DataFrame()
     last7, prev28 = days[-7:], days[-35:-7]
     out = []
-    for label, sel in (("ultimi_7", last7), ("prec_28", prev28)):
+    for label, sel in (("last_7", last7), ("prev_28", prev28)):
         w = g[g["date"].isin(sel)].groupby(["country", "group"], as_index=False)["gwh"].sum()
         n = g[g["date"].isin(sel)].groupby("country")["date"].nunique()
         w = w[w["country"].isin(n[n == len(sel)].index)]  # only countries with every day

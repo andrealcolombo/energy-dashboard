@@ -5,6 +5,12 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-12
 
+- **Dashboard v3, in English** (asked by Andrea). New layout: a ticker bar with the latest wholesale power,
+  household power, TTF, household gas, diesel and EU gas storage, with a country selector and arrows
+  (d/d, w/w or y/y). Four sheets: *Electricity prices* (compare countries and zones: daily, monthly,
+  household, negative hours), *Generation mix* (YTD pies vs 2021 and change bars instead of the table,
+  monthly evolution, demand, last 7 days), *Country profile* (spider chart vs EU27 with user-chosen
+  indicators), *DG ENER weekly* (summary + weekly indicators). Source-group names are now English in the data.
 - **Sheets 1–3 redesigned** (asked by Andrea). *Oggi*: country selector (EU27 default); wholesale, retail,
   gas, oil, CO2 cards; 7-day mix pie; full DG ENER weekly table. *Prezzi elettrici*: compare any countries and
   bidding zones (up to 6), summary table, daily/monthly prices, negative hours, Eurostat retail by semester;

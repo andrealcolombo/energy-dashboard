@@ -20,12 +20,12 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
      edition (date the newsletter was sent, YYYY-MM-DD), week_start, week_end, order, indicator, label, value,
      unit, wow_pct, mom_pct, yoy_pct, ref_period. Indicator ids: elec_wholesale_eu, gas_ttf, ttf_month_ahead,
      lng_acer, gas_storage (wow/yoy in pp), eua, coal, brent_future, brent_dated, petrol_95, diesel, heating_oil,
-     elec_retail_hh, gas_retail_hh, hicp_energy_contrib, hicp_total. Keep labels and order as in previous rows.
+     elec_retail_hh, gas_retail_hh, hicp_energy_contrib, hicp_total. Keep labels (in English) and order as in previous rows.
      Leave a cell empty when the newsletter does not give it. Copy numbers exactly as written.
-   - Replace the notes for the new edition: one row per section (edition, order, section, text), in Italian,
-     2–3 short sentences each, paraphrased, no long quotes.
+   - Add the notes for the new edition: one row per section (edition, order, section, text), in English,
+     2–3 short sentences each, paraphrased, no long quotes. Sections as in previous editions.
    - Upload both files, update datasets/dgener_weekly and datasets/dgener_notes as in step 1.
    - If no newsletter is found, leave these two datasets unchanged and say so in the report.
 3. Check: db_list data/users/<id from db_whoami> for `check`/`runs`; fix only obvious data faults.
-4. Report to Andrea with SendUserMessage, in Italian, 4–6 lines: what was updated, the week's headline
+4. Report to Andrea with SendUserMessage, in Italian (the dashboard itself is in English), 4–6 lines: what was updated, the week's headline
    (EU27 price, TTF, change vs previous week), anything missing or failed.
