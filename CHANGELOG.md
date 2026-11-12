@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-12 | Andrea | Claude | Dashboard v3.4: news feed on *Latest*; change log at the bottom of the page |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.3: layout uses the full width; household price chart removed |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.2: fixed price bar replaced by a new *Latest* tab |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.1: abbreviations explained; mix country selector; battery storage indicator |
@@ -34,6 +35,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-12
 
+- **Dashboard v3.4** (asked by Andrea). *Latest* gets a news feed: up to nine items that may help explain the
+  week's moves, for the selected country first and then EU-wide, each with a short summary and a link. Claude
+  selects them from public sources; the weekly task refreshes them (step 3 of `ops/weekly_update_prompt.md`).
+  The feed lives only in the app. The summary table of this changelog is also shown at the bottom of the dashboard.
 - **Dashboard v3.3** (asked by Andrea). Layout rebalanced to use the full width: *Latest* cards stretch across
   the row, *Country profile* definitions are a grid of cards, the *DG ENER weekly* summary flows in two columns.
   Percentages removed from the 7-day mix legend (shown on the pie). Household electricity chart removed from

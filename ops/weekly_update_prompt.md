@@ -26,6 +26,19 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
      2–3 short sentences each, paraphrased, no long quotes. Sections as in previous editions.
    - Upload both files, update datasets/dgener_weekly and datasets/dgener_notes as in step 1.
    - If no newsletter is found, leave these two datasets unchanged and say so in the report.
-3. Check: db_list data/users/<id from db_whoami> for `check`/`runs`; fix only obvious data faults.
-4. Report to Andrea with SendUserMessage, in Italian (the dashboard itself is in English), 4–6 lines: what was updated, the week's headline
+3. News feed (datasets/news, shown on the *Latest* tab; kept only in the app, not on GitHub).
+   - Read the current news.csv (read_asset with the id in datasets/news.source.url). Columns: date (YYYY-MM-DD,
+     or YYYY-MM if the day is unknown), date_label (shown as is, e.g. "9 Nov 2026" or "Sep 2026 · background"),
+     countries (ISO codes separated by ";", EU = shown for every country), topic (Electricity, Gas, Oil, Retail,
+     Policy, Carbon), title, summary, source, url.
+   - Search the web for the past 7 days: EU gas/TTF and storage, EU power prices and weather (wind, solar,
+     dunkelflaute), oil/Brent, carbon/EUA, EU energy policy; then country news for Italy and Hungary always, and for
+     any country whose weekly price move on the dashboard is unusual (more than about ±20% w/w or the top/bottom 3).
+   - Add 5–10 new items. Only items whose link you have actually seen in search or fetch results; never build a URL.
+     Title and summary in your own words (no quotes over 15 words), 2–3 sentences, saying what happened and the
+     plausible link to prices or the mix. Write links as possible, not proven, causes. State numbers only as the source gives them.
+   - Drop items older than 8 weeks, except up to 3 marked "background". Keep at most 40 rows.
+   - Upload and update datasets/news as in step 1.
+4. Check: db_list data/users/<id from db_whoami> for `check`/`runs`; fix only obvious data faults.
+5. Report to Andrea with SendUserMessage, in Italian (the dashboard itself is in English), 4–6 lines: what was updated (including how many news items were added), the week's headline
    (EU27 price, TTF, change vs previous week), anything missing or failed.

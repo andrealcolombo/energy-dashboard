@@ -30,7 +30,7 @@ window.EDL = {
   const {f, chgSpan} = ED, {row} = EDL;
   const C = () => EDS.country;
   const fk = () => (C() === 'EU27' ? 'EU' : C());
-  const TICK = ['t-whole', 't-whole-date', 't-whole-chg', 't-w7', 't-w7-per', 't-w7-chg', 't-relec', 't-relec-per', 't-relec-chg', 't-rgas', 't-rgas-per', 't-rgas-chg', 't-dsl', 't-dsl-per', 't-dsl-chg', 't-pet', 't-pet-per', 't-pet-chg', 'wk-period', 'week-pie', 'week-note', 'wk-legend'];
+  const TICK = ['t-whole', 't-whole-date', 't-whole-chg', 't-w7', 't-w7-per', 't-w7-chg', 't-relec', 't-relec-per', 't-relec-chg', 't-rgas', 't-rgas-per', 't-rgas-chg', 't-dsl', 't-dsl-per', 't-dsl-chg', 't-pet', 't-pet-per', 't-pet-chg', 'wk-period', 'week-pie', 'week-note', 'wk-legend', 'news-list'];
 
   dash.draw('country-select', (sel) => {
     sel.replaceChildren(...EDL.countries().map((c) => new Option(ED.name(c), c)));
@@ -93,6 +93,28 @@ window.EDL = {
     if (!v.length) { el.textContent = '—'; return; }
     const dr = sh('last_7', ED.RES) - sh('prev_28', ED.RES), dg = sh('last_7', ['Gas']) - sh('prev_28', ['Gas']);
     el.textContent = `Renewables ${ED.f.n0(sh('last_7', ED.RES))}% (${ED.f.p1(dr)} pp on the previous 4 weeks), gas ${ED.f.n0(sh('last_7', ['Gas']))}% (${ED.f.p1(dg)} pp). Less wind and sun and more gas usually explain a price rise.`;
+  });
+  dash.draw('news-list', (el) => {
+    el.replaceChildren();
+    const d = dash.data('news');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const c = EDS.country;
+    const tags = (r) => String(r.countries || '').split(';').map((x) => x.trim());
+    const own = c === 'EU27' ? [] : d.data.filter((r) => tags(r).includes(c));
+    const eu = d.data.filter((r) => tags(r).includes('EU') && !own.includes(r));
+    const byDate = (a, b) => (a.date < b.date ? 1 : -1);
+    const list = own.sort(byDate).concat(eu.sort(byDate)).slice(0, 9);
+    if (!list.length) { ED.placeholder(el, 'empty', 'No news selected yet.'); return; }
+    list.forEach((r) => {
+      const a = document.createElement('article');
+      const m = document.createElement('p'); m.className = 'meta';
+      const scope = document.createElement('span'); scope.className = 'tag'; scope.textContent = own.includes(r) ? ED.name(c) : 'EU-wide';
+      const topic = document.createElement('span'); topic.className = 'tag'; topic.textContent = r.topic;
+      m.append(scope, topic, document.createTextNode(r.date_label + ' · ' + r.source));
+      const h = document.createElement('h4'); const l = document.createElement('a'); l.href = r.url; l.target = '_blank'; l.rel = 'noopener noreferrer'; l.textContent = r.title; h.append(l);
+      const p = document.createElement('p'); p.textContent = r.summary;
+      a.append(m, h, p); el.append(a);
+    });
   });
   dash.draw('wk-legend', (el) => {
     el.replaceChildren();
