@@ -37,12 +37,12 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
      (European Commission press corner https://ec.europa.eu/commission/presscorner, DG ENER news, ACER, IEA,
      national regulators and TSOs); think tanks (Ember, Bruegel, OIES). Avoid blogs, price-comparison sites and
      aggregators; when a story is syndicated, name the original agency in `source`, e.g. "Arab News (Reuters)".
-   - Search the past 7 days: first country news explaining that country's price or mix moves, for Italy and Hungary
-     always, then for the countries with the largest weekly price moves on the dashboard and the main markets
-     (DE, FR, ES, PL, NL, AT, CZ, RO). Then EU-wide news: gas/TTF and storage, weather (wind, solar, dunkelflaute),
+   - Search the past 7 days: first country news explaining that country's price or mix moves, for the countries
+     with the largest weekly price moves on the dashboard (up or down) and for the main markets
+     (DE, FR, ES, IT, PL, NL, AT, CZ, RO). No country gets priority beyond these criteria. Then EU-wide news: gas/TTF and storage, weather (wind, solar, dunkelflaute),
      oil/Brent, carbon/EUA, EU energy policy. Tag a story with every country it plausibly affects.
-   - The app shows six items per country: country news first, then EU-wide. Aim for at least two recent
-     country items for IT and HU, and keep about eight current EU-wide items.
+   - The app shows six items per country: country news first, then EU-wide. Aim for recent country items for
+     the countries selected above, and keep about eight current EU-wide items.
    - Add the new items. Only items whose link you have actually seen in search or fetch results; never build a URL.
      Title and summary in your own words (no quotes over 15 words), 2–3 sentences, saying what happened and the
      plausible link to prices or the mix. Write links as possible, not proven, causes. State numbers only as the source gives them.

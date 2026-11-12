@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-12 | Andrea | Claude | News: no fixed priority for Italy and Hungary in the weekly search |
 | 2026-11-12 | Andrea | Claude | News feed v3.5: marked Beta; six items, country news first; more country sources |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.4: news feed on *Latest*; change log at the bottom of the page |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.3: layout uses the full width; household price chart removed |
@@ -36,6 +37,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-12
 
+- **News: no fixed country priority** (asked by Andrea). The weekly task no longer searches Italy and Hungary
+  every week; it covers the countries with the largest weekly price moves and the main markets, so the feed
+  serves every reader equally. Charts keep their current defaults.
 - **News feed v3.5** (asked by Andrea). The feed is marked Beta and shows six items: news about the selected
   country first, EU-wide news only to fill the rest (EU27 shows EU-wide news only). New country items for DE, CZ,
   PL, ES, IT. The weekly task now prefers recognised outlets (Reuters, Bloomberg, FT, Montel, national agencies
