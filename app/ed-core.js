@@ -123,8 +123,26 @@ window.ED = (function () {
     });
   }
 
-  return {f, parseDay, parseMonth, dayFmt, mLabel, name, MIXC, MIXORDER, num, chgSpan, placeholder, lineChart, stackChart, pairBars};
+  // Pie (donut) chart. parts: [{label, value, color}], values in %.
+  function pie(el, parts, o = {}) {
+    el.replaceChildren();
+    parts = parts.filter((p) => p.value > 0);
+    if (!parts.length) { placeholder(el, 'empty', o.empty || 'Nessun dato'); return; }
+    const W = Math.max(220, el.clientWidth), H = o.height || 230, R = Math.min(H / 2 - 6, W / 2 - 6), r0 = R * 0.52;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const g = svg.append('g').attr('transform', `translate(${W / 2},${H / 2})`);
+    const arcs = d3.pie().sort(null).value((p) => p.value)(parts);
+    const arc = d3.arc().innerRadius(r0).outerRadius(R), lab = d3.arc().innerRadius((R + r0) / 2).outerRadius((R + r0) / 2);
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
+    g.selectAll('path').data(arcs).join('path').attr('d', arc).style('fill', (d) => d.data.color).style('stroke', 'var(--color-panel)').attr('stroke-width', 1)
+      .on('pointermove', (ev, d) => { tip.textContent = d.data.label + ': ' + f.n1(d.data.value) + '%'; tip.hidden = false; const [px, py] = d3.pointer(ev, el); tip.style.left = Math.min(px + 12, el.clientWidth - tip.offsetWidth) + 'px'; tip.style.top = Math.max(0, py - 28) + 'px'; })
+      .on('pointerleave', () => { tip.hidden = true; });
+    g.selectAll('text.pl').data(arcs.filter((d) => d.data.value >= 6)).join('text').attr('class', 'pl').attr('transform', (d) => `translate(${lab.centroid(d)})`).attr('text-anchor', 'middle').attr('dy', '0.35em').style('fill', '#fff').style('font-weight', '600').text((d) => f.n0(d.data.value) + '%');
+    if (o.center) g.append('text').attr('text-anchor', 'middle').attr('dy', '0.35em').style('font-size', '13px').style('fill', 'var(--color-fg)').text(o.center);
+  }
+
+  return {f, parseDay, parseMonth, dayFmt, mLabel, name, MIXC, MIXORDER, num, chgSpan, placeholder, lineChart, stackChart, pairBars, pie};
 })();
 
 // page state (not data): what the reader has selected
-window.EDS = {areas: ['EU27', 'IT', 'HU', 'DE'], range: 365, mixCountry: 'EU27', nl: 'gas_ttf', fuels: ['EU', 'IT', 'HU'], country: 'IT'};
+window.EDS = {snap: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, mixCountry: 'EU27', nl: 'gas_ttf', fuels: ['EU', 'IT', 'HU'], country: 'IT'};

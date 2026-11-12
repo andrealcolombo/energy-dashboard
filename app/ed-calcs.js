@@ -1,29 +1,61 @@
 // ---------- calcs ----------
-dash.calc('mix_week', {
-  title: "Mix dell'ultima settimana",
-  description: 'Per UE27, Italia, Ungheria e altri grandi paesi: quote per fonte negli ultimi 7 giorni e differenza dalle 4 settimane precedenti.',
-  inputs: ['mix_weekly'],
-  fn: (mix_weekly) => {
-    const sh = (c, p, gs) => d3.sum(mix_weekly.filter((d) => d.country === c && d.period === p && gs.includes(d.group)), (d) => Number(d.share_pct));
-    const RES = ['Solare', 'Eolico', 'Idroelettrico', 'Bio, geotermia e altre rinnovabili'];
-    const r1 = (x) => Math.round(x * 10) / 10;
-    return ['EU27', 'IT', 'HU', 'DE', 'FR', 'ES', 'PL', 'AT'].filter((c) => mix_weekly.some((d) => d.country === c && d.period === 'ultimi_7')).map((c) => {
-      const any = mix_weekly.find((d) => d.country === c && d.period === 'ultimi_7');
-      return {country: c, from: any.from, to: any.to, res7: r1(sh(c, 'ultimi_7', RES)), res_d: r1(sh(c, 'ultimi_7', RES) - sh(c, 'prec_28', RES)), wind7: r1(sh(c, 'ultimi_7', ['Eolico'])), solar7: r1(sh(c, 'ultimi_7', ['Solare'])), gas7: r1(sh(c, 'ultimi_7', ['Gas'])), gas_d: r1(sh(c, 'ultimi_7', ['Gas']) - sh(c, 'prec_28', ['Gas'])), coal7: r1(sh(c, 'ultimi_7', ['Carbone e lignite']))};
+dash.calc('kpi_power', {
+  title: 'Prezzo day-ahead: ultimi giorni',
+  description: 'Per ogni area: prezzo dell\'ultimo giorno, media degli ultimi 7 giorni e dei 7 giorni prima.',
+  inputs: ['prices_daily'],
+  fn: (prices_daily) => Array.from(d3.group(prices_daily.filter((d) => d.avg_eur_mwh !== null && d.avg_eur_mwh !== ''), (d) => d.area), ([area, v]) => {
+    const r = v.slice().sort((a, b) => (a.date < b.date ? -1 : 1));
+    const last7 = r.slice(-7), prev7 = r.slice(-14, -7);
+    const mean = (a) => (a.length ? a.reduce((s, d) => s + Number(d.avg_eur_mwh), 0) / a.length : null);
+    const a7 = mean(last7), p7 = mean(prev7), last = r[r.length - 1];
+    return {area, last_date: last.date, last_day: Math.round(Number(last.avg_eur_mwh) * 10) / 10, last_min: Number(last.min_eur_mwh), last_max: Number(last.max_eur_mwh), avg7: Math.round(a7 * 10) / 10, prev7: p7 === null ? null : Math.round(p7 * 10) / 10, chg_pct: p7 ? Math.round((a7 / p7 - 1) * 1000) / 10 : null};
+  }),
+});
+
+dash.calc('price_summary', {
+  title: 'Riepilogo prezzi per area',
+  description: 'Medie degli ultimi 7 e 30 giorni, media da gennaio all\'ultimo mese completo e stesso periodo dell\'anno prima, ore negative da gennaio, prezzo al dettaglio Eurostat.',
+  inputs: ['prices_daily', 'prices_monthly', 'retail_semiannual'],
+  fn: (prices_daily, prices_monthly, retail_semiannual) => {
+    const lastDate = d3.max(prices_daily, (d) => d.date);
+    if (!lastDate) return [];
+    const cy = lastDate.slice(0, 4), cm = lastDate.slice(0, 7), py = String(+cy - 1);
+    const back = (n) => new Date(Date.parse(lastDate) - (n - 1) * 86400000).toISOString().slice(0, 10);
+    const r1 = (x) => (Number.isFinite(x) ? Math.round(x * 10) / 10 : null);
+    const daily = d3.group(prices_daily, (d) => d.area), monthly = d3.group(prices_monthly, (d) => d.area);
+    const ret = d3.group(retail_semiannual.filter((d) => d.product === 'electricity'), (d) => d.geo);
+    return Array.from(daily, ([area, v]) => {
+      const m = monthly.get(area) || [];
+      const wavg = (rows) => { const w = d3.sum(rows, (d) => Number(d.days)); return w ? d3.sum(rows, (d) => Number(d.avg_eur_mwh) * Number(d.days)) / w : NaN; };
+      const done = m.filter((d) => d.month.startsWith(cy) && d.month < cm);
+      const months = new Set(done.map((d) => d.month.slice(5)));
+      const pyRows = m.filter((d) => d.month.startsWith(py) && months.has(d.month.slice(5)));
+      const rr = (ret.get(area) || []).slice().sort((a, b) => (a.period < b.period ? -1 : 1));
+      const lr = rr[rr.length - 1];
+      return {area, avg7: r1(d3.mean(v.filter((d) => d.date >= back(7)), (d) => Number(d.avg_eur_mwh))), avg30: r1(d3.mean(v.filter((d) => d.date >= back(30)), (d) => Number(d.avg_eur_mwh))), ytd: r1(wavg(done)), ytd_py: r1(wavg(pyRows)), neg_ytd: area === 'EU27' ? null : r1(d3.sum(m.filter((d) => d.month.startsWith(cy)), (d) => Number(d.negative_hours))), retail: lr ? r1(Number(lr.eur_per_kwh) * 1000) : null, retail_period: lr ? lr.period : null, ytd_months: months.size};
     });
   },
 });
 
-dash.calc('kpi_power', {
-  title: 'Prezzo day-ahead: media 7 giorni',
-  description: 'Per UE27, Italia e Ungheria: media degli ultimi 7 giorni disponibili e dei 7 giorni prima.',
-  inputs: ['prices_daily'],
-  fn: (prices_daily) => ['EU27', 'IT', 'HU'].map((area) => {
-    const r = prices_daily.filter((d) => d.area === area && d.avg_eur_mwh !== null && d.avg_eur_mwh !== '').sort((a, b) => (a.date < b.date ? -1 : 1));
-    const last7 = r.slice(-7), prev7 = r.slice(-14, -7);
-    const mean = (a) => (a.length ? a.reduce((s, d) => s + Number(d.avg_eur_mwh), 0) / a.length : null);
-    const a7 = mean(last7), p7 = mean(prev7);
-    return {area, last_date: last7.length ? last7[last7.length - 1].date : null, avg7: a7 === null ? null : Math.round(a7 * 10) / 10, prev7: p7 === null ? null : Math.round(p7 * 10) / 10, chg_pct: a7 !== null && p7 ? Math.round((a7 / p7 - 1) * 1000) / 10 : null};
+dash.calc('retail_latest', {
+  title: 'Prezzi al dettaglio: ultimo semestre',
+  description: 'Per paese e UE27: ultimo prezzo Eurostat per le famiglie (elettricità, gas) in €/MWh e variazione sullo stesso semestre dell\'anno prima.',
+  inputs: ['retail_semiannual'],
+  fn: (retail_semiannual) => Array.from(d3.group(retail_semiannual, (d) => d.geo), ([geo, v]) => {
+    const one = (p) => { const r = v.filter((d) => d.product === p).sort((a, b) => (a.period < b.period ? -1 : 1)); const l = r[r.length - 1]; if (!l) return [null, null, null]; const prev = r.find((d) => d.period === (+l.period.slice(0, 4) - 1) + l.period.slice(4)); return [Math.round(Number(l.eur_per_kwh) * 10000) / 10, l.period, prev ? Math.round(1000 * (Number(l.eur_per_kwh) / Number(prev.eur_per_kwh) - 1)) / 10 : null]; };
+    const [e, ep, ey] = one('electricity'), [g, gp, gy] = one('gas');
+    return {geo, elec_eur_mwh: e, elec_period: ep, elec_yoy_pct: ey, gas_eur_mwh: g, gas_period: gp, gas_yoy_pct: gy};
+  }),
+});
+
+dash.calc('fuels_latest', {
+  title: 'Carburanti: ultima settimana',
+  description: 'Per paese e UE: ultimo prezzo di diesel e benzina 95 con tasse (€/l) e variazione sulla settimana prima.',
+  inputs: ['fuels_weekly'],
+  fn: (fuels_weekly) => Array.from(d3.group(fuels_weekly, (d) => d.country), ([country, v]) => {
+    const one = (p) => { const r = v.filter((d) => d.product === p).sort((a, b) => (a.date < b.date ? -1 : 1)); const l = r[r.length - 1], b = r[r.length - 2]; return l ? [Number(l.eur_per_litre), l.date, b ? Math.round(1000 * (Number(l.eur_per_litre) / Number(b.eur_per_litre) - 1)) / 10 : null] : [null, null, null]; };
+    const [d, dd, dc] = one('diesel'), [p, , pc] = one('petrol_95');
+    return {country, date: dd, diesel: d, diesel_wow_pct: dc, petrol_95: p, petrol_wow_pct: pc};
   }),
 });
 
@@ -72,27 +104,9 @@ dash.calc('spark', {
   },
 });
 
-dash.calc('zones_it', {
-  title: 'Zone italiane: ultimi 30 giorni',
-  description: 'Media, minimo e massimo giornaliero, ore negative per zona di offerta italiana; differenza dalla zona Nord.',
-  inputs: ['prices_daily'],
-  fn: (prices_daily) => {
-    const z = prices_daily.filter((d) => d.level === 'zona' && d.country === 'IT');
-    const lastDate = d3.max(z, (d) => d.date);
-    if (!lastDate) return [];
-    const from = new Date(Date.parse(lastDate) - 29 * 86400000).toISOString().slice(0, 10);
-    const rec = z.filter((d) => d.date >= from);
-    const rows = Array.from(d3.group(rec, (d) => d.area), ([area, v]) => ({area, avg30: Math.round(10 * d3.mean(v, (d) => Number(d.avg_eur_mwh))) / 10, min30: Math.round(10 * d3.min(v, (d) => Number(d.avg_eur_mwh))) / 10, max30: Math.round(10 * d3.max(v, (d) => Number(d.avg_eur_mwh))) / 10, neg30: Math.round(10 * d3.sum(v, (d) => Number(d.negative_hours))) / 10}));
-    const nord = rows.find((r) => r.area === 'IT_NORD');
-    rows.forEach((r) => { r.spread_nord = nord ? Math.round(10 * (r.avg30 - nord.avg30)) / 10 : null; });
-    const order = ['IT_NORD', 'IT_CNOR', 'IT_CSUD', 'IT_SUD', 'IT_CALA', 'IT_SICI', 'IT_SARD'];
-    return rows.sort((a, b) => order.indexOf(a.area) - order.indexOf(b.area));
-  },
-});
-
 dash.calc('mix_ytd', {
   title: 'Mix da inizio anno',
-  description: "Per paese e fonte: quota sulla generazione da gennaio all'ultimo mese disponibile, quest'anno, l'anno prima e nel 2021.",
+  description: "Per paese e fonte: quota sulla generazione da gennaio all'ultimo mese completo, quest'anno, l'anno prima e nel 2021.",
   inputs: ['mix_monthly'],
   fn: (mix_monthly) => {
     const rows = [];
@@ -104,26 +118,9 @@ dash.calc('mix_ytd', {
       const groups = new Set([...Object.keys(a.o), ...Object.keys(b.o), ...Object.keys(c.o)]);
       const r1 = (x) => (Number.isFinite(x) ? Math.round(x * 10) / 10 : null);
       const pct = (s, g) => (s.tot ? 100 * (s.o[g] || 0) / s.tot : NaN);
-      for (const g of groups) rows.push({key: country + '|' + g, country, group: g, last_month: last, cur_year: cy, prev_year: py, y2021: r1(pct(a, g)), ypy: r1(pct(b, g)), ycur: r1(pct(c, g)), d_py: r1(pct(c, g) - pct(b, g))});
+      for (const g of groups) rows.push({key: country + '|' + g, country, group: g, last_month: last, cur_year: cy, prev_year: py, y2021: r1(pct(a, g)), ypy: r1(pct(b, g)), ycur: r1(pct(c, g)), d_2021: r1(pct(c, g) - pct(a, g)), d_py: r1(pct(c, g) - pct(b, g))});
       const res = (s) => { const t = ['Solare', 'Eolico', 'Idroelettrico', 'Bio, geotermia e altre rinnovabili'].reduce((z, g) => z + (s.o[g] || 0), 0); return s.tot ? 100 * t / s.tot : NaN; };
-      rows.push({key: country + '|Rinnovabili', country, group: 'Rinnovabili (totale)', last_month: last, cur_year: cy, prev_year: py, y2021: r1(res(a)), ypy: r1(res(b)), ycur: r1(res(c)), d_py: r1(res(c) - res(b))});
-    }
-    return rows;
-  },
-});
-
-dash.calc('mix_annual', {
-  title: 'Mix annuale del paese scelto',
-  description: 'Quote annuali per fonte (somma dei GWh mensili) per tutti i paesi e la UE27.',
-  inputs: ['mix_monthly'],
-  fn: (mix_monthly) => {
-    const rows = [];
-    const by = d3.rollup(mix_monthly, (v) => v, (d) => d.country, (d) => d.month.slice(0, 4));
-    for (const [country, yrs] of by) for (const [year, v] of yrs) {
-      const tot = d3.sum(v, (d) => Number(d.gwh));
-      const share = (g) => Math.round(1000 * d3.sum(v.filter((d) => d.group === g), (d) => Number(d.gwh)) / tot) / 10;
-      const res = Math.round(1000 * d3.sum(v.filter((d) => String(d.renewable) === 'True' || d.renewable === true), (d) => Number(d.gwh)) / tot) / 10;
-      rows.push({key: country + '|' + year, country, year, res, 'Solare': share('Solare'), 'Eolico': share('Eolico'), 'Idroelettrico': share('Idroelettrico'), 'Gas': share('Gas'), 'Carbone e lignite': share('Carbone e lignite'), 'Nucleare': share('Nucleare'), twh: Math.round(tot / 100) / 10, months: new Set(v.map((d) => d.month)).size});
+      rows.push({key: country + '|Rinnovabili', country, group: 'Rinnovabili (totale)', last_month: last, cur_year: cy, prev_year: py, y2021: r1(res(a)), ypy: r1(res(b)), ycur: r1(res(c)), d_2021: r1(res(c) - res(a)), d_py: r1(res(c) - res(b))});
     }
     return rows;
   },

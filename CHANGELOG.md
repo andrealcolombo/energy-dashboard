@@ -5,6 +5,11 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-12
 
+- **Sheets 1–3 redesigned** (asked by Andrea). *Oggi*: country selector (EU27 default); wholesale, retail,
+  gas, oil, CO2 cards; 7-day mix pie; full DG ENER weekly table. *Prezzi elettrici*: compare any countries and
+  bidding zones (up to 6), summary table, daily/monthly prices, negative hours, Eurostat retail by semester;
+  Italian zones table removed. *Mix*: year-to-date pies (this year vs same months of 2021), table, monthly
+  evolution, demand; annual table removed.
 - **Household retail prices by country** (asked by Andrea: retail electricity in the first two sheets).
   Eurostat semi-annual prices, all taxes included: electricity band DC (nrg_pc_204), gas band D2 (nrg_pc_202).
 - **Fuel prices for all EU27 countries** (asked by Andrea: country selector on every sheet).
