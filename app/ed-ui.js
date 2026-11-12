@@ -31,12 +31,11 @@ window.EDL = {
   const C = () => EDS.country;
   const fk = () => (C() === 'EU27' ? 'EU' : C());
   const TICK = ['t-whole', 't-whole-date', 't-whole-chg', 't-relec', 't-relec-per', 't-relec-chg', 't-rgas', 't-rgas-per', 't-rgas-chg', 't-dsl', 't-dsl-per', 't-dsl-chg'];
-  const MIX = ['mix-country', 'ytd-period', 'pie-cur-title', 'pie-2021-title', 'pie-cur', 'pie-2021', 'mix-change', 'mix-stack', 'load-chart', 'wk-period', 'week-pie', 'week-note'];
 
   dash.draw('country-select', (sel) => {
     sel.replaceChildren(...EDL.countries().map((c) => new Option(ED.name(c), c)));
     sel.value = EDS.country;
-    sel.onchange = () => { EDS.country = sel.value; TICK.concat(MIX).forEach((n) => dash.draw(n)); };
+    sel.onchange = () => { EDS.country = sel.value; TICK.forEach((n) => dash.draw(n)); };
   });
 
   dash.draw('headline', (el) => {
@@ -133,7 +132,16 @@ window.EDL = {
 
 // ---------- Generation mix ----------
 (function () {
-  const C = () => EDS.country;
+  const C = () => EDS.mix;
+  const MIX = ['mix-country', 'ytd-period', 'pie-cur-title', 'pie-2021-title', 'pie-cur', 'pie-2021', 'mix-stack', 'load-chart', 'wk-period', 'week-pie', 'week-note'];
+  dash.draw('mix-select', (sel) => {
+    const d = dash.data('mix_monthly');
+    const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.country))) : ['EU27'];
+    cs.sort((a, b) => (a === 'EU27' ? -1 : b === 'EU27' ? 1 : ED.name(a).localeCompare(ED.name(b), 'en')));
+    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
+    sel.value = EDS.mix;
+    sel.onchange = () => { EDS.mix = sel.value; MIX.forEach((n) => dash.draw(n)); };
+  });
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const ytdRows = () => { const a = dash.data('mix_ytd'); return a.status === 'ok' && Array.isArray(a.data) ? a.data.filter((r) => r.country === C()) : []; };
   const period = (r) => 'January–' + MONTHS[+r.last_month.slice(5) - 1];
@@ -154,14 +162,6 @@ window.EDL = {
   };
   dash.draw('pie-cur', (el) => pieOf(el, 'ycur'));
   dash.draw('pie-2021', (el) => pieOf(el, 'y2021'));
-
-  dash.draw('mix-change', (el) => {
-    const a = dash.data('mix_ytd');
-    if (a.status !== 'ok') { ED.placeholder(el, a.status); return; }
-    const v = ytdRows().filter((r) => r.d_2021 !== null && ((r.ycur || 0) + (r.y2021 || 0)) > 0.3);
-    const order = ['Renewables (total)'].concat(ED.MIXORDER);
-    ED.divBars(el, v.sort((x, y) => order.indexOf(x.group) - order.indexOf(y.group)).map((r) => ({label: r.group, value: +r.d_2021, color: r.group.startsWith('Renewables') ? 'var(--color-fg)' : ED.MIXC[r.group]})), {unit: ' pp'});
-  });
 
   dash.draw('mix-stack', (el) => {
     const d = dash.data('mix_monthly');
@@ -200,22 +200,23 @@ window.EDL = {
 // ---------- Country profile ----------
 (function () {
   const IND = [
-    {id: 'w7', label: 'Wholesale price, 7 days', unit: '€/MWh', fmt: ED.f.n1},
-    {id: 'wytd', label: 'Wholesale price, year to date', unit: '€/MWh', fmt: ED.f.n1},
-    {id: 'vol30', label: 'Wholesale volatility, 30 days', unit: '€/MWh (std. dev.)', fmt: ED.f.n1},
-    {id: 'neg_ytd', label: 'Negative-price hours, YTD', unit: 'h', fmt: ED.f.n0},
-    {id: 're_el', label: 'Household electricity', unit: '€/MWh', fmt: ED.f.n0},
-    {id: 're_gas', label: 'Household gas', unit: '€/MWh', fmt: ED.f.n0},
-    {id: 'diesel', label: 'Diesel', unit: '€/l', fmt: ED.f.n2},
-    {id: 'petrol', label: 'Petrol 95', unit: '€/l', fmt: ED.f.n2},
-    {id: 'res_1m', label: 'Renewables share, last month', unit: '%', fmt: ED.f.n1},
-    {id: 'res_12m', label: 'Renewables share, 12 months', unit: '%', fmt: ED.f.n1},
-    {id: 'solar_12m', label: 'Solar share, 12 months', unit: '%', fmt: ED.f.n1},
-    {id: 'wind_12m', label: 'Wind share, 12 months', unit: '%', fmt: ED.f.n1},
-    {id: 'hydro_12m', label: 'Hydro share, 12 months', unit: '%', fmt: ED.f.n1},
-    {id: 'nuclear_12m', label: 'Nuclear share, 12 months', unit: '%', fmt: ED.f.n1},
-    {id: 'gas_12m', label: 'Gas share, 12 months', unit: '%', fmt: ED.f.n1},
-    {id: 'coal_12m', label: 'Coal share, 12 months', unit: '%', fmt: ED.f.n1},
+    {id: 'w7', label: 'Wholesale price, 7 days', unit: '€/MWh', fmt: ED.f.n1, def: 'Average day-ahead wholesale electricity price over the last 7 days (ENTSO-E). For the EU27, country prices weighted by demand.'},
+    {id: 'wytd', label: 'Wholesale price, year to date', unit: '€/MWh', fmt: ED.f.n1, def: 'Average day-ahead wholesale electricity price from January to the last complete month.'},
+    {id: 'vol30', label: 'Wholesale volatility, 30 days', unit: '€/MWh', fmt: ED.f.n1, def: 'Standard deviation of daily average wholesale prices over the last 30 days: how much the price swings from one day to the next.'},
+    {id: 'neg_ytd', label: 'Negative-price hours, YTD', unit: 'hours', fmt: ED.f.n0, def: 'Hours since January with a negative day-ahead price, a sign of surplus renewable output. For countries with several zones, the average of the zones; for the EU27, the average of countries.'},
+    {id: 're_el', label: 'Household electricity', unit: '€/MWh', fmt: ED.f.n0, def: 'Price paid by households using 2,500–4,999 kWh a year, all taxes and levies included, latest half-year (Eurostat).'},
+    {id: 're_gas', label: 'Household gas', unit: '€/MWh', fmt: ED.f.n0, def: 'Price paid by households using 20–200 GJ of gas a year, all taxes and levies included, latest half-year (Eurostat).'},
+    {id: 'diesel', label: 'Diesel', unit: '€/l', fmt: ED.f.n2, def: 'Diesel pump price with taxes, latest week (European Commission Weekly Oil Bulletin).'},
+    {id: 'petrol', label: 'Petrol 95', unit: '€/l', fmt: ED.f.n2, def: 'Euro-super 95 pump price with taxes, latest week (Weekly Oil Bulletin).'},
+    {id: 'res_1m', label: 'Renewables share, last month', unit: '% of generation', fmt: ED.f.n1, def: 'Share of solar, wind, hydro and bioenergy in electricity generation in the last complete month (ENTSO-E).'},
+    {id: 'res_12m', label: 'Renewables share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Same as above over the last 12 complete months, which removes seasonal swings.'},
+    {id: 'solar_12m', label: 'Solar share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of solar in electricity generation over the last 12 complete months.'},
+    {id: 'wind_12m', label: 'Wind share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of onshore and offshore wind in generation over the last 12 complete months.'},
+    {id: 'hydro_12m', label: 'Hydro share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of run-of-river and reservoir hydro in generation over the last 12 complete months (pumped storage excluded).'},
+    {id: 'nuclear_12m', label: 'Nuclear share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of nuclear in generation over the last 12 complete months.'},
+    {id: 'gas_12m', label: 'Gas share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of gas-fired plants in generation over the last 12 complete months. A high share ties power prices to the gas price.'},
+    {id: 'coal_12m', label: 'Coal share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of hard coal and lignite in generation over the last 12 complete months.'},
+    {id: 'bat_3m', label: 'Battery storage, 3 months', unit: '% of generation', fmt: ED.f.n2, def: 'Electricity discharged from storage reported to ENTSO-E as "energy storage" (mostly batteries), as a share of generation over the last 3 complete months. Many countries, including Germany, do not report it: shown as n/a. The EU27 value counts reporting countries only, so it understates the real total.'},
   ];
   const P = () => EDS.profile;
   const val = (c, id) => { const r = EDL.row('profile', 'key', c + '|' + id); return r ? Number(r.value) : NaN; };
@@ -224,7 +225,7 @@ window.EDL = {
     const ratio = Number.isFinite(a) && Number.isFinite(e) && e !== 0 ? a / e : NaN;
     return {...i, a, e, ratio, text: `${i.label}: ${ED.name(P())} ${Number.isFinite(a) ? i.fmt(a) : 'n/a'} · EU27 ${Number.isFinite(e) ? i.fmt(e) : 'n/a'} ${i.unit}`};
   });
-  const redraw = () => ['ind-chips', 'spider', 'spider-pick', 'profile-table', 'profile-head'].forEach((n) => dash.draw(n));
+  const redraw = () => ['ind-chips', 'spider', 'spider-pick', 'ind-legend'].forEach((n) => dash.draw(n));
 
   dash.draw('profile-select', (sel) => {
     const cs = EDL.countries().filter((c) => c !== 'EU27');
@@ -236,7 +237,7 @@ window.EDL = {
   dash.draw('ind-chips', (el) => {
     el.replaceChildren();
     IND.forEach((i) => {
-      const b = document.createElement('button'); b.className = 'chip'; b.textContent = i.label; b.setAttribute('aria-pressed', String(EDS.ind.includes(i.id)));
+      const b = document.createElement('button'); b.className = 'chip'; b.textContent = i.label; b.title = i.def; b.setAttribute('aria-pressed', String(EDS.ind.includes(i.id)));
       b.onclick = () => { EDS.ind = EDS.ind.includes(i.id) ? EDS.ind.filter((x) => x !== i.id) : EDS.ind.concat(i.id); redraw(); };
       el.append(b);
     });
@@ -255,13 +256,12 @@ window.EDL = {
     el.textContent = `${a.label} — ${ED.name(P())}: ${Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a'} ${a.unit} · EU27: ${Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a'} ${a.unit}${diff}`;
   });
 
-  dash.draw('profile-head', (el) => { el.textContent = ED.name(P()); });
-  dash.draw('profile-table', (tb) => {
-    tb.replaceChildren();
+  dash.draw('ind-legend', (el) => {
+    el.replaceChildren();
     axes().forEach((a) => {
-      const tr = document.createElement('tr'); tr.dataset.key = P() + '|' + a.id;
-      [a.label + ' (' + a.unit + ')', Number.isFinite(a.a) ? a.fmt(a.a) : '—', Number.isFinite(a.e) ? a.fmt(a.e) : '—', Number.isFinite(a.ratio) ? ED.f.n2(a.ratio) + '×' : '—'].forEach((t) => { const td = document.createElement('td'); td.textContent = t; tr.append(td); });
-      tb.append(tr);
+      const dt = document.createElement('dt'); dt.textContent = a.label + ' (' + a.unit + ')';
+      const dd = document.createElement('dd'); dd.textContent = a.def + ' ' + ED.name(P()) + ': ' + (Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a') + ' · EU27: ' + (Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a') + '.';
+      el.append(dt, dd);
     });
   });
 })();

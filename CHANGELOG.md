@@ -5,6 +5,11 @@ Each entry says who asked, what changed and why. Git history has the line-by-lin
 
 ## 2026-11-12
 
+- **Dashboard v3.1** (asked by Andrea). Ticker footnote moved right under the ticker, with the abbreviations
+  explained (d/d, w/w, y/y, w/e, H1/H2); "power" renamed "electricity". *Generation mix*: own country selector,
+  change-since-2021 chart removed. *Country profile*: table removed, a reading guide and per-indicator
+  definitions added, new indicator "Battery storage, 3 months" (ENTSO-E "energy storage" discharge, reported
+  by few countries). Data: ENTSO-E "Energy storage" is now its own group "Battery storage" (was in "Other").
 - **Dashboard v3, in English** (asked by Andrea). New layout: a ticker bar with the latest wholesale power,
   household power, TTF, household gas, diesel and EU gas storage, with a country selector and arrows
   (d/d, w/w or y/y). Four sheets: *Electricity prices* (compare countries and zones: daily, monthly,

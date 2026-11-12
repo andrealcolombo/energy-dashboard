@@ -38,7 +38,8 @@ GROUPS = {
     "Solar": "Solar",
     "Biomass": "Bio & other renewables", "Geothermal": "Bio & other renewables",
     "Other renewable": "Bio & other renewables", "Marine": "Bio & other renewables",
-    "Waste": "Other", "Other": "Other", "Energy storage": "Other",
+    "Waste": "Other", "Other": "Other",
+    "Energy storage": "Battery storage",  # ENTSO-E B25, mostly batteries; reported by few countries
 }
 RENEWABLE = {"Hydro", "Wind", "Solar", "Bio & other renewables"}
 FUEL_COUNTRIES = None  # all EU27 countries plus the EU average (EA, the euro area, is left out)

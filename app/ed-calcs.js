@@ -69,7 +69,7 @@ dash.calc('mix_ytd', {
 
 dash.calc('profile', {
   title: 'Country profile indicators',
-  description: 'One value per country and indicator, and the same for the EU27 (load-weighted price; EU27 generation totals; EU averages from Eurostat and the Oil Bulletin; for negative-price hours, the mean of countries).',
+  description: 'One value per country and indicator, and the same for the EU27 (load-weighted price; EU27 generation totals; EU averages from Eurostat and the Oil Bulletin; for negative-price hours, the mean of countries). Battery storage only for countries that report it.',
   inputs: ['prices_daily', 'prices_monthly', 'retail_semiannual', 'fuels_weekly', 'mix_monthly'],
   fn: (prices_daily, prices_monthly, retail_semiannual, fuels_weekly, mix_monthly) => {
     const out = [];
@@ -107,6 +107,7 @@ dash.calc('profile', {
       put(c, 'res_1m', sh(m1, RES)); put(c, 'res_12m', sh(m12, RES));
       put(c, 'solar_12m', sh(m12, ['Solar'])); put(c, 'wind_12m', sh(m12, ['Wind'])); put(c, 'hydro_12m', sh(m12, ['Hydro']));
       put(c, 'nuclear_12m', sh(m12, ['Nuclear'])); put(c, 'gas_12m', sh(m12, ['Gas'])); put(c, 'coal_12m', sh(m12, ['Coal & lignite']));
+      if (c === 'EU27' || v.some((d) => d.group === 'Battery storage')) put(c, 'bat_3m', sh(ms.slice(-3), ['Battery storage']));
     }
     return out;
   },

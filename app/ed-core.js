@@ -8,8 +8,8 @@ window.ED = (function () {
   const mLabel = (d) => MESI[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
   const NAMES = {EU27:'EU27', AT:'Austria', BE:'Belgium', BG:'Bulgaria', HR:'Croatia', CY:'Cyprus', CZ:'Czechia', DK:'Denmark', EE:'Estonia', FI:'Finland', FR:'France', DE:'Germany', GR:'Greece', HU:'Hungary', IE:'Ireland', IT:'Italy', LV:'Latvia', LT:'Lithuania', LU:'Luxembourg', MT:'Malta', NL:'Netherlands', PL:'Poland', PT:'Portugal', RO:'Romania', SK:'Slovakia', SI:'Slovenia', ES:'Spain', SE:'Sweden', EU:'EU'};
   const name = (c) => (c === 'IE_SEM' ? 'Ireland (SEM)' : NAMES[c] || c.replace('_', ' '));
-  const MIXC = {'Solar':'var(--c-solar)','Wind':'var(--c-wind)','Hydro':'var(--c-hydro)','Bio & other renewables':'var(--c-bio)','Nuclear':'var(--c-nuc)','Gas':'var(--c-gas)','Coal & lignite':'var(--c-coal)','Oil':'var(--c-oil)','Pumped storage':'var(--c-pump)','Other':'var(--c-other)'};
-  const MIXORDER = ['Solar','Wind','Hydro','Bio & other renewables','Nuclear','Gas','Coal & lignite','Oil','Pumped storage','Other'];
+  const MIXC = {'Solar':'var(--c-solar)','Wind':'var(--c-wind)','Hydro':'var(--c-hydro)','Bio & other renewables':'var(--c-bio)','Nuclear':'var(--c-nuc)','Gas':'var(--c-gas)','Coal & lignite':'var(--c-coal)','Oil':'var(--c-oil)','Pumped storage':'var(--c-pump)','Battery storage':'var(--c-bat)','Other':'var(--c-other)'};
+  const MIXORDER = ['Solar','Wind','Hydro','Bio & other renewables','Nuclear','Gas','Coal & lignite','Oil','Pumped storage','Battery storage','Other'];
   const RES = ['Solar', 'Wind', 'Hydro', 'Bio & other renewables'];
   const num = (v) => (v === null || v === undefined || v === '' ? NaN : +v);
 
@@ -179,4 +179,4 @@ window.ED = (function () {
 })();
 
 // page state (not data): what the reader has selected
-window.EDS = {country: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
+window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
