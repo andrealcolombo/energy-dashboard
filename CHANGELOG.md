@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | New section "Prices through the day" in Electricity prices: hourly price, mix, swing |
 | 2026-11-13 | Andrea | Claude | Day profiles: hour-by-hour prices, load and generation by month, from ENTSO-E |
 | 2026-11-13 | Andrea | Claude | Second daily data run at 17:07 UTC, as a backup to the 13:23 run |
 | 2026-11-13 | Andrea | Claude | Renamed "EU Energy Markets Dashboard"; site icon, full-width text; change log in Word |
@@ -44,6 +45,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-13
 
+- **Prices through the day** (asked by Andrea). New section at the bottom of the Electricity prices tab,
+  added to what was there: average price by hour (one line per year; whole year or season; €/MWh or % of the
+  day's average), generation by source hour by hour with storage charging below zero, and the daily price swing.
+  Purpose: show how solar and storage change the shape of the day. Data: `day_profile.csv` (years and seasons).
 - **Day profiles** (asked by Andrea, after a colleague's remark on batteries and price spikes).
   `src/fetch_intraday.py` builds `data/intraday_profile.csv`: for each country and month, the average price,
   load and generation by type for each hour of the day. History from 2021 via `intraday-backfill.yml`;
