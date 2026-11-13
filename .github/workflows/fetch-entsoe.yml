@@ -3,6 +3,7 @@ name: Fetch ENTSO-E data
 on:
   schedule:
     - cron: "23 13 * * *"   # every day, 13:23 UTC (after day-ahead results are published)
+    - cron: "7 17 * * *"    # backup run, 17:07 UTC: GitHub often starts scheduled runs late or skips them
   workflow_dispatch:         # "Run workflow" button in the Actions tab
     inputs:
       only_oil:
