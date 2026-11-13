@@ -1,8 +1,9 @@
 """Build the public website (GitHub Pages) from the private Claude dashboard page.
 
-Takes app/index.html and app/ed-*.js, removes everything that is internal or needs Claude
-(DG ENER newsletter tab and indicators, news feed, change log), adds the public TTF series,
-download links and a disclaimer, and writes a static site to _site/ with the public CSV files.
+Takes app/index.html and app/ed-*.js, removes the DG ENER newsletter tab, the news feed and the
+change log, adds download links and a disclaimer, and writes a static site to _site/.
+The two gas cards (TTF weekly, EU storage) use data/gas_weekly.csv: by Andrea's decision (13 Nov 2026)
+these two series from the DG ENER weekly newsletter are shown, cited as internal Commission elaborations.
 
 Usage: python site/build_site.py [output_dir]
 """
@@ -37,7 +38,7 @@ main{max-width:1180px;margin:0 auto;padding:16px}
 .ed .disclaimer{font-size:11px;color:var(--color-fg-muted);margin-top:var(--cds-gap-lg)}
 """
 
-TTF_CARD = ('      <div class="ti" id="t-ttfm"><div class="lab">TTF · monthly average · <span data-draw="t-ttfm-per">—</span></div>'
+_UNUSED_TTF_CARD = ('      <div class="ti" id="t-ttfm"><div class="lab">TTF · monthly average · <span data-draw="t-ttfm-per">—</span></div>'
             '<div class="v"><span data-draw="t-ttfm">—</span><span class="u">€/MWh</span></div>'
             '<div class="c" data-draw="t-ttfm-chg">—</div></div>\n')
 
@@ -58,35 +59,29 @@ def page():
     s = (APP / "index.html").read_text()
     s = s.replace('<meta name="dash-one-writer">\n', "")
     s = must(s, '    <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>\n', "")
-    # gas cards: internal weekly TTF and storage -> public monthly TTF
-    s = cut(s, '      <div class="ti" id="t-ttf">', '</div></div>\n', TTF_CARD)
-    s = cut(s, '      <div class="ti" id="t-sto">', '</div></div>\n')
-    s = must(s, "Gas · wholesale (TTF), storage and household", "Gas · wholesale (TTF) and household")
-    s = must(s, "the previous week (w/w) for 7-day averages, TTF, storage and pump prices;",
-             "the previous week (w/w) for 7-day averages and pump prices; the previous month (m/m) for TTF;")
-    s = must(s, " TTF and gas storage are EU-wide.", " TTF is the EU benchmark, a monthly average published with a lag of about a month.")
     s = cut(s, '    <h2 id="latest-news">', 'data-source="news"></div>\n')
     s = cut(s, "  <!-- ============ DG ENER ============ -->", "  </section>\n")
     s = cut(s, '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Change log</summary>', "  </details>\n\n")
     s = must(s, '  <details class="note">\n    <summary>Sources and method</summary>',
              '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Sources and method</summary>')
     s = must(s, "TTF, storage and the weekly indicators: DG ENER weekly newsletter. News: public news sites and reports, each linked to its source.",
-             "TTF: IMF Primary Commodity Prices (Dutch TTF, monthly average, USD/MMBtu) via FRED, converted to €/MWh "
-             "at the monthly average USD/EUR rate.")
+             "TTF day-ahead (weekly average) and EU gas storage: internal elaborations of the European Commission "
+             "(DG ENER), updated weekly.")
     stamp = datetime.now(timezone.utc).strftime("%d %b %Y, %H:%M UTC")
-    bar = ('  <div class="site-bar"><span>Updated daily from public data · page built ' + stamp + '</span>'
+    bar = ('  <div class="site-bar"><span>Updated daily · page built ' + stamp + '</span>'
            '<a href="data/energy_dashboard_data.xlsx">Download all data (Excel)</a>'
            '<a href="https://github.com/andrealcolombo/energy-dashboard">Code and CSV files (GitHub)</a></div>\n')
     s = must(s, '  <p class="lede" data-draw="headline">—</p>\n', '  <p class="lede" data-draw="headline">—</p>\n' + bar)
-    s = must(s, '<script src="ed-ui.js"></script>\n', '<script src="ed-ui.js"></script>\n<script src="extra.js"></script>\n')
     s = s.replace("</details>\n</div>",
                   "</details>\n  <p class=\"disclaimer\">Independent prototype built from public data "
-                  "(ENTSO-E Transparency Platform, Eurostat, European Commission Weekly Oil Bulletin, IMF). "
+                  "(ENTSO-E Transparency Platform, Eurostat, European Commission Weekly Oil Bulletin) and internal elaborations "
+                  "of the European Commission for TTF and gas storage. "
                   "Not an official publication of the European Commission.</p>\n</div>", 1)
-    for bad in ("dgener", "DG ENER", "news-list", "Claude"):
+    for bad in ('data-tab="dgener"', 'id="dgener"', "news-list", "Claude", "Change log"):
         if bad in s:
             raise SystemExit(f"build_site: internal content left in page: {bad}")
-    files = {k: f"data/{k}.csv" for k in DATA + ["gas_ttf_monthly"]}
+    files = {k: f"data/{k}.csv" for k in DATA}
+    files["dgener_weekly"] = "data/gas_weekly.csv"
     head = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
             '<title>EU energy markets</title>'
@@ -105,13 +100,13 @@ def main():
     (OUT / "index.html").write_text(page())
     for f in ("ed-core.js", "ed-calcs.js", "ed-ui.js"):
         shutil.copy(APP / f, OUT / f)
-    for f in ("runtime.js", "extra.js"):
+    for f in ("runtime.js",):
         shutil.copy(SITE / f, OUT / f)
     for k in DATA:
         shutil.copy(ROOT / "data" / "dashboard" / f"{k}.csv", OUT / "data" / f"{k}.csv")
-    ttf = ROOT / "data" / "gas_ttf_monthly.csv"
-    if ttf.exists():
-        shutil.copy(ttf, OUT / "data" / "gas_ttf_monthly.csv")
+    for f in ("gas_weekly.csv", "gas_ttf_monthly.csv"):
+        if (ROOT / "data" / f).exists():
+            shutil.copy(ROOT / "data" / f, OUT / "data" / f)
     xl = ROOT / "data" / "energy_dashboard_data.xlsx"
     if xl.exists():
         shutil.copy(xl, OUT / "data" / xl.name)

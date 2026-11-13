@@ -15,10 +15,13 @@ and the CSV files in `data/dashboard/`.
 ## Data rules
 - Never commit the DG ENER weekly newsletter or figures taken from it: it is an internal
   Commission document. It lives only in the private app (files uploaded to the artifact).
+  Single exception, decided by Andrea on 13 Nov 2026: the weekly TTF day-ahead and EU gas storage rows go to
+  `data/gas_weekly.csv` and the public site, cited as "internal elaborations of the European Commission".
+  Nothing else from the newsletter (other indicators, commentary) may be committed.
 - Never print or commit the ENTSO-E API key. It is the GitHub secret `ENTSOE_API_KEY`.
 - Public sources only in this repository: ENTSO-E Transparency Platform, EC Weekly Oil Bulletin, Eurostat,
   IMF commodity prices via FRED (TTF).
-- The public website (`site/`, GitHub Pages) must never show the DG ENER tab, newsletter figures, the news
+- The public website (`site/`, GitHub Pages) must never show the DG ENER tab, other newsletter figures, the news
   feed or the change log. `site/build_site.py` removes them and stops if any is left.
 
 ## Layout

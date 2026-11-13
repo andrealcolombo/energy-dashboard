@@ -13,7 +13,7 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
      updated = {at: now UTC, by: "Claude (aggiornamento settimanale)"}, edit = {via: "claude", at: now}.
      If a dataset doc does not exist yet, create it with `set`
      (title, description, source {kind: file, url, name, format: csv}, updated, schedule, staleAfterHours: 336, edit).
-2. DG ENER newsletter (internal: never write it to GitHub).
+2. DG ENER newsletter (internal: never write it to GitHub, except the two gas rows below).
    - Gmail: search `subject:"WEEKLY PRICES" newer_than:8d`, read the newest message (PLAIN_TEXT).
    - Read the current dgener_weekly.csv and dgener_notes.csv (read_asset with the id in datasets/<id>.source.url).
    - Append one row per indicator for the new edition (skip if that edition is already there). Columns:
@@ -26,6 +26,12 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
      2–3 short sentences each, paraphrased, no long quotes. Sections as in previous editions.
    - Upload both files, update datasets/dgener_weekly and datasets/dgener_notes as in step 1.
    - If no newsletter is found, leave these two datasets unchanged and say so in the report.
+   - Public site (exception decided by Andrea, 13 Nov 2026): append to `data/gas_weekly.csv` in the repository
+     only the new edition's `gas_ttf` and `gas_storage` rows (same columns as dgener_weekly.csv), then commit
+     ("Gas weekly (DG ENER internal elaboration) <edition>") and push to main. Nothing else from the newsletter
+     goes to GitHub. Pushing to main triggers the site rebuild only for app/ or site/ changes, so after the
+     push also start the workflow `pages.yml` (gh api -X POST repos/andrealcolombo/energy-dashboard/actions/
+     workflows/pages.yml/dispatches -f ref=main). If the push fails, say so in the report.
 3. News feed (datasets/news, shown on the *Latest* tab; kept only in the app, not on GitHub).
    - Read the current news.csv (read_asset with the id in datasets/news.source.url). Columns: date (YYYY-MM-DD,
      or YYYY-MM if the day is unknown), date_label (shown as is, e.g. "9 Nov 2026" or "Sep 2026 · background"),

@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | Public site shows weekly TTF and storage from DG ENER, cited as internal elaborations |
 | 2026-11-13 | Andrea | Claude | Public website on GitHub Pages, updated daily; TTF monthly from IMF |
 | 2026-11-13 | Andrea | Claude | One Excel file with all public datasets, rebuilt daily, downloadable from GitHub |
 | 2026-11-12 | Andrea | Claude | News: no fixed priority for Italy and Hungary in the weekly search |
@@ -39,6 +40,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-13
 
+- **Gas weekly on the public site** (decided by Andrea, after being told the site and repository are public).
+  The TTF day-ahead and EU storage rows of the DG ENER newsletter go to `data/gas_weekly.csv` and to the site,
+  cited as internal elaborations of the European Commission, so the site matches the Claude dashboard except
+  for the newsletter tab. No other newsletter content is committed. The weekly task adds the new rows.
 - **Public website** (asked by Andrea, to show the work outside Claude). `site/build_site.py` builds a static copy
   of the dashboard from `app/` without the DG ENER tab, newsletter indicators, news and change log, and with a
   disclaimer and download links. `pages.yml` deploys it to GitHub Pages after every data update. TTF on the
