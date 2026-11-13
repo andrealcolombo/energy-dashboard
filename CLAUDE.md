@@ -30,6 +30,7 @@ and the CSV files in `data/dashboard/`.
 - `src/fetch_oil_bulletin.py` — EC Weekly Oil Bulletin (weekly).
 - `src/build_dashboard_files.py` — compact files read by the app, in `data/dashboard/`.
 - `.github/workflows/fetch-entsoe.yml` — daily schedule; `backfill.yml` — one-off parallel history.
+- `src/fetch_intraday.py` — day profiles (average price, load, generation by hour, per month); `intraday-backfill.yml` for history.
 - `src/fetch_ttf.py` — TTF monthly average (IMF via FRED), daily run.
 - `src/build_excel.py` — one Excel file with all public datasets.
 - `site/` — public website built from `app/` (`build_site.py`, `runtime.js`, `extra.js`);

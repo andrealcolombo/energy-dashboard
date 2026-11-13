@@ -84,6 +84,15 @@ jobs:
         if: always() && steps.when.outputs.weekly == 'true'
         run: /tmp/commit.sh load
 
+      - name: Day profiles (hour by hour, last two complete months)
+        if: always() && steps.when.outputs.weekly == 'true' && !inputs.only_oil
+        continue-on-error: true
+        timeout-minutes: 120
+        run: python -u src/fetch_intraday.py
+      - name: Commit day profiles
+        if: always() && steps.when.outputs.weekly == 'true'
+        run: /tmp/commit.sh day-profiles
+
       - name: EC Weekly Oil Bulletin
         if: always() && steps.when.outputs.weekly == 'true'
         continue-on-error: true

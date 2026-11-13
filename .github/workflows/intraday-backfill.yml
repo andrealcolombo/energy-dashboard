@@ -1,0 +1,92 @@
+name: Backfill day profiles (parallel)
+
+# One-off history download of hour-by-hour prices, load and generation,
+# averaged into a day profile per country and month (src/fetch_intraday.py).
+# One job per country, all in parallel; a final job merges and commits.
+on:
+  workflow_dispatch:
+    inputs:
+      countries:
+        description: "Countries, comma-separated"
+        default: "AT,BE,BG,HR,CY,CZ,DK,EE,FI,FR,DE,GR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,RO,SK,SI,ES,SE"
+
+permissions:
+  contents: write
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    outputs:
+      countries: ${{ steps.l.outputs.countries }}
+    steps:
+      - id: l
+        env:
+          IN: ${{ inputs.countries }}
+        run: echo "countries=$(python3 -c 'import json,os;print(json.dumps([c.strip() for c in os.environ["IN"].split(",") if c.strip()]))')" >> "$GITHUB_OUTPUT"
+
+  fetch:
+    needs: list
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 14
+      matrix:
+        country: ${{ fromJSON(needs.list.outputs.countries) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Download ${{ matrix.country }}
+        env:
+          ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
+          ONLY_COUNTRIES: ${{ matrix.country }}
+          DATA_DIR: out
+        run: python -u src/fetch_intraday.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: part-${{ matrix.country }}
+          path: out/
+          if-no-files-found: ignore
+
+  merge:
+    needs: fetch
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas
+      - uses: actions/download-artifact@v4
+        with:
+          path: parts
+      - name: Get the latest data before merging
+        run: git pull --ff-only origin main
+      - name: Merge
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+          keys = ["country", "month", "hour"]
+          target = Path("data/intraday_profile.csv")
+          frames = [pd.read_csv(p) for p in Path("parts").glob("*/intraday_profile.csv") if p.stat().st_size > 0]
+          if target.exists():
+              frames.insert(0, pd.read_csv(target))
+          out = pd.concat(frames, ignore_index=True).drop_duplicates(keys, keep="last").sort_values(keys)
+          out.to_csv(target, index=False)
+          print(len(out), "rows,", out["country"].nunique(), "countries")
+          PY
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/intraday_profile.csv
+          git diff --cached --quiet && exit 0
+          git commit -m "Backfill day profiles ($(date -u +%Y-%m-%d))"
+          git push

@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | Day profiles: hour-by-hour prices, load and generation by month, from ENTSO-E |
 | 2026-11-13 | Andrea | Claude | Second daily data run at 17:07 UTC, as a backup to the 13:23 run |
 | 2026-11-13 | Andrea | Claude | Renamed "EU Energy Markets Dashboard"; site icon, full-width text; change log in Word |
 | 2026-11-13 | Andrea | Claude | Country profile: compare a country with the EU27 or with another country |
@@ -43,6 +44,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-13
 
+- **Day profiles** (asked by Andrea, after a colleague's remark on batteries and price spikes).
+  `src/fetch_intraday.py` builds `data/intraday_profile.csv`: for each country and month, the average price,
+  load and generation by type for each hour of the day. History from 2021 via `intraday-backfill.yml`;
+  the last two months are refreshed on Sundays. ENTSO-E reports batteries only from 2025, for some countries.
 - **Backup data run** (asked by Andrea). The data workflow now also runs every day at 17:07 UTC.
   GitHub often starts scheduled runs hours late (the 13:23 run of 12 Nov started at 20:53) or skips them.
   If the first run already got the day's prices, the second finds nothing new and commits nothing.
