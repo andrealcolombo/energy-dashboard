@@ -97,6 +97,20 @@ jobs:
         if: always()
         continue-on-error: true
         run: python src/build_dashboard_files.py
+      - name: Build Excel workbook (all public datasets)
+        if: always()
+        continue-on-error: true
+        run: python src/build_excel.py
+      - name: Publish Excel workbook as release asset (stable download link, not committed)
+        if: always()
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          test -f data/energy_dashboard_data.xlsx || exit 0
+          gh release view data-latest >/dev/null 2>&1 || gh release create data-latest --title "Latest data (Excel)" \
+            --notes "All public datasets behind the dashboard in one Excel file. Rebuilt automatically every day."
+          gh release upload data-latest data/energy_dashboard_data.xlsx --clobber
       - name: Commit oil bulletin and dashboard files
         if: always()
         run: /tmp/commit.sh "oil bulletin, dashboard files"

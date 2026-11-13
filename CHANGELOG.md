@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | One Excel file with all public datasets, rebuilt daily, downloadable from GitHub |
 | 2026-11-12 | Andrea | Claude | News: no fixed priority for Italy and Hungary in the weekly search |
 | 2026-11-12 | Andrea | Claude | News feed v3.5: marked Beta; six items, country news first; more country sources |
 | 2026-11-12 | Andrea | Claude | Dashboard v3.4: news feed on *Latest*; change log at the bottom of the page |
@@ -34,6 +35,13 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 "Requested by: Claude" means a fix Claude found and made while working on another request.
 
 ## Details
+
+### 2026-11-13
+
+- **Excel workbook** (asked by Andrea). `src/build_excel.py` puts every public dataset behind the dashboard in one
+  file (`energy_dashboard_data.xlsx`, one sheet per dataset plus a README with sources and method). The daily
+  workflow rebuilds it and publishes it as the asset of the GitHub release `data-latest`, a stable download link.
+  It is not committed, to keep the repository small. The DG ENER newsletter is never included.
 
 ### 2026-11-12
 
