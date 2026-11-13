@@ -303,7 +303,7 @@ def main():
     from entsoe import EntsoePandasClient
 
     parts = tuple(sys.argv[1:]) or ("prices", "generation", "load")
-    status = run(EntsoePandasClient(api_key=key), parts)
+    status = run(EntsoePandasClient(api_key=key, timeout=120, retry_count=3, retry_delay=20), parts)
     print(json.dumps(status, indent=2))
     total = (len(config.PRICE_ZONES) if "prices" in parts else 0) + \
         len(config.COUNTRIES) * (("generation" in parts) + ("load" in parts))

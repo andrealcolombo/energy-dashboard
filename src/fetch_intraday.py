@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import os
 import sys
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -48,6 +49,25 @@ GROUPS = {
     "hydro": ["Hydro Run-of-river and pondage", "Hydro Water Reservoir"],
 }
 STORAGE = ["Hydro Pumped Storage", "Energy storage"]
+
+
+def by_year(fn, *args, start: pd.Timestamp, end: pd.Timestamp, label: str = "", **kw):
+    """Run an ENTSO-E query one calendar year at a time, so a failure loses one year only."""
+    parts = []
+    cur = start
+    while cur < end:
+        nxt = min(end, pd.Timestamp(year=cur.year + 1, month=1, day=1, tz=cur.tz))
+        t0 = time.time()
+        try:
+            parts.append(with_retry(fn, *args, start=cur, end=nxt, **kw))
+            print(f"  {label} {cur.year}: ok ({time.time() - t0:.0f}s)", flush=True)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {label} {cur.year}: {type(exc).__name__} ({time.time() - t0:.0f}s)", flush=True)
+        cur = nxt
+    if not parts:
+        raise RuntimeError(f"no data for {label}")
+    out = pd.concat(parts)
+    return out[~out.index.duplicated(keep="last")].sort_index()
 
 
 def hourly(obj: pd.DataFrame | pd.Series) -> pd.DataFrame | pd.Series:
@@ -75,21 +95,21 @@ def profile(cc: str, client, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataF
     zp = []
     for z in zones:
         try:
-            zp.append(hourly(with_retry(client.query_day_ahead_prices, z, start=start, end=end)).rename(z))
+            zp.append(hourly(by_year(client.query_day_ahead_prices, z, start=start, end=end, label=f'price {z}')).rename(z))
         except Exception as exc:  # noqa: BLE001
             print(f"  price {z}: {type(exc).__name__}")
     if zp:
         cols["price"] = pd.concat(zp, axis=1).mean(axis=1)
 
     try:
-        ld = with_retry(client.query_load, cc, start=start, end=end)
+        ld = by_year(client.query_load, cc, start=start, end=end, label='load')
         ld = ld.iloc[:, 0] if isinstance(ld, pd.DataFrame) else ld
         cols["load"] = hourly(ld)
     except Exception as exc:  # noqa: BLE001
         print(f"  load: {type(exc).__name__}")
 
     try:
-        df = with_retry(client.query_generation, cc, start=start, end=end, psr_type=None)
+        df = by_year(client.query_generation, cc, start=start, end=end, psr_type=None, label='generation')
         if isinstance(df, pd.Series):
             df = df.to_frame()
         gen, cons = split_generation(df)
@@ -134,7 +154,7 @@ def main() -> None:
     key = os.environ.get("ENTSOE_API_KEY")
     if not key:
         sys.exit("ENTSOE_API_KEY is not set")
-    client = EntsoePandasClient(api_key=key)
+    client = EntsoePandasClient(api_key=key, timeout=120, retry_count=3, retry_delay=20)
     only = [c.strip() for c in os.environ.get("ONLY_COUNTRIES", "").split(",") if c.strip()]
     countries = [c for c in config.COUNTRIES if not only or c in only]
 

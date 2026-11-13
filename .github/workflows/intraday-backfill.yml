@@ -30,7 +30,7 @@ jobs:
     timeout-minutes: 300
     strategy:
       fail-fast: false
-      max-parallel: 14
+      max-parallel: 9
       matrix:
         country: ${{ fromJSON(needs.list.outputs.countries) }}
     steps:
