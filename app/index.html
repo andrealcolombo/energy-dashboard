@@ -140,11 +140,11 @@
     <h3><span data-draw="dp-price-title">Average price by hour</span></h3>
     <div class="row" data-draw="dp-years" data-source="day_profile"></div>
     <div class="chart" data-draw="dp-price" data-source="day_profile" role="img" aria-label="Average day-ahead price by hour of the day, one line per year"></div>
-    <p class="note" data-draw="dp-note"></p>
+    <p class="note" data-draw="dp-note" data-source="day_profile"></p>
 
-    <h3>What produced the power, hour by hour · <span data-draw="dp-mix-title">—</span></h3>
+    <h3>What produced the power, hour by hour · <span data-draw="dp-mix-title" data-source="day_profile">—</span></h3>
     <div class="row" data-draw="dp-mix-years" data-source="day_profile"></div>
-    <div class="legend" data-draw="dp-mix-legend"></div>
+    <div class="legend" data-draw="dp-mix-legend" data-source="day_profile"></div>
     <div class="chart" data-draw="dp-mix" data-source="day_profile" role="img" aria-label="Average generation by source for each hour of the day, with storage charging below zero and demand as a line"></div>
     <p class="note">Average output for each hour, MW. Below zero: storage charging. Line: demand. Where demand is above generation the country imports, where it is below it exports. ENTSO-E reports batteries only from 2025 and for some countries (not Germany); pumped hydro is reported since 2021.</p>
 
