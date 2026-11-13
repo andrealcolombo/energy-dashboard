@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | Country profile: compare a country with the EU27 or with another country |
 | 2026-11-13 | Andrea | Claude | Public site shows weekly TTF and storage from DG ENER, cited as internal elaborations |
 | 2026-11-13 | Andrea | Claude | Public website on GitHub Pages, updated daily; TTF monthly from IMF |
 | 2026-11-13 | Andrea | Claude | One Excel file with all public datasets, rebuilt daily, downloadable from GitHub |
@@ -40,6 +41,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-13
 
+- **Country profile comparison** (asked by Andrea). A second menu, "compared with", lets the reader pick the
+  EU27 average (default) or any other country. The spider chart is normalised on that choice (grey shape = 1×),
+  and the values in the legend and tooltips show both countries. Applies to the Claude dashboard and the site.
 - **Gas weekly on the public site** (decided by Andrea, after being told the site and repository are public).
   The TTF day-ahead and EU storage rows of the DG ENER newsletter go to `data/gas_weekly.csv` and to the site,
   cited as internal elaborations of the European Commission, so the site matches the Claude dashboard except

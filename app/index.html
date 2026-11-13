@@ -157,13 +157,15 @@
     <div class="row">
       <label class="muted" for="profile-country">Country</label>
       <select id="profile-country" class="dash-select" data-draw="profile-select" data-source="profile" aria-label="Country for the profile"></select>
-      <span class="muted">compared with the EU27 average (grey ring = EU27)</span>
+      <label class="muted" for="profile-ref">compared with</label>
+      <select id="profile-ref" class="dash-select" data-draw="ref-select" data-source="profile" aria-label="Country or average to compare with"></select>
+      <span class="muted" data-draw="ref-note">—</span>
     </div>
     <h3 id="profile-pick">Indicators</h3>
     <div class="row" data-draw="ind-chips" data-source="profile"></div>
-    <div class="chart" data-draw="spider" data-source="profile" role="img" aria-label="Country indicators relative to the EU27 average"></div>
+    <div class="chart" data-draw="spider" data-source="profile" role="img" aria-label="Country indicators relative to the chosen comparison"></div>
     <p class="pick" data-draw="spider-pick">—</p>
-    <p class="note wide">How to read it: each axis is the country value divided by the EU27 value. The grey shape is the EU27 (1×); the rings mark 0.5×, 1.5×, 2× and 2.5×. A point outside the grey shape means the country is above the EU27 average on that indicator; inside means below. Values above 2.5× are capped (▲). Hover or click a point for the actual values.</p>
+    <p class="note wide">How to read it: each axis is the country value divided by the value of the comparison (the EU27 average or the country chosen above). The grey shape is the comparison (1×); the rings mark 0.5×, 1.5×, 2× and 2.5×. A point outside the grey shape means the country is above the comparison on that indicator; inside means below. Values above 2.5× are capped (▲). Hover or click a point for the actual values.</p>
     <h3 id="profile-legend">The indicators shown</h3>
     <dl class="defs" data-draw="ind-legend" data-source="profile"></dl>
   </section>
@@ -196,6 +198,7 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>Country profile: compare a country with the EU27 or with another country</td></tr>
           <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>Public site shows weekly TTF and storage from DG ENER, cited as internal elaborations</td></tr>
           <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>Public website on GitHub Pages, updated daily; TTF monthly from IMF</td></tr>
           <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>One Excel file with all public datasets, rebuilt daily, downloadable from GitHub</td></tr>

@@ -244,20 +244,30 @@ window.EDL = {
     {id: 'bat_3m', label: 'Battery storage, 3 months', unit: '% of generation', fmt: ED.f.n2, def: 'Electricity discharged from storage reported to ENTSO-E as "energy storage" (mostly batteries), as a share of generation over the last 3 complete months. Many countries, including Germany, do not report it: shown as n/a. The EU27 value counts reporting countries only, so it understates the real total.'},
   ];
   const P = () => EDS.profile;
+  const R = () => EDS.ref || 'EU27';
   const val = (c, id) => { const r = EDL.row('profile', 'key', c + '|' + id); return r ? Number(r.value) : NaN; };
   const axes = () => IND.filter((i) => EDS.ind.includes(i.id)).map((i) => {
-    const a = val(P(), i.id), e = val('EU27', i.id);
+    const a = val(P(), i.id), e = val(R(), i.id);
     const ratio = Number.isFinite(a) && Number.isFinite(e) && e !== 0 ? a / e : NaN;
-    return {...i, a, e, ratio, text: `${i.label}: ${ED.name(P())} ${Number.isFinite(a) ? i.fmt(a) : 'n/a'} · EU27 ${Number.isFinite(e) ? i.fmt(e) : 'n/a'} ${i.unit}`};
+    return {...i, a, e, ratio, text: `${i.label}: ${ED.name(P())} ${Number.isFinite(a) ? i.fmt(a) : 'n/a'} · ${ED.name(R())} ${Number.isFinite(e) ? i.fmt(e) : 'n/a'} ${i.unit}`};
   });
-  const redraw = () => ['ind-chips', 'spider', 'spider-pick', 'ind-legend'].forEach((n) => dash.draw(n));
+  const redraw = () => ['ref-select', 'ref-note', 'ind-chips', 'spider', 'spider-pick', 'ind-legend'].forEach((n) => dash.draw(n));
 
   dash.draw('profile-select', (sel) => {
     const cs = EDL.countries().filter((c) => c !== 'EU27');
     sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
     sel.value = EDS.profile;
-    sel.onchange = () => { EDS.profile = sel.value; EDS.picked = null; redraw(); };
+    sel.onchange = () => { EDS.profile = sel.value; if (R() === sel.value) EDS.ref = 'EU27'; EDS.picked = null; redraw(); };
   });
+
+  dash.draw('ref-select', (sel) => {
+    const cs = EDL.countries().filter((c) => c !== P());
+    sel.replaceChildren(...cs.map((c) => new Option(c === 'EU27' ? 'EU27 average' : ED.name(c), c)));
+    sel.value = R();
+    sel.onchange = () => { EDS.ref = sel.value; EDS.picked = null; redraw(); };
+  });
+
+  dash.draw('ref-note', (el) => { el.textContent = '(grey shape = ' + (R() === 'EU27' ? 'EU27 average' : ED.name(R())) + ')'; });
 
   dash.draw('ind-chips', (el) => {
     el.replaceChildren();
@@ -277,15 +287,15 @@ window.EDL = {
   dash.draw('spider-pick', (el) => {
     const a = axes().find((x) => x.id === EDS.picked);
     if (!a) { el.textContent = 'Click a point to see the values.'; return; }
-    const diff = Number.isFinite(a.ratio) ? ` (${ED.f.p0(100 * (a.ratio - 1))}% vs EU27)` : '';
-    el.textContent = `${a.label} — ${ED.name(P())}: ${Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a'} ${a.unit} · EU27: ${Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a'} ${a.unit}${diff}`;
+    const diff = Number.isFinite(a.ratio) ? ` (${ED.f.p0(100 * (a.ratio - 1))}% vs ${ED.name(R())})` : '';
+    el.textContent = `${a.label} — ${ED.name(P())}: ${Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a'} ${a.unit} · ${ED.name(R())}: ${Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a'} ${a.unit}${diff}`;
   });
 
   dash.draw('ind-legend', (el) => {
     el.replaceChildren();
     axes().forEach((a) => {
       const dt = document.createElement('dt'); dt.textContent = a.label + ' (' + a.unit + ')';
-      const dd = document.createElement('dd'); dd.textContent = a.def + ' ' + ED.name(P()) + ': ' + (Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a') + ' · EU27: ' + (Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a') + '.';
+      const dd = document.createElement('dd'); dd.textContent = a.def + ' ' + ED.name(P()) + ': ' + (Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a') + ' · ' + ED.name(R()) + ': ' + (Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a') + '.';
       const w = document.createElement('div'); w.append(dt, dd); el.append(w);
     });
   });
