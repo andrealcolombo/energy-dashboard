@@ -1,3 +1,4 @@
 entsoe-py
 pandas
 openpyxl
+python-docx

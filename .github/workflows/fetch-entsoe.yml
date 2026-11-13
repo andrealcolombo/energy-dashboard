@@ -115,6 +115,7 @@ jobs:
           test -f data/energy_dashboard_data.xlsx || exit 0
           gh release view data-latest >/dev/null 2>&1 || gh release create data-latest --title "Latest data (Excel)" \
             --notes "All public datasets behind the dashboard in one Excel file. Rebuilt automatically every day."
+          python src/build_changelog_docx.py && gh release upload data-latest data/changelog.docx --clobber || true
           gh release upload data-latest data/energy_dashboard_data.xlsx --clobber
       - name: Commit oil bulletin and dashboard files
         if: always()

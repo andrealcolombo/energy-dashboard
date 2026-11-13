@@ -8,11 +8,11 @@ on:
     types: [completed]
   push:
     branches: [main]
-    paths: ["app/**", "site/**", "src/build_excel.py"]
+    paths: ["app/**", "site/**", "src/build_excel.py", "CHANGELOG.md"]
   workflow_dispatch:
 
 permissions:
-  contents: write   # pushes the built site to the gh-pages branch
+  contents: write   # pushes the built site to the gh-pages branch and updates the release files
 
 concurrency:
   group: pages
@@ -32,6 +32,13 @@ jobs:
       - run: pip install -r requirements.txt
       - name: Excel workbook
         run: python src/build_excel.py
+      - name: Change log as Word file (release asset)
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python src/build_changelog_docx.py
+          gh release upload data-latest data/changelog.docx --clobber
       - name: Build site
         run: python site/build_site.py _site
       - name: Push site to the gh-pages branch (GitHub Pages serves it)

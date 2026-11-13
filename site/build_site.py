@@ -35,13 +35,14 @@ body{background:var(--color-bg);color:var(--color-fg);margin:0}
 main{max-width:1180px;margin:0 auto;padding:16px}
 .ed .site-bar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12px;color:var(--color-fg-muted);margin:0 0 var(--cds-gap-md)}
 .ed .site-bar a{color:inherit}
+main .ed .lede,main .ed details.note,main .ed details.note p,main .ed .disclaimer{max-width:none}
+.ed h1 .bolt{height:.9em;width:auto;vertical-align:-.08em;margin-right:.3em}
 .ed .disclaimer{font-size:11px;color:var(--color-fg-muted);margin-top:var(--cds-gap-lg)}
 """
 
-_UNUSED_TTF_CARD = ('      <div class="ti" id="t-ttfm"><div class="lab">TTF · monthly average · <span data-draw="t-ttfm-per">—</span></div>'
-            '<div class="v"><span data-draw="t-ttfm">—</span><span class="u">€/MWh</span></div>'
-            '<div class="c" data-draw="t-ttfm-chg">—</div></div>\n')
-
+BOLT_SVG = ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1f3a5f"/>'
+            '<path d="M37 6 15 37h14l-4 21 24-33H35z" fill="#f2b632"/></svg>')
+FAVICON = "data:image/svg+xml," + BOLT_SVG.replace('"', "'").replace("#", "%23").replace("<", "%3C").replace(">", "%3E")
 
 def cut(s, start, end, repl="", keep_end=False):
     a = s.index(start)
@@ -58,6 +59,7 @@ def must(s, old, new):
 def page():
     s = (APP / "index.html").read_text()
     s = s.replace('<meta name="dash-one-writer">\n', "")
+    s = must(s, "<h1>EU Energy Markets Dashboard</h1>", "<h1>" + BOLT_SVG.replace("<svg ", '<svg class="bolt" aria-hidden="true" ', 1) + "EU Energy Markets Dashboard</h1>")
     s = must(s, '    <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>\n', "")
     s = cut(s, '    <h2 id="latest-news">', 'data-source="news"></div>\n')
     s = cut(s, "  <!-- ============ DG ENER ============ -->", "  </section>\n")
@@ -84,7 +86,8 @@ def page():
     files["dgener_weekly"] = "data/gas_weekly.csv"
     head = ('<!doctype html><html lang="en"><head><meta charset="utf-8">'
             '<meta name="viewport" content="width=device-width,initial-scale=1">'
-            '<title>EU energy markets</title>'
+            '<title>EU Energy Markets Dashboard</title>'
+            f'<link rel="icon" type="image/svg+xml" href="{FAVICON}">'
             '<meta name="description" content="EU27 electricity prices, generation mix, demand and fuel prices, updated daily from public data.">'
             f'<style>{THEME}</style>'
             '<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>'

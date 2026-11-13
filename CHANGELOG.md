@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | Renamed "EU Energy Markets Dashboard"; site icon, full-width text; change log in Word |
 | 2026-11-13 | Andrea | Claude | Country profile: compare a country with the EU27 or with another country |
 | 2026-11-13 | Andrea | Claude | Public site shows weekly TTF and storage from DG ENER, cited as internal elaborations |
 | 2026-11-13 | Andrea | Claude | Public website on GitHub Pages, updated daily; TTF monthly from IMF |
@@ -41,6 +42,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-13
 
+- **Name, icon, layout, Word change log** (asked by Andrea). The dashboard is now "EU Energy Markets Dashboard"
+  (site and Claude). The site has a lightning-bolt icon (tab and title), and the headline and "Sources and
+  method" use the full page width. `src/build_changelog_docx.py` turns this file into `changelog.docx`,
+  published next to the Excel file in the GitHub release `data-latest` after every change and every data run.
 - **Country profile comparison** (asked by Andrea). A second menu, "compared with", lets the reader pick the
   EU27 average (default) or any other country. The spider chart is normalised on that choice (grey shape = 1×),
   and the values in the legend and tooltips show both countries. Applies to the Claude dashboard and the site.
