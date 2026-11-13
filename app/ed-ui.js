@@ -342,3 +342,98 @@ window.EDL = {
     el.textContent = n < 6 ? `The series grows by one point a week: ${n} ${n === 1 ? 'week' : 'weeks'} so far.` : 'One point per week (end of the reference week).';
   });
 })();
+
+// ---------- Prices through the day ----------
+(function () {
+  const {f} = ED;
+  const SEASONS = [['year', 'Whole year', null], ['spring', 'Spring', [3, 4, 5]], ['summer', 'Summer', [6, 7, 8]], ['autumn', 'Autumn', [9, 10, 11]], ['winter', 'Winter', [12, 1, 2]]];
+  const COLS = ['price', 'load', 'solar', 'wind', 'gas', 'coal', 'nuclear', 'hydro', 'other', 'pumped_out', 'pumped_in', 'battery_out', 'battery_in'];
+  const POS = [['nuclear', 'Nuclear'], ['coal', 'Coal & lignite'], ['gas', 'Gas'], ['hydro', 'Hydro'], ['wind', 'Wind'], ['solar', 'Solar'], ['other', 'Other'], ['pumped_out', 'Pumped storage'], ['battery_out', 'Battery storage']];
+  const NEG = [['pumped_in', 'Pumped storage charging', 'Pumped storage'], ['battery_in', 'Battery charging', 'Battery storage']];
+  const ALL = ['dp-select', 'dp-season', 'dp-unit', 'dp-price-title', 'dp-years', 'dp-price', 'dp-note', 'dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix', 'dp-swing'];
+  const redraw = () => ALL.forEach((n) => dash.draw(n));
+  const hourDate = (h) => new Date(Date.UTC(2000, 0, 1, h));
+
+  // Average day per period (year or season) for the selected country: [{label, full, rows:[{h, v}]}]
+  // Periods are computed in src/build_dashboard_files.py (mean of the monthly profiles).
+  let memo = {key: null, val: []};
+  function periods() {
+    const d = dash.data('day_profile');
+    if (d.status !== 'ok') return [];
+    const key = EDS.dp + '|' + EDS.dpSeason + '|' + d.data.length;
+    if (memo.key === key) return memo.val;
+    const by = d3.group(d.data.filter((r) => r.area === EDS.dp && r.season === EDS.dpSeason), (r) => r.period);
+    const out = Array.from(by, ([label, rs]) => ({label, full: label + (rs[0].span ? ' (' + rs[0].span + ')' : ''),
+      rows: d3.range(24).map((h) => { const r = rs.find((z) => +z.hour === h) || {}; const v = {}; COLS.forEach((c) => { v[c] = ED.num(r[c]); }); return {h, v}; })}))
+      .sort((a, b) => (a.label < b.label ? -1 : 1));
+    memo = {key, val: out};
+    return out;
+  }
+  const shown = () => { const ps = periods(); const sel = EDS.dpYears || ps.slice(-4).map((p) => p.label); return ps.filter((p) => sel.includes(p.label)); };
+  const colorOf = (p) => { const ps = periods(); const i = ps.findIndex((z) => z.label === p.label); return dash.colors[(ps.length - 1 - i) % dash.colors.length]; };
+  const mixPeriod = () => { const ps = periods(); return ps.find((p) => p.label === EDS.dpMix) || ps[ps.length - 1]; };
+  const chip = (text, on, click, sw) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = text; b.setAttribute('aria-pressed', String(on)); if (sw) { const i = document.createElement('i'); i.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:${sw}`; b.prepend(i); } b.onclick = click; return b; };
+
+  dash.draw('dp-select', (sel) => {
+    const d = dash.data('day_profile');
+    const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.area))) : ['EU27'];
+    cs.sort((a, b) => (a === 'EU27' ? -1 : b === 'EU27' ? 1 : ED.name(a).localeCompare(ED.name(b), 'en')));
+    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
+    sel.value = EDS.dp;
+    sel.onchange = () => { EDS.dp = sel.value; EDS.dpYears = null; EDS.dpMix = null; redraw(); };
+  });
+  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, lab]) => chip(lab, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; EDS.dpMix = null; redraw(); }))); });
+  dash.draw('dp-unit', (el) => { el.replaceChildren(chip('€/MWh', !EDS.dpRel, () => { EDS.dpRel = false; redraw(); }), chip('% of day average', EDS.dpRel, () => { EDS.dpRel = true; redraw(); })); });
+  dash.draw('dp-price-title', (el) => { el.textContent = 'Average price by hour · ' + ED.name(EDS.dp) + (EDS.dpRel ? ' (day average = 100)' : ' (€/MWh)'); });
+
+  dash.draw('dp-years', (el) => {
+    el.replaceChildren();
+    const ps = periods(), on = shown().map((p) => p.label);
+    ps.forEach((p) => el.append(chip(p.full, on.includes(p.label), () => {
+      const cur = on.includes(p.label) ? on.filter((x) => x !== p.label) : on.concat(p.label);
+      EDS.dpYears = cur; ['dp-years', 'dp-price', 'dp-swing'].forEach((n) => dash.draw(n));
+    }, on.includes(p.label) ? colorOf(p) : null)));
+  });
+
+  dash.draw('dp-price', (el) => {
+    const d = dash.data('day_profile');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const ps = shown(), last = periods().slice(-1)[0];
+    const ser = ps.map((p) => {
+      const avg = d3.mean(p.rows, (r) => r.v.price);
+      return {label: p.full, color: colorOf(p), width: last && p.label === last.label ? 2.6 : 1.5, values: p.rows.map((r) => ({x: hourDate(r.h), y: EDS.dpRel ? 100 * r.v.price / avg : r.v.price}))};
+    });
+    ED.lineChart(el, ser, {height: 280, legend: false, unit: EDS.dpRel ? '' : '€/MWh', refY: EDS.dpRel ? 100 : undefined, zero: !EDS.dpRel,
+      xDomain: [hourDate(0), hourDate(23)], xTick: d3.utcFormat('%H:00'), tipX: (x) => d3.utcFormat('%H:00')(x) + '–' + String(x.getUTCHours() + 1).padStart(2, '0') + ':00', tipFmt: EDS.dpRel ? f.n0 : f.n1,
+      empty: periods().length ? 'Pick at least one year' : 'No hourly data for this country'});
+  });
+
+  dash.draw('dp-note', (el) => {
+    const ps = periods(); if (!ps.length) { el.textContent = ''; return; }
+    el.textContent = 'Click the years to compare them. Hours in Brussels time; each point is the average of that hour over all days of the period.' +
+      (EDS.dpRel ? ' "% of day average" removes the effect of the price level (gas, CO2), so only the shape of the day is compared.' : ' Switch to "% of day average" to compare shapes across years with very different price levels (2022).') +
+      (EDS.dp === 'EU27' ? ' EU27: country prices weighted by each country\'s demand in that hour.' : '');
+  });
+
+  dash.draw('dp-mix-title', (el) => { const p = mixPeriod(); el.textContent = ED.name(EDS.dp) + (p ? ', ' + p.full : ''); });
+  dash.draw('dp-mix-years', (el) => { el.replaceChildren(); const p0 = mixPeriod(); periods().forEach((p) => el.append(chip(p.full, p0 && p.label === p0.label, () => { EDS.dpMix = p.label; ['dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix'].forEach((n) => dash.draw(n)); }))); });
+  const parts = () => { const p = mixPeriod(); if (!p) return [[], []]; const has = (k) => p.rows.some((r) => r.v[k] > 0.5);
+    return [POS.filter(([k]) => has(k)).map(([key, label]) => ({key, label, color: ED.MIXC[label]})), NEG.filter(([k]) => has(k)).map(([key, label, c]) => ({key, label, color: ED.MIXC[c], neg: true}))]; };
+  dash.draw('dp-mix-legend', (el) => {
+    el.replaceChildren(); const [pos, neg] = parts();
+    pos.concat(neg).forEach((k) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = k.color; if (k.neg) i.style.opacity = 0.55; sp.append(i, document.createTextNode(k.label)); el.append(sp); });
+    if (pos.length) { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.cssText = 'background:none;border-top:2px dashed var(--color-fg);height:0;margin-top:6px'; sp.append(i, document.createTextNode('Demand')); el.append(sp); }
+  });
+  dash.draw('dp-mix', (el) => {
+    const d = dash.data('day_profile');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const p = mixPeriod(), [pos, neg] = parts();
+    ED.hourStack(el, p && pos.length ? p.rows : [], pos, neg, {line: 'load', empty: 'No generation data for this country'});
+  });
+
+  dash.draw('dp-swing', (el) => {
+    const ps = periods();
+    const data = ps.map((p) => { const v = p.rows.map((r) => r.v.price).filter(Number.isFinite); const avg = d3.mean(v); return {label: p.full, value: v.length && avg > 0 ? 100 * (d3.max(v) - d3.min(v)) / avg : NaN, color: shown().some((s) => s.label === p.label) ? colorOf(p) : 'var(--cds-chart-muted)'}; }).filter((x) => Number.isFinite(x.value));
+    ED.divBars(el, data, {unit: '%', noSign: true, fmt: f.n0});
+  });
+})();

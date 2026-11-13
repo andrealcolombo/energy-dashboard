@@ -128,6 +128,29 @@
     <h3 id="prices-neg">Hours with negative prices, by month</h3>
     <div class="chart short" data-draw="price-neg" data-source="prices_monthly" role="img" aria-label="Monthly hours with negative day-ahead prices for the selected areas"></div>
     <p class="note">For countries with several zones (Italy, Denmark, Sweden) this is the average of the zones; add single zones for detail.</p>
+
+    <h2 id="prices-day">Prices through the day</h2>
+    <p class="note">The price changes every hour. Solar pushes it down around midday; when the sun sets, demand is still high and the price rises. Storage charges when power is cheap and sells when it is dear, which flattens the day. These charts show an average day for each year, so the shapes can be compared.</p>
+    <div class="row">
+      <label class="muted" for="dp-country">Country</label>
+      <select id="dp-country" class="dash-select" data-draw="dp-select" data-source="day_profile" aria-label="Country for prices through the day"></select>
+      <span data-draw="dp-season"></span>
+      <span data-draw="dp-unit"></span>
+    </div>
+    <h3><span data-draw="dp-price-title">Average price by hour</span></h3>
+    <div class="row" data-draw="dp-years" data-source="day_profile"></div>
+    <div class="chart" data-draw="dp-price" data-source="day_profile" role="img" aria-label="Average day-ahead price by hour of the day, one line per year"></div>
+    <p class="note" data-draw="dp-note"></p>
+
+    <h3>What produced the power, hour by hour · <span data-draw="dp-mix-title">—</span></h3>
+    <div class="row" data-draw="dp-mix-years" data-source="day_profile"></div>
+    <div class="legend" data-draw="dp-mix-legend"></div>
+    <div class="chart" data-draw="dp-mix" data-source="day_profile" role="img" aria-label="Average generation by source for each hour of the day, with storage charging below zero and demand as a line"></div>
+    <p class="note">Average output for each hour, MW. Below zero: storage charging. Line: demand. Where demand is above generation the country imports, where it is below it exports. ENTSO-E reports batteries only from 2025 and for some countries (not Germany); pumped hydro is reported since 2021.</p>
+
+    <h3>Daily price swing · highest hour minus lowest hour, % of the day's average</h3>
+    <div class="chart short" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day, by year"></div>
+    <p class="note">Measured on the average day of each period, so it shows the regular daily pattern, not single extreme days. A smaller swing means a flatter day. Storage, demand response, interconnections and the mix all play a part: these data alone cannot separate their effects.</p>
   </section>
 
   <!-- ============ MIX ============ -->
