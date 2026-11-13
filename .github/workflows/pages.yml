@@ -1,0 +1,47 @@
+name: Publish public website
+
+# Builds the public site from app/ and the public data, and deploys it to GitHub Pages.
+# Runs after each data update, after changes to the site, or by hand.
+on:
+  workflow_run:
+    workflows: ["Fetch ENTSO-E data"]
+    types: [completed]
+  push:
+    branches: [main]
+    paths: ["app/**", "site/**", "src/build_excel.py"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Excel workbook
+        run: python src/build_excel.py
+      - name: Build site
+        run: python site/build_site.py _site
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

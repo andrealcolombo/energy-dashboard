@@ -25,6 +25,8 @@ SHEETS = [
      "ENTSO-E Transparency Platform"),
     ("load_monthly", "Electricity demand (total load, GWh; peak, MW), monthly, since 2021. Running month excluded.",
      "ENTSO-E Transparency Platform"),
+    ("gas_ttf_monthly", "TTF natural gas price, monthly average: USD/MMBtu (IMF) and converted to €/MWh at the monthly USD/EUR rate.",
+     "IMF Primary Commodity Prices via FRED (PNGASEUUSDM, DEXUSEU)"),
     ("fuels_weekly", "Pump prices with all taxes (€/litre): petrol 95, diesel, heating oil; EU average and EU27 countries.",
      "European Commission, Weekly Oil Bulletin"),
     ("retail_semiannual", "Household prices with all taxes (€/kWh), by half-year: electricity 2,500–4,999 kWh/yr "
@@ -48,6 +50,8 @@ def main():
         frames = {}
         for name, desc, src in SHEETS:
             f = SRC / f"{name}.csv"
+            if not f.exists():
+                f = SRC.parent / f"{name}.csv"
             if not f.exists() or f.stat().st_size == 0:
                 continue
             df = pd.read_csv(f)

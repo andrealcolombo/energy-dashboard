@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-13 | Andrea | Claude | Public website on GitHub Pages, updated daily; TTF monthly from IMF |
 | 2026-11-13 | Andrea | Claude | One Excel file with all public datasets, rebuilt daily, downloadable from GitHub |
 | 2026-11-12 | Andrea | Claude | News: no fixed priority for Italy and Hungary in the weekly search |
 | 2026-11-12 | Andrea | Claude | News feed v3.5: marked Beta; six items, country news first; more country sources |
@@ -38,6 +39,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-13
 
+- **Public website** (asked by Andrea, to show the work outside Claude). `site/build_site.py` builds a static copy
+  of the dashboard from `app/` without the DG ENER tab, newsletter indicators, news and change log, and with a
+  disclaimer and download links. `pages.yml` deploys it to GitHub Pages after every data update. TTF on the
+  public site is the IMF monthly average via FRED (`src/fetch_ttf.py`): no free official daily source was found.
 - **Excel workbook** (asked by Andrea). `src/build_excel.py` puts every public dataset behind the dashboard in one
   file (`energy_dashboard_data.xlsx`, one sheet per dataset plus a README with sources and method). The daily
   workflow rebuilds it and publishes it as the asset of the GitHub release `data-latest`, a stable download link.

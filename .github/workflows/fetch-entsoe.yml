@@ -93,6 +93,11 @@ jobs:
         continue-on-error: true
         timeout-minutes: 10
         run: python src/fetch_eurostat.py
+      - name: TTF gas price, monthly (IMF via FRED)
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 5
+        run: python src/fetch_ttf.py
       - name: Build dashboard files
         if: always()
         continue-on-error: true
