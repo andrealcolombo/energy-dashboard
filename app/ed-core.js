@@ -35,7 +35,7 @@ window.ED = (function () {
     if (!all.length) { placeholder(el, 'empty', o.empty || 'No data'); return; }
     const leg = document.createElement('div'); leg.className = 'legend';
     series.forEach((s) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = s.color; sp.append(i, document.createTextNode(s.label)); leg.append(sp); });
-    if (series.length > 1 || o.legend) el.append(leg);
+    if ((series.length > 1 || o.legend) && o.legend !== false) el.append(leg);
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
     const x = d3.scaleUtc().domain(o.xDomain || d3.extent(all, (d) => d.x));
     let lo = d3.min(all, (d) => d.y), hi = d3.max(all, (d) => d.y);
@@ -73,7 +73,7 @@ window.ED = (function () {
         series.forEach((s) => { const p = s.values.find((d) => +d.x === xx); if (!p || !isFinite(p.y)) return; const r = document.createElement('div'); const ii = document.createElement('i'); ii.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:${s.color}`; r.append(ii, document.createTextNode(s.label + ': ' + (o.tipFmt || f.n1)(p.y) + (o.unit ? ' ' + o.unit : ''))); tip.append(r); });
         tip.hidden = false;
         const bw = el.clientWidth, sx = x(xx) * bw / W; const tw = tip.offsetWidth;
-        tip.style.left = Math.min(Math.max(0, sx + 10), bw - tw) + 'px'; tip.style.top = (series.length > 1 || o.legend ? 22 : 0) + 'px';
+        tip.style.left = Math.min(Math.max(0, sx + 10), bw - tw) + 'px'; tip.style.top = ((series.length > 1 || o.legend) && o.legend !== false ? 22 : 0) + 'px';
       })
       .on('pointerleave', () => { tip.hidden = true; rule.style('display', 'none'); });
   }
@@ -111,13 +111,13 @@ window.ED = (function () {
     const W = Math.max(280, el.clientWidth), rowH = 24, H = data.length * rowH + 8, lw = Math.min(170, W * 0.36);
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
     const ext = d3.max(data, (d) => Math.abs(d.value)) || 1;
-    const x = d3.scaleLinear().domain([-ext, ext]).range([lw + 44, W - 64]);
+    const x = d3.scaleLinear().domain([d3.min(data, (d) => d.value) >= 0 ? 0 : -ext, ext]).range([lw + (d3.min(data, (d) => d.value) >= 0 ? 8 : 44), W - 64]);
     svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', 0).attr('y2', H).style('stroke', 'var(--cds-chart-reference)');
     data.forEach((d, i) => {
       const y = i * rowH + 4;
       svg.append('text').attr('x', 0).attr('y', y + 13).text(d.label);
       svg.append('rect').attr('x', Math.min(x(0), x(d.value))).attr('y', y + 3).attr('height', 14).attr('width', Math.abs(x(d.value) - x(0))).style('fill', d.color);
-      svg.append('text').attr('x', d.value >= 0 ? x(d.value) + 4 : x(d.value) - 4).attr('y', y + 14).attr('text-anchor', d.value >= 0 ? 'start' : 'end').text((d.value > 0 ? '+' : '') + f.n1(d.value) + (o.unit || ''));
+      svg.append('text').attr('x', d.value >= 0 ? x(d.value) + 4 : x(d.value) - 4).attr('y', y + 14).attr('text-anchor', d.value >= 0 ? 'start' : 'end').text((d.value > 0 && !o.noSign ? '+' : '') + (o.fmt || f.n1)(d.value) + (o.unit || ''));
     });
   }
 
@@ -175,8 +175,47 @@ window.ED = (function () {
     });
   }
 
-  return {f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider};
+  // Hour-of-day stacked areas (MW). rows: [{h, v:{key:value}}]; pos/neg: [{key,label,color}]; line: key drawn as a line.
+  function hourStack(el, rows, pos, neg, o = {}) {
+    el.replaceChildren();
+    if (!rows.length) { placeholder(el, 'empty', o.empty || 'No data'); return; }
+    const W = Math.max(280, el.clientWidth), H = o.height || 300;
+    const keys = pos.concat(neg);
+    const rr = rows.map((r) => { const o2 = {h: r.h}; pos.forEach((k) => { o2[k.key] = Math.max(0, r.v[k.key] || 0); }); neg.forEach((k) => { o2[k.key] = -Math.max(0, r.v[k.key] || 0); }); return o2; });
+    const st = d3.stack().keys(pos.map((k) => k.key))(rr).concat(neg.length ? d3.stack().keys(neg.map((k) => k.key)).offset(d3.stackOffsetDiverging)(rr.map((r) => { const o2 = {h: r.h}; neg.forEach((k) => { o2[k.key] = r[k.key] || -1e-9; }); return o2; })) : []);
+    const lineV = o.line ? rows.map((r) => ({h: r.h, y: r.v[o.line]})) : [];
+    const hi = Math.max(d3.max(st, (s) => d3.max(s, (d) => d[1])) || 0, d3.max(lineV, (d) => d.y) || 0);
+    const lo = Math.min(0, d3.min(st, (s) => d3.min(s, (d) => d[0])) || 0);
+    const y = d3.scaleLinear().domain([lo, hi]).nice();
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const fmt = (v) => (Math.abs(v) >= 1000 ? f.n0(v / 1000) + 'k' : f.n0(v));
+    const ya = svg.append('g'); ya.call(d3.axisLeft(y).ticks(5).tickFormat(fmt));
+    let ml = 8; ya.selectAll('text').each(function () { ml = Math.max(ml, this.getComputedTextLength() + 10); });
+    const m = {t: 8, r: 14, b: 22, l: ml};
+    const x = d3.scaleLinear().domain([0, 23]).range([m.l, W - m.r]); y.range([H - m.b, m.t]);
+    ya.attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(fmt));
+    ya.select('.domain').remove(); ya.selectAll('line').style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues([0, 3, 6, 9, 12, 15, 18, 21]).tickFormat((h) => String(h).padStart(2, '0') + ':00')).selectAll('line,path').style('stroke', 'var(--cds-chart-axis)');
+    const area = d3.area().x((d) => x(d.data.h)).y0((d) => y(d[0])).y1((d) => y(d[1]));
+    st.forEach((s) => { const k = keys.find((z) => z.key === s.key); svg.append('path').datum(s).attr('d', area).style('fill', k.color).style('fill-opacity', k.neg ? 0.55 : 0.9); });
+    if (lo < 0) svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--cds-chart-reference)');
+    if (lineV.length) svg.append('path').datum(lineV).attr('fill', 'none').style('stroke', 'var(--color-fg)').attr('stroke-width', 2).attr('stroke-dasharray', '5 3').attr('d', d3.line().defined((d) => isFinite(d.y)).x((d) => x(d.h)).y((d) => y(d.y)));
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
+    const rule = svg.append('line').attr('y1', m.t).attr('y2', H - m.b).style('stroke', 'var(--cds-chart-reference)').style('display', 'none');
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [px] = d3.pointer(ev); const hh = Math.max(0, Math.min(23, Math.round(x.invert(px * W / svg.node().getBoundingClientRect().width))));
+        const r = rows.find((z) => z.h === hh); if (!r) return;
+        rule.attr('x1', x(hh)).attr('x2', x(hh)).style('display', null);
+        tip.replaceChildren(); const h = document.createElement('div'); h.className = 'muted'; h.textContent = String(hh).padStart(2, '0') + ':00–' + String(hh + 1).padStart(2, '0') + ':00' + (o.line && isFinite(r.v[o.line]) ? ' · demand ' + f.n0(r.v[o.line]) + ' MW' : ''); tip.append(h);
+        pos.slice().reverse().concat(neg).forEach((k) => { const v = r.v[k.key]; if (!(v > 0.5)) return; const d = document.createElement('div'); const ii = document.createElement('i'); ii.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:${k.color};opacity:${k.neg ? 0.55 : 1}`; d.append(ii, document.createTextNode(k.label + ': ' + (k.neg ? '−' : '') + f.n0(v) + ' MW')); tip.append(d); });
+        tip.hidden = false; const bw = el.clientWidth, sx = x(hh) * bw / W; tip.style.left = Math.min(Math.max(0, sx + 12), bw - tip.offsetWidth) + 'px'; tip.style.top = '0px';
+      })
+      .on('pointerleave', () => { tip.hidden = true; rule.style('display', 'none'); });
+  }
+
+  return {f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider, hourStack};
 })();
 
 // page state (not data): what the reader has selected
-window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
+window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', dp: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMix: null, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};

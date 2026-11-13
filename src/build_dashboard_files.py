@@ -169,6 +169,80 @@ def loadm() -> pd.DataFrame:
     return pd.concat([eu, l], ignore_index=True)[["country", "month", "gwh", "peak_mw"]]
 
 
+def day_profile() -> pd.DataFrame:
+    """Average day by month and hour, per country and EU27 (from fetch_intraday.py).
+
+    EU27: price weighted by each country's load in that hour; MW summed over countries.
+    Storage is split into pumped hydro and batteries ("Energy storage").
+    """
+    f = DATA / "intraday_profile.csv"
+    if not f.exists():
+        return pd.DataFrame()
+    d = pd.read_csv(f)
+    for c in ["battery_out", "battery_in", "storage_out", "storage_in"]:
+        if c not in d:
+            d[c] = float("nan")
+    d["pumped_out"] = (d["storage_out"] - d["battery_out"].fillna(0)).clip(lower=0)
+    d["pumped_in"] = (d["storage_in"] - d["battery_in"].fillna(0)).clip(lower=0)
+    mw = ["load", "solar", "wind", "gas", "coal", "nuclear", "hydro", "other",
+          "pumped_out", "pumped_in", "battery_out", "battery_in"]
+    for c in mw:
+        if c not in d:
+            d[c] = float("nan")
+    k = ["month", "hour"]
+    w = d.dropna(subset=["price", "load"]).assign(pl=lambda x: x["price"] * x["load"])
+    g = w.groupby(k)
+    eu = (g["pl"].sum() / g["load"].sum()).rename("price").to_frame()
+    eu = eu.join(d.groupby(k)[mw].sum(min_count=1)).reset_index()
+    eu["country"] = "EU27"
+    out = pd.concat([eu, d], ignore_index=True)
+    out = out.rename(columns={"country": "area"})[["area", "month", "hour", "price"] + mw]
+    return periods(out, ["price"] + mw)
+
+
+SEASONS = {"year": None, "spring": [3, 4, 5], "summer": [6, 7, 8], "autumn": [9, 10, 11], "winter": [12, 1, 2]}
+MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+
+def periods(d: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+    """Average day per year and per season (mean of the monthly profiles).
+
+    Seasons with fewer than three months are dropped; the running year is kept
+    and labelled with its months (e.g. 2026, span Jan–Oct). Winter = Dec to Feb,
+    labelled 2025/26.
+    """
+    d = d.copy()
+    y = d["month"].str[:4].astype(int)
+    m = d["month"].str[5:].astype(int)
+    frames = []
+    for season, months in SEASONS.items():
+        sel = d if months is None else d[m.isin(months)]
+        py = y[sel.index] + ((m[sel.index] == 12) & (season == "winter")).astype(int)
+        lab = py.astype(str) if season != "winter" else (py - 1).astype(str) + "/" + py.astype(str).str[2:]
+        sel = sel.assign(season=season, period=lab.values, _py=py.values)
+        n = sel.groupby(["area", "period"])["month"].transform("nunique")
+        need = 12 if months is None else 3
+        if months is not None:
+            sel = sel[n >= need]
+        g = sel.groupby(["area", "season", "period", "hour"])
+        a = g[cols].mean()
+        info = sel.groupby(["area", "season", "period"])["month"].agg(["min", "max", "nunique"])
+        a = a.reset_index().merge(info.reset_index(), on=["area", "season", "period"])
+        a["span"] = ""
+        part = a["nunique"] < need
+        if part.any():
+            a.loc[part, "span"] = (a.loc[part, "min"].str[5:].astype(int).map(lambda i: MON[i - 1]) + "–" +
+                                   a.loc[part, "max"].str[5:].astype(int).map(lambda i: MON[i - 1]))
+        frames.append(a.drop(columns=["min", "max", "nunique"]))
+    out = pd.concat(frames, ignore_index=True)
+    out["price"] = out["price"].round(1)
+    mw = [c for c in cols if c != "price"]
+    out[mw] = out[mw].round(0).astype("Int64")  # whole MW, no ".0" in the file
+    out = out.dropna(how="all", axis=1)
+    return out[["area", "season", "period", "span", "hour"] + [c for c in cols if c in out]].sort_values(
+        ["area", "season", "period", "hour"])
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     load = pd.read_csv(DATA / "load_monthly.csv")
@@ -180,6 +254,9 @@ def main():
     mw = mix_weekly()
     if not mw.empty:
         mw.to_csv(OUT / "mix_weekly.csv", index=False)
+    dp = day_profile()
+    if not dp.empty:
+        dp.to_csv(OUT / "day_profile.csv", index=False)
     f = DATA / "oil_bulletin_weekly.csv"
     if f.exists():
         fu = pd.read_csv(f)
