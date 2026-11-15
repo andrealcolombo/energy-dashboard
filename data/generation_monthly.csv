@@ -909,19 +909,19 @@ AT,2026-10,Other renewable,0.0
 AT,2026-10,Solar,423.97
 AT,2026-10,Waste,74.5
 AT,2026-10,Wind Onshore,793.44
-AT,2026-11,Biomass,55.46
-AT,2026-11,Fossil Gas,544.28
+AT,2026-11,Biomass,77.95
+AT,2026-11,Fossil Gas,669.76
 AT,2026-11,Fossil Hard coal,0.0
 AT,2026-11,Fossil Oil,0.0
-AT,2026-11,Geothermal,0.02
-AT,2026-11,Hydro Pumped Storage,197.11
-AT,2026-11,Hydro Run-of-river and pondage,437.91
-AT,2026-11,Hydro Water Reservoir,78.22
-AT,2026-11,Other,5.77
+AT,2026-11,Geothermal,0.03
+AT,2026-11,Hydro Pumped Storage,211.89
+AT,2026-11,Hydro Run-of-river and pondage,606.06
+AT,2026-11,Hydro Water Reservoir,92.4
+AT,2026-11,Other,7.82
 AT,2026-11,Other renewable,0.0
-AT,2026-11,Solar,70.08
-AT,2026-11,Waste,26.22
-AT,2026-11,Wind Onshore,206.57
+AT,2026-11,Solar,93.46
+AT,2026-11,Waste,35.55
+AT,2026-11,Wind Onshore,374.53
 BE,2021-01,Biomass,349.57
 BE,2021-01,Fossil Gas,2650.79
 BE,2021-01,Fossil Oil,25.34
@@ -1714,18 +1714,18 @@ BE,2026-10,Solar,756.15
 BE,2026-10,Waste,173.63
 BE,2026-10,Wind Offshore,743.99
 BE,2026-10,Wind Onshore,603.82
-BE,2026-11,Biomass,57.36
-BE,2026-11,Energy storage,35.0
-BE,2026-11,Fossil Gas,1265.81
-BE,2026-11,Fossil Oil,14.74
-BE,2026-11,Hydro Pumped Storage,25.7
-BE,2026-11,Hydro Run-of-river and pondage,1.29
-BE,2026-11,Nuclear,509.99
-BE,2026-11,Other,75.57
-BE,2026-11,Solar,147.23
-BE,2026-11,Waste,58.47
-BE,2026-11,Wind Offshore,173.53
-BE,2026-11,Wind Onshore,107.75
+BE,2026-11,Biomass,78.85
+BE,2026-11,Energy storage,48.46
+BE,2026-11,Fossil Gas,1497.07
+BE,2026-11,Fossil Oil,22.19
+BE,2026-11,Hydro Pumped Storage,33.99
+BE,2026-11,Hydro Run-of-river and pondage,1.64
+BE,2026-11,Nuclear,701.92
+BE,2026-11,Other,104.61
+BE,2026-11,Solar,210.73
+BE,2026-11,Waste,82.42
+BE,2026-11,Wind Offshore,246.65
+BE,2026-11,Wind Onshore,160.67
 BG,2021-01,Biomass,22.66
 BG,2021-01,Fossil Brown coal/Lignite,1355.78
 BG,2021-01,Fossil Gas,292.9
@@ -2536,18 +2536,18 @@ BG,2026-11,"('Nuclear', 'Actual Aggregated')",240.06
 BG,2026-11,"('Solar', 'Actual Aggregated')",158.61
 BG,2026-11,"('Waste', 'Actual Aggregated')",0.89
 BG,2026-11,"('Wind Onshore', 'Actual Aggregated')",60.87
-BG,2026-11,Biomass,3.58
-BG,2026-11,Energy storage,123.78
-BG,2026-11,Fossil Brown coal/Lignite,409.64
-BG,2026-11,Fossil Gas,70.28
-BG,2026-11,Fossil Hard coal,13.28
-BG,2026-11,Hydro Pumped Storage,13.0
-BG,2026-11,Hydro Run-of-river and pondage,25.51
-BG,2026-11,Hydro Water Reservoir,54.0
-BG,2026-11,Nuclear,240.06
-BG,2026-11,Solar,158.61
-BG,2026-11,Waste,0.89
-BG,2026-11,Wind Onshore,60.87
+BG,2026-11,Biomass,4.87
+BG,2026-11,Energy storage,165.89
+BG,2026-11,Fossil Brown coal/Lignite,565.38
+BG,2026-11,Fossil Gas,94.44
+BG,2026-11,Fossil Hard coal,18.22
+BG,2026-11,Hydro Pumped Storage,17.26
+BG,2026-11,Hydro Run-of-river and pondage,35.47
+BG,2026-11,Hydro Water Reservoir,71.51
+BG,2026-11,Nuclear,335.11
+BG,2026-11,Solar,218.51
+BG,2026-11,Waste,1.23
+BG,2026-11,Wind Onshore,81.14
 CY,2021-01,Fossil Oil,352.75
 CY,2021-01,Wind Onshore,24.81
 CY,2021-02,Fossil Oil,300.33
@@ -2675,9 +2675,9 @@ CY,2026-10,Fossil Oil,316.7
 CY,2026-10,Solar,3.41
 CY,2026-10,Wind Onshore,5.23
 CY,2026-11,Fossil Gas,0.0
-CY,2026-11,Fossil Oil,68.21
-CY,2026-11,Solar,16.37
-CY,2026-11,Wind Onshore,1.99
+CY,2026-11,Fossil Oil,101.19
+CY,2026-11,Solar,25.41
+CY,2026-11,Wind Onshore,2.32
 CZ,2021-01,Biomass,228.3
 CZ,2021-01,Fossil Brown coal/Lignite,3111.23
 CZ,2021-01,Fossil Coal-derived gas,162.26
@@ -3728,21 +3728,21 @@ CZ,2026-10,Other renewable,203.07
 CZ,2026-10,Solar,369.1
 CZ,2026-10,Waste,25.55
 CZ,2026-10,Wind Onshore,63.61
-CZ,2026-11,Biomass,77.98
-CZ,2026-11,Fossil Brown coal/Lignite,1120.47
+CZ,2026-11,Biomass,105.83
+CZ,2026-11,Fossil Brown coal/Lignite,1515.91
 CZ,2026-11,Fossil Coal-derived gas,0.0
-CZ,2026-11,Fossil Gas,322.44
-CZ,2026-11,Fossil Hard coal,36.25
-CZ,2026-11,Fossil Oil,1.01
-CZ,2026-11,Hydro Pumped Storage,39.84
-CZ,2026-11,Hydro Run-of-river and pondage,13.55
-CZ,2026-11,Hydro Water Reservoir,13.14
-CZ,2026-11,Nuclear,697.07
-CZ,2026-11,Other,17.41
-CZ,2026-11,Other renewable,73.12
-CZ,2026-11,Solar,73.39
-CZ,2026-11,Waste,9.02
-CZ,2026-11,Wind Onshore,20.05
+CZ,2026-11,Fossil Gas,383.67
+CZ,2026-11,Fossil Hard coal,47.04
+CZ,2026-11,Fossil Oil,1.38
+CZ,2026-11,Hydro Pumped Storage,51.33
+CZ,2026-11,Hydro Run-of-river and pondage,18.0
+CZ,2026-11,Hydro Water Reservoir,16.82
+CZ,2026-11,Nuclear,974.25
+CZ,2026-11,Other,23.71
+CZ,2026-11,Other renewable,98.78
+CZ,2026-11,Solar,103.58
+CZ,2026-11,Waste,12.15
+CZ,2026-11,Wind Onshore,32.08
 DE,2021-01,Biomass,3390.65
 DE,2021-01,Fossil Brown coal/Lignite,10260.44
 DE,2021-01,Fossil Gas,7292.29
@@ -4867,22 +4867,22 @@ DE,2026-10,Solar,5117.01
 DE,2026-10,Waste,581.66
 DE,2026-10,Wind Offshore,2950.24
 DE,2026-10,Wind Onshore,11535.86
-DE,2026-11,Biomass,944.98
-DE,2026-11,Fossil Brown coal/Lignite,2616.99
-DE,2026-11,Fossil Coal-derived gas,84.84
-DE,2026-11,Fossil Gas,3126.4
-DE,2026-11,Fossil Hard coal,1071.64
-DE,2026-11,Fossil Oil,53.14
-DE,2026-11,Geothermal,4.29
-DE,2026-11,Hydro Pumped Storage,252.73
-DE,2026-11,Hydro Run-of-river and pondage,209.55
-DE,2026-11,Hydro Water Reservoir,49.21
-DE,2026-11,Other,50.86
-DE,2026-11,Other renewable,16.56
-DE,2026-11,Solar,873.92
-DE,2026-11,Waste,202.26
-DE,2026-11,Wind Offshore,595.54
-DE,2026-11,Wind Onshore,1728.38
+DE,2026-11,Biomass,1491.37
+DE,2026-11,Fossil Brown coal/Lignite,3949.82
+DE,2026-11,Fossil Coal-derived gas,134.84
+DE,2026-11,Fossil Gas,4563.63
+DE,2026-11,Fossil Hard coal,1600.36
+DE,2026-11,Fossil Oil,95.48
+DE,2026-11,Geothermal,6.76
+DE,2026-11,Hydro Pumped Storage,388.13
+DE,2026-11,Hydro Run-of-river and pondage,351.91
+DE,2026-11,Hydro Water Reservoir,67.87
+DE,2026-11,Other,77.58
+DE,2026-11,Other renewable,25.99
+DE,2026-11,Solar,1400.77
+DE,2026-11,Waste,316.39
+DE,2026-11,Wind Offshore,1212.87
+DE,2026-11,Wind Onshore,3706.82
 DK,2021-01,Biomass,573.26
 DK,2021-01,Fossil Gas,376.11
 DK,2021-01,Fossil Hard coal,758.66
@@ -6243,21 +6243,21 @@ EE,2026-10,Fossil Peat,0.0
 EE,2026-10,Hydro Run-of-river and pondage,0.52
 EE,2026-10,Other,0.0
 EE,2026-10,Other renewable,0.04
-EE,2026-10,Solar,10.47
+EE,2026-10,Solar,72.69
 EE,2026-10,Waste,12.72
 EE,2026-10,Wind Onshore,122.28
-EE,2026-11,Biomass,22.22
-EE,2026-11,Energy storage,4.83
-EE,2026-11,Fossil Coal-derived gas,17.5
-EE,2026-11,Fossil Gas,1.35
-EE,2026-11,Fossil Oil shale,93.85
+EE,2026-11,Biomass,29.85
+EE,2026-11,Energy storage,6.38
+EE,2026-11,Fossil Coal-derived gas,22.54
+EE,2026-11,Fossil Gas,1.91
+EE,2026-11,Fossil Oil shale,120.75
 EE,2026-11,Fossil Peat,0.0
-EE,2026-11,Hydro Run-of-river and pondage,0.2
+EE,2026-11,Hydro Run-of-river and pondage,0.27
 EE,2026-11,Other,0.0
 EE,2026-11,Other renewable,0.05
-EE,2026-11,Solar,10.17
-EE,2026-11,Waste,4.43
-EE,2026-11,Wind Onshore,52.86
+EE,2026-11,Solar,13.01
+EE,2026-11,Waste,6.06
+EE,2026-11,Wind Onshore,87.72
 ES,2021-01,Biomass,346.17
 ES,2021-01,Fossil Brown coal/Lignite,0.0
 ES,2021-01,Fossil Coal-derived gas,0.0
@@ -7649,27 +7649,27 @@ ES,2026-10,Solar,5080.36
 ES,2026-10,Waste,196.43
 ES,2026-10,Wind Offshore,0.0
 ES,2026-10,Wind Onshore,3634.68
-ES,2026-11,Biomass,101.8
-ES,2026-11,Energy storage,0.45
+ES,2026-11,Biomass,155.05
+ES,2026-11,Energy storage,1.53
 ES,2026-11,Fossil Brown coal/Lignite,0.0
 ES,2026-11,Fossil Coal-derived gas,0.0
-ES,2026-11,Fossil Gas,1932.7
-ES,2026-11,Fossil Hard coal,21.51
-ES,2026-11,Fossil Oil,3.15
+ES,2026-11,Fossil Gas,2666.36
+ES,2026-11,Fossil Hard coal,31.6
+ES,2026-11,Fossil Oil,5.4
 ES,2026-11,Fossil Oil shale,0.0
 ES,2026-11,Fossil Peat,0.0
 ES,2026-11,Geothermal,0.0
-ES,2026-11,Hydro Pumped Storage,295.95
-ES,2026-11,Hydro Run-of-river and pondage,50.29
-ES,2026-11,Hydro Water Reservoir,293.82
+ES,2026-11,Hydro Pumped Storage,426.67
+ES,2026-11,Hydro Run-of-river and pondage,110.03
+ES,2026-11,Hydro Water Reservoir,499.51
 ES,2026-11,Marine,0.0
-ES,2026-11,Nuclear,1322.99
-ES,2026-11,Other,2.4
-ES,2026-11,Other renewable,12.02
-ES,2026-11,Solar,1198.01
-ES,2026-11,Waste,60.4
+ES,2026-11,Nuclear,2116.6
+ES,2026-11,Other,3.53
+ES,2026-11,Other renewable,18.97
+ES,2026-11,Solar,1653.19
+ES,2026-11,Waste,88.0
 ES,2026-11,Wind Offshore,0.0
-ES,2026-11,Wind Onshore,1381.22
+ES,2026-11,Wind Onshore,2861.01
 FI,2021-01,Biomass,631.31
 FI,2021-01,Fossil Gas,630.31
 FI,2021-01,Fossil Hard coal,557.73
@@ -8548,19 +8548,19 @@ FI,2026-11,"('Other', 'Actual Aggregated')",40.18
 FI,2026-11,"('Solar', 'Actual Aggregated')",11.7
 FI,2026-11,"('Waste', 'Actual Aggregated')",13.34
 FI,2026-11,"('Wind Onshore', 'Actual Aggregated')",1087.09
-FI,2026-11,Biomass,238.02
-FI,2026-11,Energy storage,21.46
-FI,2026-11,Fossil Gas,20.31
-FI,2026-11,Fossil Hard coal,1.07
-FI,2026-11,Fossil Oil,0.54
-FI,2026-11,Fossil Peat,43.76
-FI,2026-11,Hydro Run-of-river and pondage,480.84
-FI,2026-11,Nuclear,683.58
-FI,2026-11,Other,40.7
-FI,2026-11,Other renewable,8.41
-FI,2026-11,Solar,11.7
-FI,2026-11,Waste,13.54
-FI,2026-11,Wind Onshore,1092.31
+FI,2026-11,Biomass,317.92
+FI,2026-11,Energy storage,29.07
+FI,2026-11,Fossil Gas,21.17
+FI,2026-11,Fossil Hard coal,1.26
+FI,2026-11,Fossil Oil,0.62
+FI,2026-11,Fossil Peat,55.02
+FI,2026-11,Hydro Run-of-river and pondage,644.9
+FI,2026-11,Nuclear,924.63
+FI,2026-11,Other,56.63
+FI,2026-11,Other renewable,10.09
+FI,2026-11,Solar,13.31
+FI,2026-11,Waste,16.61
+FI,2026-11,Wind Onshore,1568.12
 FR,2021-01,Biomass,275.53
 FR,2021-01,Fossil Gas,4734.04
 FR,2021-01,Fossil Hard coal,841.55
@@ -9376,19 +9376,19 @@ FR,2026-10,Solar,2506.72
 FR,2026-10,Waste,301.25
 FR,2026-10,Wind Offshore,691.86
 FR,2026-10,Wind Onshore,4202.84
-FR,2026-11,Biomass,73.07
-FR,2026-11,Energy storage,14.03
-FR,2026-11,Fossil Gas,1554.02
-FR,2026-11,Fossil Hard coal,92.34
-FR,2026-11,Fossil Oil,24.64
-FR,2026-11,Hydro Pumped Storage,221.42
-FR,2026-11,Hydro Run-of-river and pondage,640.0
-FR,2026-11,Hydro Water Reservoir,432.53
-FR,2026-11,Nuclear,10788.1
-FR,2026-11,Solar,677.17
-FR,2026-11,Waste,106.46
-FR,2026-11,Wind Offshore,196.51
-FR,2026-11,Wind Onshore,1041.35
+FR,2026-11,Biomass,98.69
+FR,2026-11,Energy storage,17.97
+FR,2026-11,Fossil Gas,1877.79
+FR,2026-11,Fossil Hard coal,92.48
+FR,2026-11,Fossil Oil,28.04
+FR,2026-11,Hydro Pumped Storage,260.26
+FR,2026-11,Hydro Run-of-river and pondage,949.99
+FR,2026-11,Hydro Water Reservoir,521.13
+FR,2026-11,Nuclear,14863.48
+FR,2026-11,Solar,877.88
+FR,2026-11,Waste,144.71
+FR,2026-11,Wind Offshore,307.45
+FR,2026-11,Wind Onshore,1679.79
 GR,2021-01,Fossil Brown coal/Lignite,587.3
 GR,2021-01,Fossil Gas,1722.94
 GR,2021-01,Fossil Oil,0.0
@@ -9919,14 +9919,14 @@ GR,2026-11,"('Hydro Pumped Storage', 'Actual Consumption')",14.8
 GR,2026-11,"('Hydro Water Reservoir', 'Actual Aggregated')",82.87
 GR,2026-11,"('Solar', 'Actual Aggregated')",300.42
 GR,2026-11,"('Wind Onshore', 'Actual Aggregated')",406.59
-GR,2026-11,Energy storage,17.44
-GR,2026-11,Fossil Brown coal/Lignite,116.92
-GR,2026-11,Fossil Gas,844.67
+GR,2026-11,Energy storage,24.23
+GR,2026-11,Fossil Brown coal/Lignite,149.74
+GR,2026-11,Fossil Gas,1048.63
 GR,2026-11,Fossil Oil,0.0
-GR,2026-11,Hydro Pumped Storage,21.27
-GR,2026-11,Hydro Water Reservoir,83.64
-GR,2026-11,Solar,300.42
-GR,2026-11,Wind Onshore,412.77
+GR,2026-11,Hydro Pumped Storage,26.14
+GR,2026-11,Hydro Water Reservoir,100.83
+GR,2026-11,Solar,376.53
+GR,2026-11,Wind Onshore,657.99
 HR,2021-01,Biomass,48.62
 HR,2021-01,Fossil Gas,295.66
 HR,2021-01,Fossil Hard coal,119.54
@@ -10777,19 +10777,19 @@ HR,2026-10,Other renewable,23.49
 HR,2026-10,Solar,72.26
 HR,2026-10,Waste,3.26
 HR,2026-10,Wind Onshore,313.04
-HR,2026-11,Biomass,18.48
-HR,2026-11,Energy storage,1.68
-HR,2026-11,Fossil Gas,111.57
-HR,2026-11,Fossil Hard coal,19.87
+HR,2026-11,Biomass,25.13
+HR,2026-11,Energy storage,2.17
+HR,2026-11,Fossil Gas,141.37
+HR,2026-11,Fossil Hard coal,32.93
 HR,2026-11,Fossil Oil,0.0
 HR,2026-11,Geothermal,0.0
-HR,2026-11,Hydro Pumped Storage,7.44
-HR,2026-11,Hydro Run-of-river and pondage,19.34
-HR,2026-11,Hydro Water Reservoir,38.72
-HR,2026-11,Other renewable,8.45
-HR,2026-11,Solar,15.57
-HR,2026-11,Waste,1.93
-HR,2026-11,Wind Onshore,145.46
+HR,2026-11,Hydro Pumped Storage,28.41
+HR,2026-11,Hydro Run-of-river and pondage,33.07
+HR,2026-11,Hydro Water Reservoir,78.39
+HR,2026-11,Other renewable,11.48
+HR,2026-11,Solar,19.02
+HR,2026-11,Waste,2.5
+HR,2026-11,Wind Onshore,203.01
 HU,2021-01,Biomass,88.87
 HU,2021-01,Fossil Brown coal/Lignite,232.74
 HU,2021-01,Fossil Gas,927.24
@@ -11770,20 +11770,20 @@ HU,2026-10,Other renewable,16.65
 HU,2026-10,Solar,602.78
 HU,2026-10,Waste,8.34
 HU,2026-10,Wind Onshore,41.61
-HU,2026-11,Biomass,51.71
-HU,2026-11,Fossil Brown coal/Lignite,73.81
-HU,2026-11,Fossil Gas,377.48
+HU,2026-11,Biomass,68.91
+HU,2026-11,Fossil Brown coal/Lignite,96.59
+HU,2026-11,Fossil Gas,463.02
 HU,2026-11,Fossil Hard coal,0.0
-HU,2026-11,Fossil Oil,1.01
-HU,2026-11,Geothermal,0.09
-HU,2026-11,Hydro Run-of-river and pondage,1.35
-HU,2026-11,Hydro Water Reservoir,1.12
-HU,2026-11,Nuclear,372.72
-HU,2026-11,Other,16.76
-HU,2026-11,Other renewable,6.18
-HU,2026-11,Solar,135.43
-HU,2026-11,Waste,3.66
-HU,2026-11,Wind Onshore,9.12
+HU,2026-11,Fossil Oil,1.02
+HU,2026-11,Geothermal,0.13
+HU,2026-11,Hydro Run-of-river and pondage,2.12
+HU,2026-11,Hydro Water Reservoir,1.64
+HU,2026-11,Nuclear,509.29
+HU,2026-11,Other,22.16
+HU,2026-11,Other renewable,8.37
+HU,2026-11,Solar,171.27
+HU,2026-11,Waste,5.22
+HU,2026-11,Wind Onshore,17.21
 IE,2021-01,Fossil Gas,692.19
 IE,2021-01,Fossil Hard coal,273.58
 IE,2021-01,Fossil Oil,291.47
@@ -12368,15 +12368,15 @@ IE,2026-10,Hydro Run-of-river and pondage,32.22
 IE,2026-10,Other,0.66
 IE,2026-10,Solar,0.0
 IE,2026-10,Wind Onshore,1198.57
-IE,2026-11,Fossil Gas,278.37
+IE,2026-11,Fossil Gas,360.81
 IE,2026-11,Fossil Hard coal,7.31
-IE,2026-11,Fossil Oil,88.06
-IE,2026-11,Fossil Peat,18.74
-IE,2026-11,Hydro Pumped Storage,9.37
-IE,2026-11,Hydro Run-of-river and pondage,15.05
-IE,2026-11,Other,6.79
+IE,2026-11,Fossil Oil,119.11
+IE,2026-11,Fossil Peat,24.14
+IE,2026-11,Hydro Pumped Storage,12.27
+IE,2026-11,Hydro Run-of-river and pondage,18.6
+IE,2026-11,Other,7.74
 IE,2026-11,Solar,0.0
-IE,2026-11,Wind Onshore,250.56
+IE,2026-11,Wind Onshore,368.54
 IT,2021-01,Biomass,532.8
 IT,2021-01,Fossil Coal-derived gas,347.08
 IT,2021-01,Fossil Gas,10623.62
@@ -13346,32 +13346,33 @@ IT,2026-09,Other,1322.92
 IT,2026-09,Solar,3572.89
 IT,2026-09,Wind Offshore,2.92
 IT,2026-09,Wind Onshore,1254.84
-IT,2026-10,Biomass,392.42
-IT,2026-10,Energy storage,192.85
-IT,2026-10,Fossil Gas,9716.42
-IT,2026-10,Fossil Hard coal,174.59
-IT,2026-10,Fossil Oil,27.38
-IT,2026-10,Geothermal,438.87
-IT,2026-10,Hydro Pumped Storage,154.29
-IT,2026-10,Hydro Run-of-river and pondage,1264.27
-IT,2026-10,Hydro Water Reservoir,261.64
-IT,2026-10,Other,1321.87
-IT,2026-10,Solar,2727.51
+IT,2026-10,Biomass,391.38
+IT,2026-10,Energy storage,192.86
+IT,2026-10,Fossil Coal-derived gas,29.33
+IT,2026-10,Fossil Gas,9712.6
+IT,2026-10,Fossil Hard coal,180.44
+IT,2026-10,Fossil Oil,26.43
+IT,2026-10,Geothermal,438.72
+IT,2026-10,Hydro Pumped Storage,154.15
+IT,2026-10,Hydro Run-of-river and pondage,1264.03
+IT,2026-10,Hydro Water Reservoir,261.66
+IT,2026-10,Other,1321.77
+IT,2026-10,Solar,2729.65
 IT,2026-10,Wind Offshore,5.25
-IT,2026-10,Wind Onshore,1885.73
-IT,2026-11,Biomass,180.86
-IT,2026-11,Energy storage,56.83
-IT,2026-11,Fossil Gas,5173.15
-IT,2026-11,Fossil Hard coal,9.88
-IT,2026-11,Fossil Oil,4.48
-IT,2026-11,Geothermal,149.96
-IT,2026-11,Hydro Pumped Storage,36.81
-IT,2026-11,Hydro Run-of-river and pondage,389.6
-IT,2026-11,Hydro Water Reservoir,80.0
-IT,2026-11,Other,495.86
-IT,2026-11,Solar,588.47
-IT,2026-11,Wind Offshore,1.22
-IT,2026-11,Wind Onshore,695.15
+IT,2026-10,Wind Onshore,1884.64
+IT,2026-11,Biomass,242.47
+IT,2026-11,Energy storage,68.89
+IT,2026-11,Fossil Gas,6504.82
+IT,2026-11,Fossil Hard coal,12.73
+IT,2026-11,Fossil Oil,4.4
+IT,2026-11,Geothermal,201.61
+IT,2026-11,Hydro Pumped Storage,37.02
+IT,2026-11,Hydro Run-of-river and pondage,560.61
+IT,2026-11,Hydro Water Reservoir,99.97
+IT,2026-11,Other,670.61
+IT,2026-11,Solar,786.32
+IT,2026-11,Wind Offshore,2.05
+IT,2026-11,Wind Onshore,1148.35
 LT,2021-01,Biomass,41.02
 LT,2021-01,Fossil Gas,109.56
 LT,2021-01,Hydro Pumped Storage,64.62
@@ -13952,15 +13953,15 @@ LT,2026-10,Other,53.31
 LT,2026-10,Solar,139.58
 LT,2026-10,Waste,63.88
 LT,2026-10,Wind Onshore,535.6
-LT,2026-11,Biomass,4.9
-LT,2026-11,Energy storage,15.6
-LT,2026-11,Fossil Gas,28.46
-LT,2026-11,Hydro Pumped Storage,17.67
-LT,2026-11,Hydro Run-of-river and pondage,8.2
-LT,2026-11,Other,30.64
-LT,2026-11,Solar,32.72
-LT,2026-11,Waste,30.09
-LT,2026-11,Wind Onshore,123.99
+LT,2026-11,Biomass,6.8
+LT,2026-11,Energy storage,19.38
+LT,2026-11,Fossil Gas,32.21
+LT,2026-11,Hydro Pumped Storage,18.35
+LT,2026-11,Hydro Run-of-river and pondage,10.45
+LT,2026-11,Other,38.51
+LT,2026-11,Solar,42.55
+LT,2026-11,Waste,40.12
+LT,2026-11,Wind Onshore,256.03
 LU,2021-01,Biomass,23.28
 LU,2021-01,Fossil Gas,26.19
 LU,2021-01,Hydro Run-of-river and pondage,9.68
@@ -14451,13 +14452,13 @@ LU,2026-10,Hydro Water Reservoir,0.22
 LU,2026-10,Solar,25.53
 LU,2026-10,Waste,7.01
 LU,2026-10,Wind Onshore,54.13
-LU,2026-11,Biomass,5.87
-LU,2026-11,Fossil Gas,1.68
-LU,2026-11,Hydro Run-of-river and pondage,0.37
-LU,2026-11,Hydro Water Reservoir,0.09
-LU,2026-11,Solar,3.77
-LU,2026-11,Waste,2.89
-LU,2026-11,Wind Onshore,13.44
+LU,2026-11,Biomass,10.07
+LU,2026-11,Fossil Gas,2.42
+LU,2026-11,Hydro Run-of-river and pondage,0.56
+LU,2026-11,Hydro Water Reservoir,0.12
+LU,2026-11,Solar,5.48
+LU,2026-11,Waste,3.96
+LU,2026-11,Wind Onshore,21.27
 LV,2021-01,Biomass,54.36
 LV,2021-01,Fossil Gas,301.59
 LV,2021-01,Hydro Run-of-river and pondage,187.93
@@ -14858,12 +14859,12 @@ LV,2026-10,Hydro Run-of-river and pondage,224.93
 LV,2026-10,Other,15.95
 LV,2026-10,Solar,93.6
 LV,2026-10,Wind Onshore,67.33
-LV,2026-11,Biomass,10.93
-LV,2026-11,Fossil Gas,109.99
-LV,2026-11,Hydro Run-of-river and pondage,55.78
-LV,2026-11,Other,7.53
-LV,2026-11,Solar,17.74
-LV,2026-11,Wind Onshore,24.46
+LV,2026-11,Biomass,14.2
+LV,2026-11,Fossil Gas,126.49
+LV,2026-11,Hydro Run-of-river and pondage,72.24
+LV,2026-11,Other,9.77
+LV,2026-11,Solar,21.46
+LV,2026-11,Wind Onshore,47.92
 NL,2021-01,Biomass,12.35
 NL,2021-01,Fossil Gas,4128.94
 NL,2021-01,Fossil Hard coal,2036.89
@@ -15554,26 +15555,26 @@ NL,2026-09,Solar,40.5
 NL,2026-09,Waste,195.86
 NL,2026-09,Wind Offshore,1204.93
 NL,2026-09,Wind Onshore,510.38
-NL,2026-10,Biomass,147.84
-NL,2026-10,Fossil Gas,2532.28
-NL,2026-10,Fossil Hard coal,1868.55
+NL,2026-10,Biomass,151.79
+NL,2026-10,Fossil Gas,2539.88
+NL,2026-10,Fossil Hard coal,1868.24
 NL,2026-10,Hydro Run-of-river and pondage,0.0
-NL,2026-10,Nuclear,354.69
-NL,2026-10,Other,1511.4
-NL,2026-10,Solar,22.72
-NL,2026-10,Waste,133.94
-NL,2026-10,Wind Offshore,1645.85
-NL,2026-10,Wind Onshore,458.47
-NL,2026-11,Biomass,128.87
-NL,2026-11,Fossil Gas,1767.58
-NL,2026-11,Fossil Hard coal,813.86
+NL,2026-10,Nuclear,354.78
+NL,2026-10,Other,1871.68
+NL,2026-10,Solar,23.72
+NL,2026-10,Waste,160.3
+NL,2026-10,Wind Offshore,1646.88
+NL,2026-10,Wind Onshore,502.18
+NL,2026-11,Biomass,132.11
+NL,2026-11,Fossil Gas,2102.19
+NL,2026-11,Fossil Hard coal,1106.64
 NL,2026-11,Hydro Run-of-river and pondage,0.0
-NL,2026-11,Nuclear,126.37
-NL,2026-11,Other,110.48
-NL,2026-11,Solar,3.4
-NL,2026-11,Waste,13.04
-NL,2026-11,Wind Offshore,375.63
-NL,2026-11,Wind Onshore,63.71
+NL,2026-11,Nuclear,171.62
+NL,2026-11,Other,128.33
+NL,2026-11,Solar,4.88
+NL,2026-11,Waste,19.7
+NL,2026-11,Wind Offshore,587.18
+NL,2026-11,Wind Onshore,101.52
 PL,2021-01,Biomass,164.06
 PL,2021-01,Fossil Brown coal/Lignite,3468.89
 PL,2021-01,Fossil Coal-derived gas,38.99
@@ -16477,21 +16478,21 @@ PL,2026-11,"('Other', 'Actual Aggregated')",115.81
 PL,2026-11,"('Solar', 'Actual Aggregated')",353.78
 PL,2026-11,"('Wind Offshore', 'Actual Aggregated')",21.26
 PL,2026-11,"('Wind Onshore', 'Actual Aggregated')",259.69
-PL,2026-11,Biomass,95.12
-PL,2026-11,Energy storage,2.37
-PL,2026-11,Fossil Brown coal/Lignite,1135.95
-PL,2026-11,Fossil Coal-derived gas,48.77
-PL,2026-11,Fossil Gas,737.44
-PL,2026-11,Fossil Hard coal,2174.17
-PL,2026-11,Fossil Oil,45.91
-PL,2026-11,Hydro Pumped Storage,49.04
-PL,2026-11,Hydro Run-of-river and pondage,16.14
-PL,2026-11,Hydro Water Reservoir,12.0
-PL,2026-11,Other,116.26
-PL,2026-11,Other renewable,27.95
-PL,2026-11,Solar,353.78
-PL,2026-11,Wind Offshore,21.37
-PL,2026-11,Wind Onshore,261.68
+PL,2026-11,Biomass,126.72
+PL,2026-11,Energy storage,2.49
+PL,2026-11,Fossil Brown coal/Lignite,1478.25
+PL,2026-11,Fossil Coal-derived gas,63.28
+PL,2026-11,Fossil Gas,923.01
+PL,2026-11,Fossil Hard coal,2816.31
+PL,2026-11,Fossil Oil,61.19
+PL,2026-11,Hydro Pumped Storage,66.42
+PL,2026-11,Hydro Run-of-river and pondage,21.51
+PL,2026-11,Hydro Water Reservoir,15.46
+PL,2026-11,Other,155.92
+PL,2026-11,Other renewable,38.49
+PL,2026-11,Solar,473.15
+PL,2026-11,Wind Offshore,56.12
+PL,2026-11,Wind Onshore,741.06
 PT,2021-01,Biomass,289.62
 PT,2021-01,Fossil Gas,1212.54
 PT,2021-01,Fossil Hard coal,187.98
@@ -17182,26 +17183,26 @@ PT,2026-09,Other,20.26
 PT,2026-09,Solar,729.62
 PT,2026-09,Wind Offshore,6.92
 PT,2026-09,Wind Onshore,720.72
-PT,2026-10,Biomass,223.89
+PT,2026-10,Biomass,223.21
 PT,2026-10,Fossil Gas,586.69
 PT,2026-10,Fossil Hard coal,0.0
 PT,2026-10,Hydro Pumped Storage,513.57
-PT,2026-10,Hydro Run-of-river and pondage,362.33
+PT,2026-10,Hydro Run-of-river and pondage,362.27
 PT,2026-10,Hydro Water Reservoir,52.62
 PT,2026-10,Other,6.8
-PT,2026-10,Solar,614.79
+PT,2026-10,Solar,614.73
 PT,2026-10,Wind Offshore,5.26
-PT,2026-10,Wind Onshore,716.53
-PT,2026-11,Biomass,75.08
-PT,2026-11,Fossil Gas,246.37
+PT,2026-10,Wind Onshore,716.33
+PT,2026-11,Biomass,103.43
+PT,2026-11,Fossil Gas,304.33
 PT,2026-11,Fossil Hard coal,0.0
-PT,2026-11,Hydro Pumped Storage,170.69
-PT,2026-11,Hydro Run-of-river and pondage,137.98
-PT,2026-11,Hydro Water Reservoir,39.25
-PT,2026-11,Other,1.86
-PT,2026-11,Solar,136.34
-PT,2026-11,Wind Offshore,2.94
-PT,2026-11,Wind Onshore,540.28
+PT,2026-11,Hydro Pumped Storage,226.42
+PT,2026-11,Hydro Run-of-river and pondage,209.04
+PT,2026-11,Hydro Water Reservoir,71.25
+PT,2026-11,Other,3.05
+PT,2026-11,Solar,172.19
+PT,2026-11,Wind Offshore,4.06
+PT,2026-11,Wind Onshore,803.72
 RO,2021-01,Biomass,53.06
 RO,2021-01,Fossil Brown coal/Lignite,820.4
 RO,2021-01,Fossil Gas,1140.09
@@ -17843,26 +17844,26 @@ RO,2026-09,Hydro Water Reservoir,366.76
 RO,2026-09,Nuclear,0.0
 RO,2026-09,Solar,589.62
 RO,2026-09,Wind Onshore,528.05
-RO,2026-10,Biomass,43.48
+RO,2026-10,Biomass,43.49
 RO,2026-10,Energy storage,65.65
-RO,2026-10,Fossil Brown coal/Lignite,481.6
-RO,2026-10,Fossil Gas,918.68
-RO,2026-10,Fossil Hard coal,34.02
-RO,2026-10,Hydro Run-of-river and pondage,316.53
-RO,2026-10,Hydro Water Reservoir,412.68
+RO,2026-10,Fossil Brown coal/Lignite,481.81
+RO,2026-10,Fossil Gas,918.98
+RO,2026-10,Fossil Hard coal,34.04
+RO,2026-10,Hydro Run-of-river and pondage,316.62
+RO,2026-10,Hydro Water Reservoir,412.71
 RO,2026-10,Nuclear,0.01
 RO,2026-10,Solar,390.22
 RO,2026-10,Wind Onshore,828.05
-RO,2026-11,Biomass,17.72
-RO,2026-11,Energy storage,21.36
-RO,2026-11,Fossil Brown coal/Lignite,130.25
-RO,2026-11,Fossil Gas,377.91
-RO,2026-11,Fossil Hard coal,22.33
-RO,2026-11,Hydro Run-of-river and pondage,154.36
-RO,2026-11,Hydro Water Reservoir,155.63
-RO,2026-11,Nuclear,32.1
-RO,2026-11,Solar,85.08
-RO,2026-11,Wind Onshore,359.97
+RO,2026-11,Biomass,24.21
+RO,2026-11,Energy storage,28.56
+RO,2026-11,Fossil Brown coal/Lignite,171.7
+RO,2026-11,Fossil Gas,520.68
+RO,2026-11,Fossil Hard coal,30.6
+RO,2026-11,Hydro Run-of-river and pondage,204.79
+RO,2026-11,Hydro Water Reservoir,181.71
+RO,2026-11,Nuclear,106.37
+RO,2026-11,Solar,114.84
+RO,2026-11,Wind Onshore,476.75
 SE,2021-01,Hydro Water Reservoir,8169.55
 SE,2021-01,Nuclear,5038.37
 SE,2021-01,Other,1110.4
@@ -18264,12 +18265,12 @@ SE,2026-10,Nuclear,2559.29
 SE,2026-10,Other,601.92
 SE,2026-10,Solar,110.04
 SE,2026-10,Wind Onshore,4690.68
-SE,2026-11,Fossil Gas,1.87
-SE,2026-11,Hydro Water Reservoir,1779.18
-SE,2026-11,Nuclear,956.38
-SE,2026-11,Other,364.44
-SE,2026-11,Solar,19.17
-SE,2026-11,Wind Onshore,1560.73
+SE,2026-11,Fossil Gas,2.0
+SE,2026-11,Hydro Water Reservoir,2468.47
+SE,2026-11,Nuclear,1246.58
+SE,2026-11,Other,487.01
+SE,2026-11,Solar,24.16
+SE,2026-11,Wind Onshore,2457.64
 SI,2021-01,Biomass,9.09
 SI,2021-01,Fossil Brown coal/Lignite,377.24
 SI,2021-01,Fossil Gas,57.15
@@ -19012,18 +19013,18 @@ SI,2026-10,Other renewable,8.14
 SI,2026-10,Solar,123.34
 SI,2026-10,Waste,0.05
 SI,2026-10,Wind Onshore,0.78
-SI,2026-11,Biomass,4.47
-SI,2026-11,Fossil Brown coal/Lignite,105.73
-SI,2026-11,Fossil Gas,50.58
+SI,2026-11,Biomass,6.14
+SI,2026-11,Fossil Brown coal/Lignite,130.66
+SI,2026-11,Fossil Gas,62.88
 SI,2026-11,Fossil Oil,0.11
-SI,2026-11,Hydro Pumped Storage,8.65
-SI,2026-11,Hydro Run-of-river and pondage,55.73
-SI,2026-11,Nuclear,182.53
+SI,2026-11,Hydro Pumped Storage,10.69
+SI,2026-11,Hydro Run-of-river and pondage,95.1
+SI,2026-11,Nuclear,238.82
 SI,2026-11,Other,0.01
-SI,2026-11,Other renewable,2.6
-SI,2026-11,Solar,21.43
+SI,2026-11,Other renewable,3.75
+SI,2026-11,Solar,26.59
 SI,2026-11,Waste,0.05
-SI,2026-11,Wind Onshore,0.64
+SI,2026-11,Wind Onshore,0.8
 SK,2021-01,Biomass,82.14
 SK,2021-01,Fossil Brown coal/Lignite,97.39
 SK,2021-01,Fossil Gas,438.17
@@ -19934,16 +19935,16 @@ SK,2026-10,Other,75.07
 SK,2026-10,Other renewable,34.56
 SK,2026-10,Solar,51.76
 SK,2026-10,Wind Onshore,0.38
-SK,2026-11,Biomass,26.01
-SK,2026-11,Fossil Brown coal/Lignite,2.32
-SK,2026-11,Fossil Gas,150.03
+SK,2026-11,Biomass,35.07
+SK,2026-11,Fossil Brown coal/Lignite,3.21
+SK,2026-11,Fossil Gas,178.52
 SK,2026-11,Fossil Hard coal,0.0
-SK,2026-11,Fossil Oil,15.47
-SK,2026-11,Hydro Pumped Storage,15.92
-SK,2026-11,Hydro Run-of-river and pondage,35.4
-SK,2026-11,Hydro Water Reservoir,4.63
-SK,2026-11,Nuclear,520.37
-SK,2026-11,Other,35.24
-SK,2026-11,Other renewable,12.59
-SK,2026-11,Solar,12.59
-SK,2026-11,Wind Onshore,0.14
+SK,2026-11,Fossil Oil,20.96
+SK,2026-11,Hydro Pumped Storage,18.99
+SK,2026-11,Hydro Run-of-river and pondage,55.68
+SK,2026-11,Hydro Water Reservoir,6.19
+SK,2026-11,Nuclear,747.78
+SK,2026-11,Other,47.71
+SK,2026-11,Other renewable,16.97
+SK,2026-11,Solar,15.76
+SK,2026-11,Wind Onshore,0.22
