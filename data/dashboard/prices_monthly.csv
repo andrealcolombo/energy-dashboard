@@ -2631,7 +2631,7 @@ month,area,country,level,avg_eur_mwh,negative_hours,days
 2026-10,DK_2,DK,zone,163.01,0.0,31
 2026-10,EE,EE,country,82.29,5.2,31
 2026-10,ES,ES,country,166.66,8.8,31
-2026-10,EU27,EU27,EU,171.19,0.0,31
+2026-10,EU27,EU27,EU,171.2,0.0,31
 2026-10,FI,FI,country,38.05,7.0,31
 2026-10,FR,FR,country,166.02,1.5,31
 2026-10,GR,GR,country,197.03,72.2,31
@@ -2669,7 +2669,7 @@ month,area,country,level,avg_eur_mwh,negative_hours,days
 2026-11,DK_2,DK,zone,256.69,0.0,16
 2026-11,EE,EE,country,169.77,0.0,16
 2026-11,ES,ES,country,184.21,4.5,16
-2026-11,EU27,EU27,EU,232.37,0.0,16
+2026-11,EU27,EU27,EU,232.36,0.0,16
 2026-11,FI,FI,country,60.55,0.0,16
 2026-11,FR,FR,country,238.29,0.0,16
 2026-11,GR,GR,country,254.82,2.5,16

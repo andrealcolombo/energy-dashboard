@@ -1,449 +1,453 @@
 country,period,from,to,group,renewable,gwh,share_pct
-EU27,last_7,2026-11-08,2026-11-14,Battery storage,False,190.3,0.37
-EU27,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,1673.9,3.3
-EU27,last_7,2026-11-08,2026-11-14,Coal & lignite,False,6753.8,13.31
-EU27,last_7,2026-11-08,2026-11-14,Gas,False,11725.3,23.1
-EU27,last_7,2026-11-08,2026-11-14,Hydro,True,4320.0,8.51
-EU27,last_7,2026-11-08,2026-11-14,Nuclear,False,10996.8,21.67
-EU27,last_7,2026-11-08,2026-11-14,Oil,False,174.8,0.34
-EU27,last_7,2026-11-08,2026-11-14,Other,False,1237.6,2.44
-EU27,last_7,2026-11-08,2026-11-14,Pumped storage,False,913.0,1.8
-EU27,last_7,2026-11-08,2026-11-14,Solar,True,2768.7,5.45
-EU27,last_7,2026-11-08,2026-11-14,Wind,True,10003.1,19.71
-AT,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,37.9,3.59
-AT,last_7,2026-11-08,2026-11-14,Coal & lignite,False,0.0,0.0
-AT,last_7,2026-11-08,2026-11-14,Gas,False,309.6,29.35
-AT,last_7,2026-11-08,2026-11-14,Hydro,True,352.7,33.45
-AT,last_7,2026-11-08,2026-11-14,Oil,False,0.0,0.0
-AT,last_7,2026-11-08,2026-11-14,Other,False,20.5,1.94
-AT,last_7,2026-11-08,2026-11-14,Pumped storage,False,112.1,10.63
-AT,last_7,2026-11-08,2026-11-14,Solar,True,40.3,3.82
-AT,last_7,2026-11-08,2026-11-14,Wind,True,181.6,17.22
-BE,last_7,2026-11-08,2026-11-14,Battery storage,False,24.8,1.73
-BE,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,30.6,2.14
-BE,last_7,2026-11-08,2026-11-14,Gas,False,695.9,48.58
-BE,last_7,2026-11-08,2026-11-14,Hydro,True,0.6,0.04
-BE,last_7,2026-11-08,2026-11-14,Nuclear,False,317.0,22.13
-BE,last_7,2026-11-08,2026-11-14,Oil,False,9.3,0.65
-BE,last_7,2026-11-08,2026-11-14,Other,False,91.5,6.39
-BE,last_7,2026-11-08,2026-11-14,Pumped storage,False,17.0,1.18
-BE,last_7,2026-11-08,2026-11-14,Solar,True,122.6,8.56
-BE,last_7,2026-11-08,2026-11-14,Wind,True,123.2,8.6
-BG,last_7,2026-11-08,2026-11-14,Battery storage,False,78.6,10.0
-BG,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,2.4,0.3
-BG,last_7,2026-11-08,2026-11-14,Coal & lignite,False,280.4,35.67
-BG,last_7,2026-11-08,2026-11-14,Gas,False,44.8,5.7
-BG,last_7,2026-11-08,2026-11-14,Hydro,True,55.4,7.04
-BG,last_7,2026-11-08,2026-11-14,Nuclear,False,166.2,21.15
-BG,last_7,2026-11-08,2026-11-14,Other,False,0.6,0.08
-BG,last_7,2026-11-08,2026-11-14,Pumped storage,False,8.6,1.09
-BG,last_7,2026-11-08,2026-11-14,Solar,True,120.5,15.33
-BG,last_7,2026-11-08,2026-11-14,Wind,True,28.6,3.64
-CZ,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,97.7,5.82
-CZ,last_7,2026-11-08,2026-11-14,Coal & lignite,False,791.2,47.18
-CZ,last_7,2026-11-08,2026-11-14,Gas,False,180.0,10.73
-CZ,last_7,2026-11-08,2026-11-14,Hydro,True,15.9,0.95
-CZ,last_7,2026-11-08,2026-11-14,Nuclear,False,496.3,29.6
-CZ,last_7,2026-11-08,2026-11-14,Oil,False,0.7,0.04
-CZ,last_7,2026-11-08,2026-11-14,Other,False,16.8,1.0
-CZ,last_7,2026-11-08,2026-11-14,Pumped storage,False,24.1,1.43
-CZ,last_7,2026-11-08,2026-11-14,Solar,True,39.5,2.35
-CZ,last_7,2026-11-08,2026-11-14,Wind,True,14.8,0.89
-DE,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,718.0,7.77
-DE,last_7,2026-11-08,2026-11-14,Coal & lignite,False,2712.8,29.35
-DE,last_7,2026-11-08,2026-11-14,Gas,False,2350.5,25.43
-DE,last_7,2026-11-08,2026-11-14,Hydro,True,211.7,2.29
-DE,last_7,2026-11-08,2026-11-14,Oil,False,52.2,0.56
-DE,last_7,2026-11-08,2026-11-14,Other,False,187.5,2.03
-DE,last_7,2026-11-08,2026-11-14,Pumped storage,False,192.5,2.08
-DE,last_7,2026-11-08,2026-11-14,Solar,True,593.9,6.43
-DE,last_7,2026-11-08,2026-11-14,Wind,True,2224.5,24.07
-EE,last_7,2026-11-08,2026-11-14,Battery storage,False,2.9,1.96
-EE,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,14.7,9.93
-EE,last_7,2026-11-08,2026-11-14,Coal & lignite,False,68.5,46.18
-EE,last_7,2026-11-08,2026-11-14,Gas,False,11.4,7.71
-EE,last_7,2026-11-08,2026-11-14,Hydro,True,0.1,0.08
-EE,last_7,2026-11-08,2026-11-14,Other,False,2.9,1.94
-EE,last_7,2026-11-08,2026-11-14,Solar,True,6.0,4.01
-EE,last_7,2026-11-08,2026-11-14,Wind,True,41.8,28.18
-ES,last_7,2026-11-08,2026-11-14,Battery storage,False,1.0,0.02
-ES,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,77.9,1.55
-ES,last_7,2026-11-08,2026-11-14,Coal & lignite,False,10.2,0.2
-ES,last_7,2026-11-08,2026-11-14,Gas,False,1011.0,20.08
-ES,last_7,2026-11-08,2026-11-14,Hydro,True,324.2,6.44
-ES,last_7,2026-11-08,2026-11-14,Nuclear,False,1021.1,20.28
-ES,last_7,2026-11-08,2026-11-14,Oil,False,3.0,0.06
-ES,last_7,2026-11-08,2026-11-14,Other,False,38.9,0.77
-ES,last_7,2026-11-08,2026-11-14,Pumped storage,False,200.7,3.98
-ES,last_7,2026-11-08,2026-11-14,Solar,True,542.7,10.78
-ES,last_7,2026-11-08,2026-11-14,Wind,True,1805.0,35.84
-FI,last_7,2026-11-08,2026-11-14,Battery storage,False,13.4,0.79
-FI,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,154.2,9.05
-FI,last_7,2026-11-08,2026-11-14,Coal & lignite,False,31.8,1.87
-FI,last_7,2026-11-08,2026-11-14,Gas,False,12.4,0.73
-FI,last_7,2026-11-08,2026-11-14,Hydro,True,304.0,17.85
-FI,last_7,2026-11-08,2026-11-14,Nuclear,False,437.1,25.66
-FI,last_7,2026-11-08,2026-11-14,Oil,False,0.3,0.02
-FI,last_7,2026-11-08,2026-11-14,Other,False,36.1,2.12
-FI,last_7,2026-11-08,2026-11-14,Solar,True,4.3,0.25
-FI,last_7,2026-11-08,2026-11-14,Wind,True,709.4,41.66
-FR,last_7,2026-11-08,2026-11-14,Battery storage,False,8.0,0.08
-FR,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,46.1,0.45
-FR,last_7,2026-11-08,2026-11-14,Coal & lignite,False,30.1,0.29
-FR,last_7,2026-11-08,2026-11-14,Gas,False,900.2,8.8
-FR,last_7,2026-11-08,2026-11-14,Hydro,True,777.8,7.6
-FR,last_7,2026-11-08,2026-11-14,Nuclear,False,7092.0,69.29
-FR,last_7,2026-11-08,2026-11-14,Oil,False,16.9,0.17
-FR,last_7,2026-11-08,2026-11-14,Other,False,68.7,0.67
-FR,last_7,2026-11-08,2026-11-14,Pumped storage,False,127.7,1.25
-FR,last_7,2026-11-08,2026-11-14,Solar,True,347.9,3.4
-FR,last_7,2026-11-08,2026-11-14,Wind,True,819.4,8.01
-GR,last_7,2026-11-08,2026-11-14,Battery storage,False,12.0,1.01
-GR,last_7,2026-11-08,2026-11-14,Coal & lignite,False,65.9,5.56
-GR,last_7,2026-11-08,2026-11-14,Gas,False,483.8,40.77
-GR,last_7,2026-11-08,2026-11-14,Hydro,True,59.5,5.02
-GR,last_7,2026-11-08,2026-11-14,Oil,False,0.0,0.0
-GR,last_7,2026-11-08,2026-11-14,Pumped storage,False,15.1,1.27
-GR,last_7,2026-11-08,2026-11-14,Solar,True,199.7,16.83
-GR,last_7,2026-11-08,2026-11-14,Wind,True,350.5,29.54
-HR,last_7,2026-11-08,2026-11-14,Battery storage,False,1.0,0.34
-HR,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,17.4,6.28
-HR,last_7,2026-11-08,2026-11-14,Coal & lignite,False,18.7,6.74
-HR,last_7,2026-11-08,2026-11-14,Gas,False,66.4,23.99
-HR,last_7,2026-11-08,2026-11-14,Hydro,True,62.7,22.64
-HR,last_7,2026-11-08,2026-11-14,Oil,False,0.0,0.0
-HR,last_7,2026-11-08,2026-11-14,Other,False,1.0,0.36
-HR,last_7,2026-11-08,2026-11-14,Pumped storage,False,21.2,7.65
-HR,last_7,2026-11-08,2026-11-14,Solar,True,6.3,2.28
-HR,last_7,2026-11-08,2026-11-14,Wind,True,82.2,29.71
-HU,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,36.5,5.72
-HU,last_7,2026-11-08,2026-11-14,Coal & lignite,False,46.0,7.2
-HU,last_7,2026-11-08,2026-11-14,Gas,False,228.8,35.85
-HU,last_7,2026-11-08,2026-11-14,Hydro,True,1.8,0.27
-HU,last_7,2026-11-08,2026-11-14,Nuclear,False,244.9,38.38
-HU,last_7,2026-11-08,2026-11-14,Oil,False,1.0,0.15
-HU,last_7,2026-11-08,2026-11-14,Other,False,12.7,1.99
-HU,last_7,2026-11-08,2026-11-14,Solar,True,57.4,8.99
-HU,last_7,2026-11-08,2026-11-14,Wind,True,9.2,1.44
-IE,last_7,2026-11-08,2026-11-14,Coal & lignite,False,9.9,2.1
-IE,last_7,2026-11-08,2026-11-14,Gas,False,158.6,33.78
-IE,last_7,2026-11-08,2026-11-14,Hydro,True,7.3,1.56
-IE,last_7,2026-11-08,2026-11-14,Oil,False,52.3,11.14
-IE,last_7,2026-11-08,2026-11-14,Other,False,0.9,0.2
-IE,last_7,2026-11-08,2026-11-14,Pumped storage,False,5.6,1.2
-IE,last_7,2026-11-08,2026-11-14,Solar,True,0.0,0.0
-IE,last_7,2026-11-08,2026-11-14,Wind,True,234.7,50.01
-IT,last_7,2026-11-08,2026-11-14,Battery storage,False,25.5,0.5
-IT,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,208.2,4.1
-IT,last_7,2026-11-08,2026-11-14,Coal & lignite,False,7.2,0.14
-IT,last_7,2026-11-08,2026-11-14,Gas,False,3195.1,62.98
-IT,last_7,2026-11-08,2026-11-14,Hydro,True,323.5,6.38
-IT,last_7,2026-11-08,2026-11-14,Oil,False,0.3,0.01
-IT,last_7,2026-11-08,2026-11-14,Other,False,319.0,6.29
-IT,last_7,2026-11-08,2026-11-14,Pumped storage,False,22.6,0.44
-IT,last_7,2026-11-08,2026-11-14,Solar,True,336.7,6.64
-IT,last_7,2026-11-08,2026-11-14,Wind,True,635.6,12.53
-LT,last_7,2026-11-08,2026-11-14,Battery storage,False,9.2,3.86
-LT,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,3.3,1.39
-LT,last_7,2026-11-08,2026-11-14,Gas,False,24.5,10.22
-LT,last_7,2026-11-08,2026-11-14,Hydro,True,5.1,2.12
-LT,last_7,2026-11-08,2026-11-14,Other,False,38.5,16.11
-LT,last_7,2026-11-08,2026-11-14,Pumped storage,False,9.7,4.04
-LT,last_7,2026-11-08,2026-11-14,Solar,True,16.2,6.76
-LT,last_7,2026-11-08,2026-11-14,Wind,True,132.8,55.5
-LU,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,6.3,32.31
-LU,last_7,2026-11-08,2026-11-14,Gas,False,1.2,6.01
-LU,last_7,2026-11-08,2026-11-14,Hydro,True,0.3,1.78
-LU,last_7,2026-11-08,2026-11-14,Other,False,1.9,9.61
-LU,last_7,2026-11-08,2026-11-14,Solar,True,2.5,12.59
-LU,last_7,2026-11-08,2026-11-14,Wind,True,7.4,37.71
-LV,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,6.7,4.84
-LV,last_7,2026-11-08,2026-11-14,Gas,False,62.2,44.9
-LV,last_7,2026-11-08,2026-11-14,Hydro,True,33.1,23.88
-LV,last_7,2026-11-08,2026-11-14,Other,False,4.5,3.26
-LV,last_7,2026-11-08,2026-11-14,Solar,True,8.2,5.92
-LV,last_7,2026-11-08,2026-11-14,Wind,True,23.8,17.21
-NL,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,49.9,2.51
-NL,last_7,2026-11-08,2026-11-14,Coal & lignite,False,526.0,26.49
-NL,last_7,2026-11-08,2026-11-14,Gas,False,1030.6,51.9
-NL,last_7,2026-11-08,2026-11-14,Hydro,True,0.0,0.0
-NL,last_7,2026-11-08,2026-11-14,Nuclear,False,81.0,4.08
-NL,last_7,2026-11-08,2026-11-14,Other,False,46.7,2.35
-NL,last_7,2026-11-08,2026-11-14,Solar,True,2.3,0.12
-NL,last_7,2026-11-08,2026-11-14,Wind,True,249.3,12.55
-PL,last_7,2026-11-08,2026-11-14,Battery storage,False,0.9,0.03
-PL,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,77.8,2.3
-PL,last_7,2026-11-08,2026-11-14,Coal & lignite,False,1990.8,58.91
-PL,last_7,2026-11-08,2026-11-14,Gas,False,472.2,13.97
-PL,last_7,2026-11-08,2026-11-14,Hydro,True,16.9,0.5
-PL,last_7,2026-11-08,2026-11-14,Oil,False,29.4,0.87
-PL,last_7,2026-11-08,2026-11-14,Other,False,73.3,2.17
-PL,last_7,2026-11-08,2026-11-14,Pumped storage,False,32.2,0.95
-PL,last_7,2026-11-08,2026-11-14,Solar,True,186.1,5.51
-PL,last_7,2026-11-08,2026-11-14,Wind,True,499.6,14.78
-PT,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,49.0,4.75
-PT,last_7,2026-11-08,2026-11-14,Coal & lignite,False,0.0,0.0
-PT,last_7,2026-11-08,2026-11-14,Gas,False,110.3,10.71
-PT,last_7,2026-11-08,2026-11-14,Hydro,True,157.8,15.32
-PT,last_7,2026-11-08,2026-11-14,Other,False,1.8,0.17
-PT,last_7,2026-11-08,2026-11-14,Pumped storage,False,108.2,10.5
-PT,last_7,2026-11-08,2026-11-14,Solar,True,51.3,4.99
-PT,last_7,2026-11-08,2026-11-14,Wind,True,551.6,53.56
-RO,last_7,2026-11-08,2026-11-14,Battery storage,False,12.9,1.53
-RO,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,11.4,1.35
-RO,last_7,2026-11-08,2026-11-14,Coal & lignite,False,98.0,11.57
-RO,last_7,2026-11-08,2026-11-14,Gas,False,264.3,31.2
-RO,last_7,2026-11-08,2026-11-14,Hydro,True,167.0,19.72
-RO,last_7,2026-11-08,2026-11-14,Nuclear,False,73.6,8.69
-RO,last_7,2026-11-08,2026-11-14,Solar,True,58.4,6.89
-RO,last_7,2026-11-08,2026-11-14,Wind,True,161.4,19.06
-SE,last_7,2026-11-08,2026-11-14,Gas,False,0.5,0.02
-SE,last_7,2026-11-08,2026-11-14,Hydro,True,1354.8,40.9
-SE,last_7,2026-11-08,2026-11-14,Nuclear,False,583.0,17.6
-SE,last_7,2026-11-08,2026-11-14,Other,False,250.7,7.57
-SE,last_7,2026-11-08,2026-11-14,Solar,True,7.2,0.22
-SE,last_7,2026-11-08,2026-11-14,Wind,True,1116.5,33.7
-SI,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,4.7,1.62
-SI,last_7,2026-11-08,2026-11-14,Coal & lignite,False,64.6,22.21
-SI,last_7,2026-11-08,2026-11-14,Gas,False,32.1,11.03
-SI,last_7,2026-11-08,2026-11-14,Hydro,True,55.6,19.14
-SI,last_7,2026-11-08,2026-11-14,Nuclear,False,113.8,39.15
-SI,last_7,2026-11-08,2026-11-14,Oil,False,0.1,0.04
-SI,last_7,2026-11-08,2026-11-14,Other,False,0.0,0.01
-SI,last_7,2026-11-08,2026-11-14,Pumped storage,False,6.3,2.17
-SI,last_7,2026-11-08,2026-11-14,Solar,True,13.3,4.58
-SI,last_7,2026-11-08,2026-11-14,Wind,True,0.2,0.06
-SK,last_7,2026-11-08,2026-11-14,Bio & other renewables,True,23.2,4.19
-SK,last_7,2026-11-08,2026-11-14,Coal & lignite,False,1.8,0.32
-SK,last_7,2026-11-08,2026-11-14,Gas,False,79.2,14.28
-SK,last_7,2026-11-08,2026-11-14,Hydro,True,32.2,5.81
-SK,last_7,2026-11-08,2026-11-14,Nuclear,False,370.8,66.83
-SK,last_7,2026-11-08,2026-11-14,Oil,False,9.3,1.68
-SK,last_7,2026-11-08,2026-11-14,Other,False,23.0,4.15
-SK,last_7,2026-11-08,2026-11-14,Pumped storage,False,9.7,1.74
-SK,last_7,2026-11-08,2026-11-14,Solar,True,5.4,0.97
-SK,last_7,2026-11-08,2026-11-14,Wind,True,0.2,0.03
-EU27,prev_28,2026-10-11,2026-11-07,Battery storage,False,896.3,0.47
-EU27,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,6526.8,3.44
-EU27,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,23674.3,12.47
-EU27,prev_28,2026-10-11,2026-11-07,Gas,False,35955.8,18.95
-EU27,prev_28,2026-10-11,2026-11-07,Hydro,True,14523.8,7.65
-EU27,prev_28,2026-10-11,2026-11-07,Nuclear,False,40650.4,21.42
-EU27,prev_28,2026-10-11,2026-11-07,Oil,False,604.2,0.32
-EU27,prev_28,2026-10-11,2026-11-07,Other,False,5414.6,2.85
-EU27,prev_28,2026-10-11,2026-11-07,Pumped storage,False,3423.5,1.8
-EU27,prev_28,2026-10-11,2026-11-07,Solar,True,18005.4,9.49
-EU27,prev_28,2026-10-11,2026-11-07,Wind,True,40111.0,21.13
-AT,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,137.1,3.49
-AT,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,0.0,0.0
-AT,prev_28,2026-10-11,2026-11-07,Gas,False,1157.4,29.45
-AT,prev_28,2026-10-11,2026-11-07,Hydro,True,1279.1,32.54
-AT,prev_28,2026-10-11,2026-11-07,Oil,False,0.0,0.0
-AT,prev_28,2026-10-11,2026-11-07,Other,False,82.1,2.09
-AT,prev_28,2026-10-11,2026-11-07,Pumped storage,False,281.5,7.16
-AT,prev_28,2026-10-11,2026-11-07,Solar,True,289.1,7.36
-AT,prev_28,2026-10-11,2026-11-07,Wind,True,704.1,17.91
-BE,prev_28,2026-10-11,2026-11-07,Battery storage,False,89.8,1.73
-BE,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,150.5,2.9
-BE,prev_28,2026-10-11,2026-11-07,Gas,False,1864.6,35.92
-BE,prev_28,2026-10-11,2026-11-07,Hydro,True,4.7,0.09
-BE,prev_28,2026-10-11,2026-11-07,Nuclear,False,788.2,15.18
-BE,prev_28,2026-10-11,2026-11-07,Oil,False,45.6,0.88
-BE,prev_28,2026-10-11,2026-11-07,Other,False,361.0,6.95
-BE,prev_28,2026-10-11,2026-11-07,Pumped storage,False,73.1,1.41
-BE,prev_28,2026-10-11,2026-11-07,Solar,True,536.0,10.33
-BE,prev_28,2026-10-11,2026-11-07,Wind,True,1277.8,24.61
-BG,prev_28,2026-10-11,2026-11-07,Battery storage,False,385.8,12.43
-BG,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,10.2,0.33
-BG,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,1091.5,35.17
-BG,prev_28,2026-10-11,2026-11-07,Gas,False,155.2,5.0
-BG,prev_28,2026-10-11,2026-11-07,Hydro,True,168.7,5.44
-BG,prev_28,2026-10-11,2026-11-07,Nuclear,False,605.8,19.52
-BG,prev_28,2026-10-11,2026-11-07,Other,False,2.5,0.08
-BG,prev_28,2026-10-11,2026-11-07,Pumped storage,False,25.9,0.83
-BG,prev_28,2026-10-11,2026-11-07,Solar,True,493.6,15.91
-BG,prev_28,2026-10-11,2026-11-07,Wind,True,163.8,5.28
-CZ,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,370.1,6.11
-CZ,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,2653.4,43.78
-CZ,prev_28,2026-10-11,2026-11-07,Gas,False,430.9,7.11
-CZ,prev_28,2026-10-11,2026-11-07,Hydro,True,65.0,1.07
-CZ,prev_28,2026-10-11,2026-11-07,Nuclear,False,2046.5,33.76
-CZ,prev_28,2026-10-11,2026-11-07,Oil,False,2.4,0.04
-CZ,prev_28,2026-10-11,2026-11-07,Other,False,67.7,1.12
-CZ,prev_28,2026-10-11,2026-11-07,Pumped storage,False,99.4,1.64
-CZ,prev_28,2026-10-11,2026-11-07,Solar,True,267.3,4.41
-CZ,prev_28,2026-10-11,2026-11-07,Wind,True,58.6,0.97
-DE,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,2845.5,7.71
-DE,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,8884.6,24.09
-DE,prev_28,2026-10-11,2026-11-07,Gas,False,6076.4,16.47
-DE,prev_28,2026-10-11,2026-11-07,Hydro,True,737.8,2.0
-DE,prev_28,2026-10-11,2026-11-07,Oil,False,183.7,0.5
-DE,prev_28,2026-10-11,2026-11-07,Other,False,675.6,1.83
-DE,prev_28,2026-10-11,2026-11-07,Pumped storage,False,693.8,1.88
-DE,prev_28,2026-10-11,2026-11-07,Solar,True,3773.0,10.23
-DE,prev_28,2026-10-11,2026-11-07,Wind,True,13015.1,35.29
-EE,prev_28,2026-10-11,2026-11-07,Battery storage,False,12.2,3.05
-EE,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,40.9,10.23
-EE,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,122.0,30.47
-EE,prev_28,2026-10-11,2026-11-07,Gas,False,39.1,9.77
-EE,prev_28,2026-10-11,2026-11-07,Hydro,True,0.5,0.13
-EE,prev_28,2026-10-11,2026-11-07,Other,False,11.5,2.86
-EE,prev_28,2026-10-11,2026-11-07,Solar,True,50.6,12.65
-EE,prev_28,2026-10-11,2026-11-07,Wind,True,123.5,30.85
-ES,prev_28,2026-10-11,2026-11-07,Battery storage,False,1.4,0.01
-ES,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,328.3,1.67
-ES,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,75.6,0.38
-ES,prev_28,2026-10-11,2026-11-07,Gas,False,5110.4,26.03
-ES,prev_28,2026-10-11,2026-11-07,Hydro,True,1031.5,5.25
-ES,prev_28,2026-10-11,2026-11-07,Nuclear,False,4303.0,21.91
-ES,prev_28,2026-10-11,2026-11-07,Oil,False,17.6,0.09
-ES,prev_28,2026-10-11,2026-11-07,Other,False,186.3,0.95
-ES,prev_28,2026-10-11,2026-11-07,Pumped storage,False,846.4,4.31
-ES,prev_28,2026-10-11,2026-11-07,Solar,True,4584.6,23.35
-ES,prev_28,2026-10-11,2026-11-07,Wind,True,3150.7,16.05
-FI,prev_28,2026-10-11,2026-11-07,Battery storage,False,51.7,0.81
-FI,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,553.2,8.71
-FI,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,74.2,1.17
-FI,prev_28,2026-10-11,2026-11-07,Gas,False,16.1,0.25
-FI,prev_28,2026-10-11,2026-11-07,Hydro,True,1310.1,20.63
-FI,prev_28,2026-10-11,2026-11-07,Nuclear,False,1501.4,23.64
-FI,prev_28,2026-10-11,2026-11-07,Oil,False,2.0,0.03
-FI,prev_28,2026-10-11,2026-11-07,Other,False,143.2,2.26
-FI,prev_28,2026-10-11,2026-11-07,Solar,True,49.0,0.77
-FI,prev_28,2026-10-11,2026-11-07,Wind,True,2649.2,41.72
-FR,prev_28,2026-10-11,2026-11-07,Battery storage,False,39.8,0.1
-FR,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,187.4,0.49
-FR,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,62.4,0.16
-FR,prev_28,2026-10-11,2026-11-07,Gas,False,2079.3,5.44
-FR,prev_28,2026-10-11,2026-11-07,Hydro,True,2226.3,5.82
-FR,prev_28,2026-10-11,2026-11-07,Nuclear,False,26112.6,68.29
-FR,prev_28,2026-10-11,2026-11-07,Oil,False,39.0,0.1
-FR,prev_28,2026-10-11,2026-11-07,Other,False,273.0,0.71
-FR,prev_28,2026-10-11,2026-11-07,Pumped storage,False,496.0,1.3
-FR,prev_28,2026-10-11,2026-11-07,Solar,True,2095.1,5.48
-FR,prev_28,2026-10-11,2026-11-07,Wind,True,4628.4,12.1
-GR,prev_28,2026-10-11,2026-11-07,Battery storage,False,52.8,1.25
-GR,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,283.6,6.72
-GR,prev_28,2026-10-11,2026-11-07,Gas,False,1867.8,44.27
-GR,prev_28,2026-10-11,2026-11-07,Hydro,True,248.6,5.89
-GR,prev_28,2026-10-11,2026-11-07,Oil,False,0.0,0.0
-GR,prev_28,2026-10-11,2026-11-07,Pumped storage,False,56.5,1.34
-GR,prev_28,2026-10-11,2026-11-07,Solar,True,808.1,19.15
-GR,prev_28,2026-10-11,2026-11-07,Wind,True,901.6,21.37
-HR,prev_28,2026-10-11,2026-11-07,Battery storage,False,4.3,0.47
-HR,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,67.9,7.37
-HR,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,22.1,2.4
-HR,prev_28,2026-10-11,2026-11-07,Gas,False,257.7,27.97
-HR,prev_28,2026-10-11,2026-11-07,Hydro,True,125.4,13.62
-HR,prev_28,2026-10-11,2026-11-07,Oil,False,0.0,0.0
-HR,prev_28,2026-10-11,2026-11-07,Other,False,3.7,0.4
-HR,prev_28,2026-10-11,2026-11-07,Pumped storage,False,14.3,1.55
-HR,prev_28,2026-10-11,2026-11-07,Solar,True,58.3,6.32
-HR,prev_28,2026-10-11,2026-11-07,Wind,True,367.6,39.9
-HU,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,136.7,5.89
-HU,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,145.4,6.27
-HU,prev_28,2026-10-11,2026-11-07,Gas,False,602.8,25.97
-HU,prev_28,2026-10-11,2026-11-07,Hydro,True,4.1,0.18
-HU,prev_28,2026-10-11,2026-11-07,Nuclear,False,854.5,36.82
-HU,prev_28,2026-10-11,2026-11-07,Oil,False,0.4,0.02
-HU,prev_28,2026-10-11,2026-11-07,Other,False,79.0,3.4
-HU,prev_28,2026-10-11,2026-11-07,Solar,True,462.8,19.94
-HU,prev_28,2026-10-11,2026-11-07,Wind,True,35.3,1.52
-IE,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,50.2,2.77
-IE,prev_28,2026-10-11,2026-11-07,Gas,False,599.6,33.07
-IE,prev_28,2026-10-11,2026-11-07,Hydro,True,36.5,2.01
-IE,prev_28,2026-10-11,2026-11-07,Oil,False,143.9,7.94
-IE,prev_28,2026-10-11,2026-11-07,Other,False,7.2,0.4
-IE,prev_28,2026-10-11,2026-11-07,Pumped storage,False,27.0,1.49
-IE,prev_28,2026-10-11,2026-11-07,Solar,True,0.0,0.0
-IE,prev_28,2026-10-11,2026-11-07,Wind,True,948.6,52.32
-IT,prev_28,2026-10-11,2026-11-07,Battery storage,False,164.9,0.94
-IT,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,784.6,4.48
-IT,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,74.2,0.42
-IT,prev_28,2026-10-11,2026-11-07,Gas,False,9559.7,54.61
-IT,prev_28,2026-10-11,2026-11-07,Hydro,True,1332.0,7.61
-IT,prev_28,2026-10-11,2026-11-07,Oil,False,19.8,0.11
-IT,prev_28,2026-10-11,2026-11-07,Other,False,1220.6,6.97
-IT,prev_28,2026-10-11,2026-11-07,Pumped storage,False,125.1,0.71
-IT,prev_28,2026-10-11,2026-11-07,Solar,True,2230.1,12.74
-IT,prev_28,2026-10-11,2026-11-07,Wind,True,1993.6,11.39
-LT,prev_28,2026-10-11,2026-11-07,Battery storage,False,31.8,4.16
-LT,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,12.0,1.56
-LT,prev_28,2026-10-11,2026-11-07,Gas,False,16.7,2.19
-LT,prev_28,2026-10-11,2026-11-07,Hydro,True,20.4,2.66
-LT,prev_28,2026-10-11,2026-11-07,Other,False,123.5,16.13
-LT,prev_28,2026-10-11,2026-11-07,Pumped storage,False,45.5,5.94
-LT,prev_28,2026-10-11,2026-11-07,Solar,True,92.4,12.08
-LT,prev_28,2026-10-11,2026-11-07,Wind,True,423.1,55.28
-LU,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,13.4,13.82
-LU,prev_28,2026-10-11,2026-11-07,Gas,False,3.3,3.36
-LU,prev_28,2026-10-11,2026-11-07,Hydro,True,1.2,1.2
-LU,prev_28,2026-10-11,2026-11-07,Other,False,7.9,8.12
-LU,prev_28,2026-10-11,2026-11-07,Solar,True,17.8,18.26
-LU,prev_28,2026-10-11,2026-11-07,Wind,True,53.7,55.24
-LV,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,22.5,4.92
-LV,prev_28,2026-10-11,2026-11-07,Gas,False,111.2,24.29
-LV,prev_28,2026-10-11,2026-11-07,Hydro,True,178.3,38.95
-LV,prev_28,2026-10-11,2026-11-07,Other,False,16.0,3.49
-LV,prev_28,2026-10-11,2026-11-07,Solar,True,65.4,14.29
-LV,prev_28,2026-10-11,2026-11-07,Wind,True,64.3,14.05
-NL,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,214.7,2.69
-NL,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,1804.4,22.6
-NL,prev_28,2026-10-11,2026-11-07,Gas,False,2571.2,32.21
-NL,prev_28,2026-10-11,2026-11-07,Hydro,True,0.0,0.0
-NL,prev_28,2026-10-11,2026-11-07,Nuclear,False,322.0,4.03
-NL,prev_28,2026-10-11,2026-11-07,Other,False,1073.4,13.45
-NL,prev_28,2026-10-11,2026-11-07,Solar,True,14.5,0.18
-NL,prev_28,2026-10-11,2026-11-07,Wind,True,1982.7,24.84
-PL,prev_28,2026-10-11,2026-11-07,Battery storage,False,3.8,0.03
-PL,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,291.9,2.23
-PL,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,7756.0,59.25
-PL,prev_28,2026-10-11,2026-11-07,Gas,False,1547.8,11.82
-PL,prev_28,2026-10-11,2026-11-07,Hydro,True,71.0,0.54
-PL,prev_28,2026-10-11,2026-11-07,Oil,False,116.5,0.89
-PL,prev_28,2026-10-11,2026-11-07,Other,False,333.8,2.55
-PL,prev_28,2026-10-11,2026-11-07,Pumped storage,False,114.5,0.87
-PL,prev_28,2026-10-11,2026-11-07,Solar,True,1147.7,8.77
-PL,prev_28,2026-10-11,2026-11-07,Wind,True,1707.1,13.04
-PT,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,197.4,7.08
-PT,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,0.0,0.0
-PT,prev_28,2026-10-11,2026-11-07,Gas,False,585.3,21.01
-PT,prev_28,2026-10-11,2026-11-07,Hydro,True,362.4,13.01
-PT,prev_28,2026-10-11,2026-11-07,Other,False,4.2,0.15
-PT,prev_28,2026-10-11,2026-11-07,Pumped storage,False,464.4,16.67
-PT,prev_28,2026-10-11,2026-11-07,Solar,True,531.2,19.07
-PT,prev_28,2026-10-11,2026-11-07,Wind,True,641.3,23.02
-RO,prev_28,2026-10-11,2026-11-07,Battery storage,False,57.9,1.69
-RO,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,41.0,1.2
-RO,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,460.5,13.47
-RO,prev_28,2026-10-11,2026-11-07,Gas,False,883.5,25.84
-RO,prev_28,2026-10-11,2026-11-07,Hydro,True,750.0,21.93
-RO,prev_28,2026-10-11,2026-11-07,Nuclear,False,7.7,0.23
-RO,prev_28,2026-10-11,2026-11-07,Solar,True,238.5,6.97
-RO,prev_28,2026-10-11,2026-11-07,Wind,True,980.2,28.67
-SE,prev_28,2026-10-11,2026-11-07,Gas,False,3.6,0.03
-SE,prev_28,2026-10-11,2026-11-07,Hydro,True,4296.9,36.72
-SE,prev_28,2026-10-11,2026-11-07,Nuclear,False,2424.5,20.72
-SE,prev_28,2026-10-11,2026-11-07,Other,False,666.5,5.7
-SE,prev_28,2026-10-11,2026-11-07,Solar,True,71.7,0.61
-SE,prev_28,2026-10-11,2026-11-07,Wind,True,4239.3,36.23
-SI,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,18.1,1.87
-SI,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,113.0,11.67
-SI,prev_28,2026-10-11,2026-11-07,Gas,False,105.0,10.85
-SI,prev_28,2026-10-11,2026-11-07,Hydro,True,156.2,16.14
-SI,prev_28,2026-10-11,2026-11-07,Nuclear,False,468.1,48.37
-SI,prev_28,2026-10-11,2026-11-07,Oil,False,0.0,0.0
-SI,prev_28,2026-10-11,2026-11-07,Other,False,0.1,0.01
-SI,prev_28,2026-10-11,2026-11-07,Pumped storage,False,17.9,1.85
-SI,prev_28,2026-10-11,2026-11-07,Solar,True,88.2,9.12
-SI,prev_28,2026-10-11,2026-11-07,Wind,True,1.1,0.12
-SK,prev_28,2026-10-11,2026-11-07,Bio & other renewables,True,103.5,5.33
-SK,prev_28,2026-10-11,2026-11-07,Coal & lignite,False,1.2,0.06
-SK,prev_28,2026-10-11,2026-11-07,Gas,False,311.1,16.03
-SK,prev_28,2026-10-11,2026-11-07,Hydro,True,117.2,6.04
-SK,prev_28,2026-10-11,2026-11-07,Nuclear,False,1215.9,62.65
-SK,prev_28,2026-10-11,2026-11-07,Oil,False,33.1,1.71
-SK,prev_28,2026-10-11,2026-11-07,Other,False,75.9,3.91
-SK,prev_28,2026-10-11,2026-11-07,Pumped storage,False,42.3,2.18
-SK,prev_28,2026-10-11,2026-11-07,Solar,True,40.3,2.07
-SK,prev_28,2026-10-11,2026-11-07,Wind,True,0.3,0.02
+EU27,last_7,2026-11-09,2026-11-15,Battery storage,False,180.0,0.36
+EU27,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,1643.6,3.25
+EU27,last_7,2026-11-09,2026-11-15,Coal & lignite,False,6394.4,12.63
+EU27,last_7,2026-11-09,2026-11-15,Gas,False,10676.3,21.09
+EU27,last_7,2026-11-09,2026-11-15,Hydro,True,4314.4,8.52
+EU27,last_7,2026-11-09,2026-11-15,Nuclear,False,10966.9,21.67
+EU27,last_7,2026-11-09,2026-11-15,Oil,False,225.5,0.45
+EU27,last_7,2026-11-09,2026-11-15,Other,False,1204.1,2.38
+EU27,last_7,2026-11-09,2026-11-15,Pumped storage,False,890.2,1.76
+EU27,last_7,2026-11-09,2026-11-15,Solar,True,2694.2,5.32
+EU27,last_7,2026-11-09,2026-11-15,Wind,True,11421.5,22.57
+AT,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,38.6,3.63
+AT,last_7,2026-11-09,2026-11-15,Coal & lignite,False,0.0,0.0
+AT,last_7,2026-11-09,2026-11-15,Gas,False,281.3,26.45
+AT,last_7,2026-11-09,2026-11-15,Hydro,True,351.1,33.01
+AT,last_7,2026-11-09,2026-11-15,Oil,False,0.0,0.0
+AT,last_7,2026-11-09,2026-11-15,Other,False,20.2,1.9
+AT,last_7,2026-11-09,2026-11-15,Pumped storage,False,110.4,10.38
+AT,last_7,2026-11-09,2026-11-15,Solar,True,37.5,3.53
+AT,last_7,2026-11-09,2026-11-15,Wind,True,224.5,21.11
+BE,last_7,2026-11-09,2026-11-15,Battery storage,False,24.7,1.82
+BE,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,26.7,1.97
+BE,last_7,2026-11-09,2026-11-15,Gas,False,589.4,43.4
+BE,last_7,2026-11-09,2026-11-15,Hydro,True,0.4,0.03
+BE,last_7,2026-11-09,2026-11-15,Nuclear,False,312.9,23.04
+BE,last_7,2026-11-09,2026-11-15,Oil,False,7.5,0.55
+BE,last_7,2026-11-09,2026-11-15,Other,False,89.7,6.61
+BE,last_7,2026-11-09,2026-11-15,Pumped storage,False,17.0,1.25
+BE,last_7,2026-11-09,2026-11-15,Solar,True,117.2,8.63
+BE,last_7,2026-11-09,2026-11-15,Wind,True,172.6,12.71
+BG,last_7,2026-11-09,2026-11-15,Battery storage,False,68.4,9.76
+BG,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,2.0,0.29
+BG,last_7,2026-11-09,2026-11-15,Coal & lignite,False,258.9,36.97
+BG,last_7,2026-11-09,2026-11-15,Gas,False,40.2,5.74
+BG,last_7,2026-11-09,2026-11-15,Hydro,True,47.0,6.71
+BG,last_7,2026-11-09,2026-11-15,Nuclear,False,152.4,21.77
+BG,last_7,2026-11-09,2026-11-15,Other,False,0.6,0.08
+BG,last_7,2026-11-09,2026-11-15,Pumped storage,False,7.5,1.07
+BG,last_7,2026-11-09,2026-11-15,Solar,True,96.2,13.74
+BG,last_7,2026-11-09,2026-11-15,Wind,True,27.0,3.86
+CY,last_7,2026-11-09,2026-11-15,Gas,False,0.0,0.0
+CY,last_7,2026-11-09,2026-11-15,Oil,False,54.8,80.16
+CY,last_7,2026-11-09,2026-11-15,Solar,True,13.0,18.96
+CY,last_7,2026-11-09,2026-11-15,Wind,True,0.6,0.87
+CZ,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,96.5,5.96
+CZ,last_7,2026-11-09,2026-11-15,Coal & lignite,False,758.9,46.86
+CZ,last_7,2026-11-09,2026-11-15,Gas,False,157.0,9.69
+CZ,last_7,2026-11-09,2026-11-15,Hydro,True,15.7,0.97
+CZ,last_7,2026-11-09,2026-11-15,Nuclear,False,494.6,30.54
+CZ,last_7,2026-11-09,2026-11-15,Oil,False,0.7,0.04
+CZ,last_7,2026-11-09,2026-11-15,Other,False,16.6,1.02
+CZ,last_7,2026-11-09,2026-11-15,Pumped storage,False,23.8,1.47
+CZ,last_7,2026-11-09,2026-11-15,Solar,True,38.3,2.36
+CZ,last_7,2026-11-09,2026-11-15,Wind,True,17.5,1.08
+DE,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,712.5,7.61
+DE,last_7,2026-11-09,2026-11-15,Coal & lignite,False,2500.9,26.71
+DE,last_7,2026-11-09,2026-11-15,Gas,False,2092.5,22.35
+DE,last_7,2026-11-09,2026-11-15,Hydro,True,209.5,2.24
+DE,last_7,2026-11-09,2026-11-15,Oil,False,52.2,0.56
+DE,last_7,2026-11-09,2026-11-15,Other,False,183.4,1.96
+DE,last_7,2026-11-09,2026-11-15,Pumped storage,False,194.6,2.08
+DE,last_7,2026-11-09,2026-11-15,Solar,True,603.4,6.44
+DE,last_7,2026-11-09,2026-11-15,Wind,True,2813.0,30.05
+EE,last_7,2026-11-09,2026-11-15,Battery storage,False,2.7,1.85
+EE,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,13.9,9.5
+EE,last_7,2026-11-09,2026-11-15,Coal & lignite,False,65.1,44.31
+EE,last_7,2026-11-09,2026-11-15,Gas,False,10.7,7.27
+EE,last_7,2026-11-09,2026-11-15,Hydro,True,0.1,0.08
+EE,last_7,2026-11-09,2026-11-15,Other,False,2.8,1.94
+EE,last_7,2026-11-09,2026-11-15,Solar,True,4.3,2.91
+EE,last_7,2026-11-09,2026-11-15,Wind,True,47.2,32.14
+ES,last_7,2026-11-09,2026-11-15,Battery storage,False,1.2,0.02
+ES,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,77.6,1.54
+ES,last_7,2026-11-09,2026-11-15,Coal & lignite,False,10.1,0.2
+ES,last_7,2026-11-09,2026-11-15,Gas,False,940.4,18.62
+ES,last_7,2026-11-09,2026-11-15,Hydro,True,322.8,6.39
+ES,last_7,2026-11-09,2026-11-15,Nuclear,False,1014.0,20.08
+ES,last_7,2026-11-09,2026-11-15,Oil,False,2.9,0.06
+ES,last_7,2026-11-09,2026-11-15,Other,False,37.7,0.75
+ES,last_7,2026-11-09,2026-11-15,Pumped storage,False,182.3,3.61
+ES,last_7,2026-11-09,2026-11-15,Solar,True,536.4,10.62
+ES,last_7,2026-11-09,2026-11-15,Wind,True,1924.4,38.11
+FI,last_7,2026-11-09,2026-11-15,Battery storage,False,13.6,0.8
+FI,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,153.7,9.0
+FI,last_7,2026-11-09,2026-11-15,Coal & lignite,False,31.2,1.83
+FI,last_7,2026-11-09,2026-11-15,Gas,False,12.4,0.72
+FI,last_7,2026-11-09,2026-11-15,Hydro,True,301.3,17.63
+FI,last_7,2026-11-09,2026-11-15,Nuclear,False,431.2,25.24
+FI,last_7,2026-11-09,2026-11-15,Oil,False,0.3,0.02
+FI,last_7,2026-11-09,2026-11-15,Other,False,35.1,2.05
+FI,last_7,2026-11-09,2026-11-15,Solar,True,3.4,0.2
+FI,last_7,2026-11-09,2026-11-15,Wind,True,726.5,42.52
+FR,last_7,2026-11-09,2026-11-15,Battery storage,False,8.4,0.08
+FR,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,45.6,0.44
+FR,last_7,2026-11-09,2026-11-15,Coal & lignite,False,30.1,0.29
+FR,last_7,2026-11-09,2026-11-15,Gas,False,800.8,7.73
+FR,last_7,2026-11-09,2026-11-15,Hydro,True,782.7,7.55
+FR,last_7,2026-11-09,2026-11-15,Nuclear,False,7104.6,68.58
+FR,last_7,2026-11-09,2026-11-15,Oil,False,16.9,0.16
+FR,last_7,2026-11-09,2026-11-15,Other,False,68.1,0.66
+FR,last_7,2026-11-09,2026-11-15,Pumped storage,False,117.3,1.13
+FR,last_7,2026-11-09,2026-11-15,Solar,True,329.9,3.18
+FR,last_7,2026-11-09,2026-11-15,Wind,True,1055.7,10.19
+GR,last_7,2026-11-09,2026-11-15,Battery storage,False,12.3,1.08
+GR,last_7,2026-11-09,2026-11-15,Coal & lignite,False,63.3,5.56
+GR,last_7,2026-11-09,2026-11-15,Gas,False,472.5,41.49
+GR,last_7,2026-11-09,2026-11-15,Hydro,True,54.6,4.8
+GR,last_7,2026-11-09,2026-11-15,Oil,False,0.0,0.0
+GR,last_7,2026-11-09,2026-11-15,Pumped storage,False,13.9,1.22
+GR,last_7,2026-11-09,2026-11-15,Solar,True,186.7,16.39
+GR,last_7,2026-11-09,2026-11-15,Wind,True,335.4,29.45
+HR,last_7,2026-11-09,2026-11-15,Battery storage,False,0.9,0.33
+HR,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,17.2,6.0
+HR,last_7,2026-11-09,2026-11-15,Coal & lignite,False,20.1,7.01
+HR,last_7,2026-11-09,2026-11-15,Gas,False,60.8,21.17
+HR,last_7,2026-11-09,2026-11-15,Hydro,True,72.3,25.19
+HR,last_7,2026-11-09,2026-11-15,Oil,False,0.0,0.0
+HR,last_7,2026-11-09,2026-11-15,Other,False,1.0,0.34
+HR,last_7,2026-11-09,2026-11-15,Pumped storage,False,26.6,9.28
+HR,last_7,2026-11-09,2026-11-15,Solar,True,6.0,2.11
+HR,last_7,2026-11-09,2026-11-15,Wind,True,82.0,28.57
+HU,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,35.6,5.82
+HU,last_7,2026-11-09,2026-11-15,Coal & lignite,False,43.8,7.16
+HU,last_7,2026-11-09,2026-11-15,Gas,False,214.5,35.1
+HU,last_7,2026-11-09,2026-11-15,Hydro,True,2.0,0.33
+HU,last_7,2026-11-09,2026-11-15,Nuclear,False,242.8,39.74
+HU,last_7,2026-11-09,2026-11-15,Oil,False,1.0,0.16
+HU,last_7,2026-11-09,2026-11-15,Other,False,12.6,2.06
+HU,last_7,2026-11-09,2026-11-15,Solar,True,48.2,7.89
+HU,last_7,2026-11-09,2026-11-15,Wind,True,10.6,1.74
+IE,last_7,2026-11-09,2026-11-15,Coal & lignite,False,9.2,1.9
+IE,last_7,2026-11-09,2026-11-15,Gas,False,155.0,32.02
+IE,last_7,2026-11-09,2026-11-15,Hydro,True,6.9,1.43
+IE,last_7,2026-11-09,2026-11-15,Oil,False,50.9,10.51
+IE,last_7,2026-11-09,2026-11-15,Other,False,0.9,0.2
+IE,last_7,2026-11-09,2026-11-15,Pumped storage,False,5.4,1.11
+IE,last_7,2026-11-09,2026-11-15,Solar,True,0.0,0.0
+IE,last_7,2026-11-09,2026-11-15,Wind,True,255.8,52.84
+IT,last_7,2026-11-09,2026-11-15,Battery storage,False,25.4,0.52
+IT,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,204.2,4.15
+IT,last_7,2026-11-09,2026-11-15,Coal & lignite,False,2.8,0.06
+IT,last_7,2026-11-09,2026-11-15,Gas,False,3001.0,60.94
+IT,last_7,2026-11-09,2026-11-15,Hydro,True,333.8,6.78
+IT,last_7,2026-11-09,2026-11-15,Oil,False,0.3,0.01
+IT,last_7,2026-11-09,2026-11-15,Other,False,313.2,6.36
+IT,last_7,2026-11-09,2026-11-15,Pumped storage,False,19.2,0.39
+IT,last_7,2026-11-09,2026-11-15,Solar,True,319.6,6.49
+IT,last_7,2026-11-09,2026-11-15,Wind,True,704.9,14.31
+LT,last_7,2026-11-09,2026-11-15,Battery storage,False,8.5,3.16
+LT,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,3.3,1.23
+LT,last_7,2026-11-09,2026-11-15,Gas,False,24.2,9.0
+LT,last_7,2026-11-09,2026-11-15,Hydro,True,4.9,1.82
+LT,last_7,2026-11-09,2026-11-15,Other,False,36.4,13.51
+LT,last_7,2026-11-09,2026-11-15,Pumped storage,False,9.5,3.53
+LT,last_7,2026-11-09,2026-11-15,Solar,True,19.5,7.25
+LT,last_7,2026-11-09,2026-11-15,Wind,True,163.0,60.5
+LU,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,7.5,31.38
+LU,last_7,2026-11-09,2026-11-15,Gas,False,1.3,5.58
+LU,last_7,2026-11-09,2026-11-15,Hydro,True,0.3,1.41
+LU,last_7,2026-11-09,2026-11-15,Other,False,1.9,7.73
+LU,last_7,2026-11-09,2026-11-15,Solar,True,2.4,9.96
+LU,last_7,2026-11-09,2026-11-15,Wind,True,10.5,43.94
+LV,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,6.4,4.83
+LV,last_7,2026-11-09,2026-11-15,Gas,False,50.9,38.48
+LV,last_7,2026-11-09,2026-11-15,Hydro,True,34.6,26.17
+LV,last_7,2026-11-09,2026-11-15,Other,False,4.4,3.31
+LV,last_7,2026-11-09,2026-11-15,Solar,True,7.8,5.87
+LV,last_7,2026-11-09,2026-11-15,Wind,True,28.2,21.35
+NL,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,38.0,2.07
+NL,last_7,2026-11-09,2026-11-15,Coal & lignite,False,514.9,28.02
+NL,last_7,2026-11-09,2026-11-15,Gas,False,857.3,46.65
+NL,last_7,2026-11-09,2026-11-15,Hydro,True,0.0,0.0
+NL,last_7,2026-11-09,2026-11-15,Nuclear,False,80.3,4.37
+NL,last_7,2026-11-09,2026-11-15,Other,False,38.4,2.09
+NL,last_7,2026-11-09,2026-11-15,Solar,True,2.3,0.13
+NL,last_7,2026-11-09,2026-11-15,Wind,True,306.5,16.68
+PL,last_7,2026-11-09,2026-11-15,Battery storage,False,0.9,0.03
+PL,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,76.7,2.25
+PL,last_7,2026-11-09,2026-11-15,Coal & lignite,False,1923.6,56.43
+PL,last_7,2026-11-09,2026-11-15,Gas,False,439.7,12.9
+PL,last_7,2026-11-09,2026-11-15,Hydro,True,16.4,0.48
+PL,last_7,2026-11-09,2026-11-15,Oil,False,28.7,0.84
+PL,last_7,2026-11-09,2026-11-15,Other,False,72.5,2.13
+PL,last_7,2026-11-09,2026-11-15,Pumped storage,False,32.6,0.96
+PL,last_7,2026-11-09,2026-11-15,Solar,True,191.1,5.61
+PL,last_7,2026-11-09,2026-11-15,Wind,True,626.4,18.38
+PT,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,48.7,4.83
+PT,last_7,2026-11-09,2026-11-15,Coal & lignite,False,0.0,0.0
+PT,last_7,2026-11-09,2026-11-15,Gas,False,108.7,10.77
+PT,last_7,2026-11-09,2026-11-15,Hydro,True,168.3,16.68
+PT,last_7,2026-11-09,2026-11-15,Other,False,1.8,0.18
+PT,last_7,2026-11-09,2026-11-15,Pumped storage,False,114.1,11.31
+PT,last_7,2026-11-09,2026-11-15,Solar,True,51.8,5.13
+PT,last_7,2026-11-09,2026-11-15,Wind,True,515.6,51.1
+RO,last_7,2026-11-09,2026-11-15,Battery storage,False,13.0,1.51
+RO,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,11.4,1.32
+RO,last_7,2026-11-09,2026-11-15,Coal & lignite,False,97.1,11.28
+RO,last_7,2026-11-09,2026-11-15,Gas,False,263.3,30.58
+RO,last_7,2026-11-09,2026-11-15,Hydro,True,168.5,19.56
+RO,last_7,2026-11-09,2026-11-15,Nuclear,False,89.3,10.37
+RO,last_7,2026-11-09,2026-11-15,Solar,True,54.7,6.36
+RO,last_7,2026-11-09,2026-11-15,Wind,True,163.9,19.03
+SE,last_7,2026-11-09,2026-11-15,Gas,False,0.3,0.01
+SE,last_7,2026-11-09,2026-11-15,Hydro,True,1323.3,39.66
+SE,last_7,2026-11-09,2026-11-15,Nuclear,False,552.2,16.55
+SE,last_7,2026-11-09,2026-11-15,Other,False,244.3,7.32
+SE,last_7,2026-11-09,2026-11-15,Solar,True,7.2,0.21
+SE,last_7,2026-11-09,2026-11-15,Wind,True,1209.4,36.25
+SI,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,4.6,1.53
+SI,last_7,2026-11-09,2026-11-15,Coal & lignite,False,62.7,21.05
+SI,last_7,2026-11-09,2026-11-15,Gas,False,31.7,10.63
+SI,last_7,2026-11-09,2026-11-15,Hydro,True,63.8,21.43
+SI,last_7,2026-11-09,2026-11-15,Nuclear,False,115.5,38.76
+SI,last_7,2026-11-09,2026-11-15,Oil,False,0.1,0.04
+SI,last_7,2026-11-09,2026-11-15,Other,False,0.0,0.01
+SI,last_7,2026-11-09,2026-11-15,Pumped storage,False,6.3,2.12
+SI,last_7,2026-11-09,2026-11-15,Solar,True,13.0,4.37
+SI,last_7,2026-11-09,2026-11-15,Wind,True,0.2,0.06
+SK,last_7,2026-11-09,2026-11-15,Bio & other renewables,True,22.9,4.14
+SK,last_7,2026-11-09,2026-11-15,Coal & lignite,False,1.8,0.32
+SK,last_7,2026-11-09,2026-11-15,Gas,False,70.5,12.75
+SK,last_7,2026-11-09,2026-11-15,Hydro,True,34.1,6.18
+SK,last_7,2026-11-09,2026-11-15,Nuclear,False,377.1,68.26
+SK,last_7,2026-11-09,2026-11-15,Oil,False,9.5,1.71
+SK,last_7,2026-11-09,2026-11-15,Other,False,22.6,4.09
+SK,last_7,2026-11-09,2026-11-15,Pumped storage,False,9.6,1.73
+SK,last_7,2026-11-09,2026-11-15,Solar,True,4.4,0.79
+SK,last_7,2026-11-09,2026-11-15,Wind,True,0.2,0.03
+EU27,prev_28,2026-10-12,2026-11-08,Battery storage,False,895.3,0.47
+EU27,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,6544.0,3.44
+EU27,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,24082.4,12.65
+EU27,prev_28,2026-10-12,2026-11-08,Gas,False,37033.6,19.45
+EU27,prev_28,2026-10-12,2026-11-08,Hydro,True,14468.2,7.6
+EU27,prev_28,2026-10-12,2026-11-08,Nuclear,False,40744.5,21.4
+EU27,prev_28,2026-10-12,2026-11-08,Oil,False,610.8,0.32
+EU27,prev_28,2026-10-12,2026-11-08,Other,False,5340.6,2.8
+EU27,prev_28,2026-10-12,2026-11-08,Pumped storage,False,3401.5,1.79
+EU27,prev_28,2026-10-12,2026-11-08,Solar,True,17732.3,9.31
+EU27,prev_28,2026-10-12,2026-11-08,Wind,True,39559.6,20.78
+AT,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,137.4,3.49
+AT,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,0.0,0.0
+AT,prev_28,2026-10-12,2026-11-08,Gas,False,1191.3,30.24
+AT,prev_28,2026-10-12,2026-11-08,Hydro,True,1275.0,32.37
+AT,prev_28,2026-10-12,2026-11-08,Oil,False,0.0,0.0
+AT,prev_28,2026-10-12,2026-11-08,Other,False,82.1,2.08
+AT,prev_28,2026-10-12,2026-11-08,Pumped storage,False,281.3,7.14
+AT,prev_28,2026-10-12,2026-11-08,Solar,True,285.5,7.25
+AT,prev_28,2026-10-12,2026-11-08,Wind,True,686.6,17.43
+BE,prev_28,2026-10-12,2026-11-08,Battery storage,False,89.3,1.69
+BE,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,150.6,2.85
+BE,prev_28,2026-10-12,2026-11-08,Gas,False,1955.9,37.03
+BE,prev_28,2026-10-12,2026-11-08,Hydro,True,4.9,0.09
+BE,prev_28,2026-10-12,2026-11-08,Nuclear,False,837.9,15.86
+BE,prev_28,2026-10-12,2026-11-08,Oil,False,46.5,0.88
+BE,prev_28,2026-10-12,2026-11-08,Other,False,362.4,6.86
+BE,prev_28,2026-10-12,2026-11-08,Pumped storage,False,73.3,1.39
+BE,prev_28,2026-10-12,2026-11-08,Solar,True,517.1,9.79
+BE,prev_28,2026-10-12,2026-11-08,Wind,True,1244.0,23.55
+BG,prev_28,2026-10-12,2026-11-08,Battery storage,False,386.4,12.38
+BG,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,10.2,0.33
+BG,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,1096.9,35.13
+BG,prev_28,2026-10-12,2026-11-08,Gas,False,157.2,5.03
+BG,prev_28,2026-10-12,2026-11-08,Hydro,True,174.4,5.58
+BG,prev_28,2026-10-12,2026-11-08,Nuclear,False,608.5,19.49
+BG,prev_28,2026-10-12,2026-11-08,Other,False,2.5,0.08
+BG,prev_28,2026-10-12,2026-11-08,Pumped storage,False,26.4,0.85
+BG,prev_28,2026-10-12,2026-11-08,Solar,True,496.1,15.89
+BG,prev_28,2026-10-12,2026-11-08,Wind,True,163.7,5.24
+CZ,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,373.0,6.1
+CZ,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,2712.3,44.35
+CZ,prev_28,2026-10-12,2026-11-08,Gas,False,455.9,7.45
+CZ,prev_28,2026-10-12,2026-11-08,Hydro,True,65.1,1.06
+CZ,prev_28,2026-10-12,2026-11-08,Nuclear,False,2018.0,33.0
+CZ,prev_28,2026-10-12,2026-11-08,Oil,False,2.4,0.04
+CZ,prev_28,2026-10-12,2026-11-08,Other,False,67.7,1.11
+CZ,prev_28,2026-10-12,2026-11-08,Pumped storage,False,98.9,1.62
+CZ,prev_28,2026-10-12,2026-11-08,Solar,True,265.0,4.33
+CZ,prev_28,2026-10-12,2026-11-08,Wind,True,57.1,0.93
+DE,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,2846.9,7.75
+DE,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,9096.5,24.78
+DE,prev_28,2026-10-12,2026-11-08,Gas,False,6343.5,17.28
+DE,prev_28,2026-10-12,2026-11-08,Hydro,True,734.2,2.0
+DE,prev_28,2026-10-12,2026-11-08,Oil,False,182.7,0.5
+DE,prev_28,2026-10-12,2026-11-08,Other,False,682.7,1.86
+DE,prev_28,2026-10-12,2026-11-08,Pumped storage,False,687.5,1.87
+DE,prev_28,2026-10-12,2026-11-08,Solar,True,3687.4,10.04
+DE,prev_28,2026-10-12,2026-11-08,Wind,True,12454.0,33.92
+EE,prev_28,2026-10-12,2026-11-08,Battery storage,False,12.0,2.93
+EE,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,42.1,10.24
+EE,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,128.2,31.21
+EE,prev_28,2026-10-12,2026-11-08,Gas,False,39.8,9.68
+EE,prev_28,2026-10-12,2026-11-08,Hydro,True,0.5,0.12
+EE,prev_28,2026-10-12,2026-11-08,Other,False,11.5,2.79
+EE,prev_28,2026-10-12,2026-11-08,Solar,True,50.5,12.28
+EE,prev_28,2026-10-12,2026-11-08,Wind,True,126.3,30.74
+ES,prev_28,2026-10-12,2026-11-08,Battery storage,False,1.4,0.01
+ES,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,328.9,1.67
+ES,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,75.7,0.38
+ES,prev_28,2026-10-12,2026-11-08,Gas,False,5119.0,26.02
+ES,prev_28,2026-10-12,2026-11-08,Hydro,True,1036.0,5.27
+ES,prev_28,2026-10-12,2026-11-08,Nuclear,False,4284.2,21.77
+ES,prev_28,2026-10-12,2026-11-08,Oil,False,17.6,0.09
+ES,prev_28,2026-10-12,2026-11-08,Other,False,186.7,0.95
+ES,prev_28,2026-10-12,2026-11-08,Pumped storage,False,844.2,4.29
+ES,prev_28,2026-10-12,2026-11-08,Solar,True,4488.3,22.81
+ES,prev_28,2026-10-12,2026-11-08,Wind,True,3293.1,16.74
+FI,prev_28,2026-10-12,2026-11-08,Battery storage,False,51.7,0.81
+FI,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,551.6,8.59
+FI,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,74.2,1.16
+FI,prev_28,2026-10-12,2026-11-08,Gas,False,16.1,0.25
+FI,prev_28,2026-10-12,2026-11-08,Hydro,True,1297.5,20.21
+FI,prev_28,2026-10-12,2026-11-08,Nuclear,False,1513.5,23.57
+FI,prev_28,2026-10-12,2026-11-08,Oil,False,2.0,0.03
+FI,prev_28,2026-10-12,2026-11-08,Other,False,143.5,2.23
+FI,prev_28,2026-10-12,2026-11-08,Solar,True,48.1,0.75
+FI,prev_28,2026-10-12,2026-11-08,Wind,True,2722.7,42.4
+FR,prev_28,2026-10-12,2026-11-08,Battery storage,False,39.5,0.1
+FR,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,186.5,0.49
+FR,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,62.4,0.16
+FR,prev_28,2026-10-12,2026-11-08,Gas,False,2188.1,5.7
+FR,prev_28,2026-10-12,2026-11-08,Hydro,True,2248.9,5.86
+FR,prev_28,2026-10-12,2026-11-08,Nuclear,False,26163.2,68.17
+FR,prev_28,2026-10-12,2026-11-08,Oil,False,39.0,0.1
+FR,prev_28,2026-10-12,2026-11-08,Other,False,273.2,0.71
+FR,prev_28,2026-10-12,2026-11-08,Pumped storage,False,494.1,1.29
+FR,prev_28,2026-10-12,2026-11-08,Solar,True,2067.4,5.39
+FR,prev_28,2026-10-12,2026-11-08,Wind,True,4614.5,12.02
+GR,prev_28,2026-10-12,2026-11-08,Battery storage,False,52.3,1.23
+GR,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,284.0,6.68
+GR,prev_28,2026-10-12,2026-11-08,Gas,False,1894.4,44.55
+GR,prev_28,2026-10-12,2026-11-08,Hydro,True,251.0,5.9
+GR,prev_28,2026-10-12,2026-11-08,Oil,False,0.0,0.0
+GR,prev_28,2026-10-12,2026-11-08,Pumped storage,False,57.1,1.34
+GR,prev_28,2026-10-12,2026-11-08,Solar,True,817.0,19.22
+GR,prev_28,2026-10-12,2026-11-08,Wind,True,896.2,21.08
+HR,prev_28,2026-10-12,2026-11-08,Battery storage,False,4.3,0.47
+HR,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,68.0,7.43
+HR,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,24.4,2.66
+HR,prev_28,2026-10-12,2026-11-08,Gas,False,260.9,28.47
+HR,prev_28,2026-10-12,2026-11-08,Hydro,True,127.0,13.85
+HR,prev_28,2026-10-12,2026-11-08,Oil,False,0.0,0.0
+HR,prev_28,2026-10-12,2026-11-08,Other,False,3.7,0.41
+HR,prev_28,2026-10-12,2026-11-08,Pumped storage,False,14.7,1.6
+HR,prev_28,2026-10-12,2026-11-08,Solar,True,56.9,6.21
+HR,prev_28,2026-10-12,2026-11-08,Wind,True,356.6,38.91
+HU,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,138.0,5.87
+HU,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,148.1,6.3
+HU,prev_28,2026-10-12,2026-11-08,Gas,False,623.5,26.52
+HU,prev_28,2026-10-12,2026-11-08,Hydro,True,4.2,0.18
+HU,prev_28,2026-10-12,2026-11-08,Nuclear,False,854.9,36.37
+HU,prev_28,2026-10-12,2026-11-08,Oil,False,0.4,0.02
+HU,prev_28,2026-10-12,2026-11-08,Other,False,78.5,3.34
+HU,prev_28,2026-10-12,2026-11-08,Solar,True,468.7,19.94
+HU,prev_28,2026-10-12,2026-11-08,Wind,True,34.3,1.46
+IE,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,50.4,2.81
+IE,prev_28,2026-10-12,2026-11-08,Gas,False,602.2,33.55
+IE,prev_28,2026-10-12,2026-11-08,Hydro,True,36.5,2.04
+IE,prev_28,2026-10-12,2026-11-08,Oil,False,150.9,8.41
+IE,prev_28,2026-10-12,2026-11-08,Other,False,7.2,0.4
+IE,prev_28,2026-10-12,2026-11-08,Pumped storage,False,27.3,1.52
+IE,prev_28,2026-10-12,2026-11-08,Solar,True,0.0,0.0
+IE,prev_28,2026-10-12,2026-11-08,Wind,True,920.5,51.28
+IT,prev_28,2026-10-12,2026-11-08,Battery storage,False,164.3,0.93
+IT,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,790.5,4.48
+IT,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,73.4,0.42
+IT,prev_28,2026-10-12,2026-11-08,Gas,False,9826.0,55.64
+IT,prev_28,2026-10-12,2026-11-08,Hydro,True,1327.9,7.52
+IT,prev_28,2026-10-12,2026-11-08,Oil,False,19.2,0.11
+IT,prev_28,2026-10-12,2026-11-08,Other,False,1225.8,6.94
+IT,prev_28,2026-10-12,2026-11-08,Pumped storage,False,125.8,0.71
+IT,prev_28,2026-10-12,2026-11-08,Solar,True,2191.6,12.41
+IT,prev_28,2026-10-12,2026-11-08,Wind,True,1913.9,10.84
+LT,prev_28,2026-10-12,2026-11-08,Battery storage,False,32.2,4.23
+LT,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,12.0,1.57
+LT,prev_28,2026-10-12,2026-11-08,Gas,False,17.7,2.32
+LT,prev_28,2026-10-12,2026-11-08,Hydro,True,20.5,2.69
+LT,prev_28,2026-10-12,2026-11-08,Other,False,125.1,16.42
+LT,prev_28,2026-10-12,2026-11-08,Pumped storage,False,44.1,5.79
+LT,prev_28,2026-10-12,2026-11-08,Solar,True,91.0,11.94
+LT,prev_28,2026-10-12,2026-11-08,Wind,True,419.5,55.05
+LU,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,13.4,14.12
+LU,prev_28,2026-10-12,2026-11-08,Gas,False,3.3,3.49
+LU,prev_28,2026-10-12,2026-11-08,Hydro,True,1.2,1.24
+LU,prev_28,2026-10-12,2026-11-08,Other,False,7.9,8.29
+LU,prev_28,2026-10-12,2026-11-08,Solar,True,17.3,18.2
+LU,prev_28,2026-10-12,2026-11-08,Wind,True,52.0,54.66
+LV,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,22.7,4.89
+LV,prev_28,2026-10-12,2026-11-08,Gas,False,122.5,26.3
+LV,prev_28,2026-10-12,2026-11-08,Hydro,True,174.7,37.52
+LV,prev_28,2026-10-12,2026-11-08,Other,False,16.0,3.44
+LV,prev_28,2026-10-12,2026-11-08,Solar,True,64.2,13.79
+LV,prev_28,2026-10-12,2026-11-08,Wind,True,65.5,14.06
+NL,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,216.9,2.7
+NL,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,1859.5,23.18
+NL,prev_28,2026-10-12,2026-11-08,Gas,False,2731.9,34.05
+NL,prev_28,2026-10-12,2026-11-08,Hydro,True,0.0,0.0
+NL,prev_28,2026-10-12,2026-11-08,Nuclear,False,322.2,4.02
+NL,prev_28,2026-10-12,2026-11-08,Other,False,973.3,12.13
+NL,prev_28,2026-10-12,2026-11-08,Solar,True,13.5,0.17
+NL,prev_28,2026-10-12,2026-11-08,Wind,True,1905.0,23.75
+PL,prev_28,2026-10-12,2026-11-08,Battery storage,False,3.8,0.03
+PL,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,295.8,2.26
+PL,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,7816.2,59.61
+PL,prev_28,2026-10-12,2026-11-08,Gas,False,1572.2,11.99
+PL,prev_28,2026-10-12,2026-11-08,Hydro,True,71.2,0.54
+PL,prev_28,2026-10-12,2026-11-08,Oil,False,116.7,0.89
+PL,prev_28,2026-10-12,2026-11-08,Other,False,331.8,2.53
+PL,prev_28,2026-10-12,2026-11-08,Pumped storage,False,114.5,0.87
+PL,prev_28,2026-10-12,2026-11-08,Solar,True,1146.0,8.74
+PL,prev_28,2026-10-12,2026-11-08,Wind,True,1643.8,12.54
+PT,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,196.6,6.87
+PT,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,0.0,0.0
+PT,prev_28,2026-10-12,2026-11-08,Gas,False,583.5,20.41
+PT,prev_28,2026-10-12,2026-11-08,Hydro,True,367.2,12.84
+PT,prev_28,2026-10-12,2026-11-08,Other,False,4.2,0.15
+PT,prev_28,2026-10-12,2026-11-08,Pumped storage,False,453.5,15.86
+PT,prev_28,2026-10-12,2026-11-08,Solar,True,520.6,18.21
+PT,prev_28,2026-10-12,2026-11-08,Wind,True,733.9,25.67
+RO,prev_28,2026-10-12,2026-11-08,Battery storage,False,57.9,1.69
+RO,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,41.6,1.22
+RO,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,455.3,13.32
+RO,prev_28,2026-10-12,2026-11-08,Gas,False,898.6,26.29
+RO,prev_28,2026-10-12,2026-11-08,Hydro,True,748.8,21.91
+RO,prev_28,2026-10-12,2026-11-08,Nuclear,False,20.1,0.59
+RO,prev_28,2026-10-12,2026-11-08,Solar,True,241.8,7.07
+RO,prev_28,2026-10-12,2026-11-08,Wind,True,954.3,27.92
+SE,prev_28,2026-10-12,2026-11-08,Gas,False,3.7,0.03
+SE,prev_28,2026-10-12,2026-11-08,Hydro,True,4229.2,36.12
+SE,prev_28,2026-10-12,2026-11-08,Nuclear,False,2425.6,20.72
+SE,prev_28,2026-10-12,2026-11-08,Other,False,677.8,5.79
+SE,prev_28,2026-10-12,2026-11-08,Solar,True,70.5,0.6
+SE,prev_28,2026-10-12,2026-11-08,Wind,True,4300.6,36.73
+SI,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,18.1,1.85
+SI,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,123.4,12.62
+SI,prev_28,2026-10-12,2026-11-08,Gas,False,106.7,10.91
+SI,prev_28,2026-10-12,2026-11-08,Hydro,True,155.2,15.87
+SI,prev_28,2026-10-12,2026-11-08,Nuclear,False,468.0,47.87
+SI,prev_28,2026-10-12,2026-11-08,Oil,False,0.0,0.0
+SI,prev_28,2026-10-12,2026-11-08,Other,False,0.1,0.01
+SI,prev_28,2026-10-12,2026-11-08,Pumped storage,False,17.9,1.83
+SI,prev_28,2026-10-12,2026-11-08,Solar,True,87.2,8.92
+SI,prev_28,2026-10-12,2026-11-08,Wind,True,1.1,0.11
+SK,prev_28,2026-10-12,2026-11-08,Bio & other renewables,True,103.3,5.26
+SK,prev_28,2026-10-12,2026-11-08,Coal & lignite,False,1.5,0.08
+SK,prev_28,2026-10-12,2026-11-08,Gas,False,319.9,16.3
+SK,prev_28,2026-10-12,2026-11-08,Hydro,True,117.0,5.96
+SK,prev_28,2026-10-12,2026-11-08,Nuclear,False,1228.4,62.6
+SK,prev_28,2026-10-12,2026-11-08,Oil,False,33.4,1.7
+SK,prev_28,2026-10-12,2026-11-08,Other,False,77.1,3.93
+SK,prev_28,2026-10-12,2026-11-08,Pumped storage,False,40.8,2.08
+SK,prev_28,2026-10-12,2026-11-08,Solar,True,40.6,2.07
+SK,prev_28,2026-10-12,2026-11-08,Wind,True,0.3,0.02
