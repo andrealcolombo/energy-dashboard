@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-16 | Andrea | Claude | Evening-peak chart: clearer title and note; solar value shown as its own tooltip row |
 | 2026-11-16 | Andrea | Claude | Removed hour-by-hour mix chart; solar shape added to the evening-peak chart |
 | 2026-11-16 | Andrea | Claude | Battery notes: no example country singled out; EU27 note lists reporting countries |
 | 2026-11-16 | Andrea | Claude | Prices through the day: compare countries and seasons too; full-width text |
@@ -50,6 +51,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-16
 
+- **Evening-peak chart wording** (asked by Andrea). Title changed to "Gas and storage through the day · how they
+  follow the evening peak": the chart shows only two of the sources that ramp up in the evening. The note now
+  names the others (hydro reservoirs, coal, wind, imports). Solar output is a separate line in the hover box.
 - **Simpler "Prices through the day"** (asked by Andrea). The chart "What produced the power, hour by hour" is
   removed: it repeated the Generation mix tab. The evening-peak chart now shows solar as a light background
   shape (not to scale, MW on hover), so one can see gas and storage taking over when solar fades.

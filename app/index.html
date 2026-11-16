@@ -152,8 +152,8 @@
     <div class="chart bars" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day, by year"></div>
     <p class="note">Measured on the average day of each period, so it shows the regular daily pattern, not single extreme days. A smaller swing means a flatter day. Storage, demand response, interconnections and the mix all play a part: these data alone cannot separate their effects.</p>
 
-    <h3>Who covers the evening peak · gas and storage, hour by hour</h3>
-    <p class="note">When solar fades in the evening, gas plants and storage fill the gap. If storage grows, it should take over part of the evening peak from gas. Average output for each hour, MW, same scale in both panels. The light yellow shape shows when solar produces; it is not to scale (solar is much larger), hover for its output in MW.</p>
+    <h3>Gas and storage through the day · how they follow the evening peak</h3>
+    <p class="note">When solar fades in the evening, other sources must ramp up. This chart shows two of them: gas plants and storage (pumped hydro and batteries). If storage grows, it should take over part of the evening ramp from gas. Hydro reservoirs, coal, wind and imports also contribute and are not shown. Average output for each hour, MW, same scale in both panels. The light yellow shape shows when solar produces; it is not to scale (solar is much larger), hover for its output in MW.</p>
     <div class="row" data-draw="dp-peak-years" data-source="day_profile"></div>
     <div class="legend" data-draw="dp-peak-legend"></div>
     <div class="pair">
@@ -232,6 +232,7 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Evening-peak chart: clearer title and note; solar value shown as its own tooltip row</td></tr>
           <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Removed hour-by-hour mix chart; solar shape added to the evening-peak chart</td></tr>
           <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Battery notes: no example country singled out; EU27 note lists reporting countries</td></tr>
           <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Prices through the day: compare countries and seasons too; full-width text</td></tr>
