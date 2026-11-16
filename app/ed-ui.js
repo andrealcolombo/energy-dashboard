@@ -244,8 +244,8 @@ window.EDL = {
     {id: 'swing_12m', label: 'Daily price swing, 12 months', unit: '% of day average', fmt: ED.f.n0, def: 'On the average day of the last 12 complete months: price of the most expensive hour minus the cheapest, as a share of the day\'s average price. Higher means a more uneven day, with more value in shifting power across hours.'},
     {id: 'eve_12m', label: 'Evening price, 12 months', unit: '% of day average', fmt: ED.f.n0, def: 'Average price from 17:00 to 21:00 (Brussels time) as a share of the day\'s average, last 12 complete months. 150 means evenings cost 50% more than the average hour.'},
     {id: 'mid_12m', label: 'Midday price, 12 months', unit: '% of day average', fmt: ED.f.n0, def: 'Average price from 11:00 to 15:00 as a share of the day\'s average, last 12 complete months. Low values mean solar pushes midday prices down.'},
-    {id: 'sto_eve_12m', label: 'Storage in the evening, 12 months', unit: '% of demand', fmt: ED.f.n1, def: 'Output of pumped hydro and batteries from 17:00 to 21:00 as a share of demand in those hours, last 12 complete months. Batteries count only where reported to ENTSO-E (from 2025, some countries; not Germany), so this understates storage in many countries.'},
-    {id: 'bat_3m', label: 'Battery storage, 3 months', unit: '% of generation', fmt: ED.f.n2, def: 'Electricity discharged from storage reported to ENTSO-E as "energy storage" (mostly batteries), as a share of generation over the last 3 complete months. Many countries, including Germany, do not report it: shown as n/a. The EU27 value counts reporting countries only, so it understates the real total.'},
+    {id: 'sto_eve_12m', label: 'Storage in the evening, 12 months', unit: '% of demand', fmt: ED.f.n1, def: 'Output of pumped hydro and batteries from 17:00 to 21:00 as a share of demand in those hours, last 12 complete months. Batteries count only where reported to ENTSO-E (from 2025, and only some countries), so this understates storage where batteries are not reported.'},
+    {id: 'bat_3m', label: 'Battery storage, 3 months', unit: '% of generation', fmt: ED.f.n2, def: 'Electricity discharged from storage reported to ENTSO-E as "energy storage" (mostly batteries), as a share of generation over the last 3 complete months. Many countries do not report it: shown as n/a. The EU27 value counts reporting countries only, so it understates the real total.'},
   ];
   const P = () => EDS.profile;
   const R = () => EDS.ref || 'EU27';
@@ -529,7 +529,7 @@ window.EDL = {
     const msg = [];
     if (EDS.dp === 'EU27') {
       const rep = areas().filter((c) => c !== 'EU27' && prof(c, EDS.dpSeason).some((p) => p.label === b.label && has(p, 'battery_out')));
-      msg.push('EU27 batteries are the sum of the countries that report them to ENTSO-E' + (rep.length ? ' (' + rep.map(ED.name).join(', ') + ')' : '') + '. Germany and the other countries do not report batteries, so their total is understated.');
+      msg.push('EU27 batteries are the sum of the ' + rep.length + ' countries (out of ' + (areas().length - 1) + ') that report them to ENTSO-E' + (rep.length ? ': ' + rep.map(ED.name).join(', ') : '') + '. Countries that do not report batteries are not counted, so the EU27 total is understated.');
     } else if (!has(a, 'battery_out') && !has(b, 'battery_out')) {
       msg.push(ED.name(EDS.dp) + ' does not report batteries to ENTSO-E. The chart shows only gas and pumped storage: any batteries in the country are invisible here.');
     } else if (!has(a, 'battery_out')) {
