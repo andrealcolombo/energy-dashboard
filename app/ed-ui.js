@@ -353,12 +353,10 @@ window.EDL = {
   const SEASONS = [['year', 'Whole year', null], ['spring', 'Spring', [3, 4, 5]], ['summer', 'Summer', [6, 7, 8]], ['autumn', 'Autumn', [9, 10, 11]], ['winter', 'Winter', [12, 1, 2]]];
   const SNAME = Object.fromEntries(SEASONS.map(([k, l]) => [k, l]));
   const COLS = ['price', 'load', 'solar', 'wind', 'gas', 'coal', 'nuclear', 'hydro', 'other', 'pumped_out', 'pumped_in', 'battery_out', 'battery_in'];
-  const POS = [['nuclear', 'Nuclear'], ['coal', 'Coal & lignite'], ['gas', 'Gas'], ['hydro', 'Hydro'], ['wind', 'Wind'], ['solar', 'Solar'], ['other', 'Other'], ['pumped_out', 'Pumped storage'], ['battery_out', 'Battery storage']];
-  const NEG = [['pumped_in', 'Pumped storage charging', 'Pumped storage'], ['battery_in', 'Battery charging', 'Battery storage']];
   const PEAK = [['gas', 'Gas'], ['pumped_out', 'Pumped storage'], ['battery_out', 'Battery storage']];
   const MODES = [['years', 'Years'], ['countries', 'Countries'], ['seasons', 'Seasons']];
   const ALL = ['dp-select', 'dp-season', 'dp-unit', 'dp-mode', 'dp-price-title', 'dp-years', 'dp-countries', 'dp-price', 'dp-note', 'dp-swing-title', 'dp-swing',
-    'dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix', 'dp-peak-years', 'dp-peak-legend', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'];
+    'dp-peak-years', 'dp-peak-legend', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'];
   const redraw = () => ALL.forEach((n) => dash.draw(n));
   const hourDate = (h) => new Date(Date.UTC(2000, 0, 1, h));
   const mode = () => EDS.dpMode || 'years';
@@ -401,7 +399,6 @@ window.EDL = {
     return (all ? periods() : shown()).map((p) => ({label: p.full, color: colorOf(p), width: last && p.label === last.label ? 2.6 : 1.5, rows: p.rows, on: shown().includes(p)}));
   }
 
-  const mixPeriod = () => { const ps = periods(); return ps.find((p) => p.label === EDS.dpMix) || ps[ps.length - 1]; };
   const chip = (text, on, click, sw) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = text; b.setAttribute('aria-pressed', String(on)); if (sw) { const i = document.createElement('i'); i.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:${sw}`; b.prepend(i); } b.onclick = click; return b; };
   const lab = (text) => { const s = document.createElement('span'); s.className = 'muted'; s.textContent = text; s.style.marginRight = '4px'; return s; };
   const areas = () => { const d = dash.data('day_profile'); const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.area))) : ['EU27'];
@@ -410,9 +407,9 @@ window.EDL = {
   dash.draw('dp-select', (sel) => {
     sel.replaceChildren(...areas().map((c) => new Option(ED.name(c), c)));
     sel.value = EDS.dp;
-    sel.onchange = () => { EDS.dp = sel.value; EDS.dpYears = null; EDS.dpMix = null; EDS.dpPeak = null; redraw(); };
+    sel.onchange = () => { EDS.dp = sel.value; EDS.dpYears = null; EDS.dpPeak = null; redraw(); };
   });
-  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, l]) => chip(l, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; EDS.dpMix = null; EDS.dpPeak = null; redraw(); }))); });
+  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, l]) => chip(l, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; EDS.dpPeak = null; redraw(); }))); });
   dash.draw('dp-unit', (el) => { el.replaceChildren(chip('€/MWh', !EDS.dpRel, () => { EDS.dpRel = false; redraw(); }), chip('% of day average', EDS.dpRel, () => { EDS.dpRel = true; redraw(); })); });
   dash.draw('dp-mode', (el) => { el.replaceChildren(lab('Compare'), ...MODES.map(([k, l]) => chip(l, mode() === k, () => { EDS.dpMode = k; redraw(); }))); });
 
@@ -477,22 +474,11 @@ window.EDL = {
     ED.divBars(el, data, {unit: '%', noSign: true, fmt: f.n0});
   });
 
-  dash.draw('dp-mix-title', (el) => { const p = mixPeriod(); el.textContent = ED.name(EDS.dp) + (p ? ', ' + SNAME[EDS.dpSeason].toLowerCase() + ' ' + p.full : ''); });
-  dash.draw('dp-mix-years', (el) => { el.replaceChildren(); const p0 = mixPeriod(); periods().forEach((p) => el.append(chip(p.full, p0 && p.label === p0.label, () => { EDS.dpMix = p.label; ['dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix'].forEach((n) => dash.draw(n)); }))); });
-  const parts = () => { const p = mixPeriod(); if (!p) return [[], []]; const has = (k) => p.rows.some((r) => r.v[k] > 0.5);
-    return [POS.filter(([k]) => has(k)).map(([key, label]) => ({key, label, color: ED.MIXC[label]})), NEG.filter(([k]) => has(k)).map(([key, label, c]) => ({key, label, color: ED.MIXC[c], neg: true}))]; };
   const legend = (el, items, demand) => {
     el.replaceChildren();
     items.forEach((k) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = k.color; if (k.neg) i.style.opacity = 0.55; sp.append(i, document.createTextNode(k.label)); el.append(sp); });
     if (demand) { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.cssText = 'background:none;border-top:2px dashed var(--color-fg);height:0;margin-top:6px'; sp.append(i, document.createTextNode('Demand')); el.append(sp); }
   };
-  dash.draw('dp-mix-legend', (el) => { const [pos, neg] = parts(); legend(el, pos.concat(neg), pos.length > 0); });
-  dash.draw('dp-mix', (el) => {
-    const d = dash.data('day_profile');
-    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
-    const p = mixPeriod(), [pos, neg] = parts();
-    ED.hourStack(el, p && pos.length ? p.rows : [], pos, neg, {line: 'load', empty: 'No generation data for this country'});
-  });
 
   // ---- Who covers the evening peak: gas and storage, two periods side by side ----
   const peakPair = () => {
@@ -510,13 +496,19 @@ window.EDL = {
       s.append(...ps.map((p) => new Option(p.full, p.label))); s.value = cur ? cur.label : ''; s.onchange = () => { const v = peakPair().map((p) => p && p.label); v[i] = s.value; EDS.dpPeak = v; ['dp-peak-years', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'].forEach((n) => dash.draw(n)); }; return s; };
     el.append(lab(ED.name(EDS.dp) + ', ' + SNAME[EDS.dpSeason].toLowerCase() + ':'), mk(a, 0), lab('compared with'), mk(b, 1));
   });
-  dash.draw('dp-peak-legend', (el) => legend(el, peakKeys(), false));
+  const SOLAR = {key: 'solar', label: 'Solar', color: ED.MIXC['Solar']};
+  dash.draw('dp-peak-legend', (el) => {
+    legend(el, peakKeys(), false);
+    const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = SOLAR.color; i.style.opacity = 0.3;
+    sp.append(i, document.createTextNode('Solar (shape only, not to scale; hover for MW)')); el.append(sp);
+  });
+  const solarMax = () => d3.max(peakPair().filter(Boolean), (p) => d3.max(p.rows, (r) => r.v.solar)) || 1;
   const peakMax = () => d3.max(peakPair().filter(Boolean), (p) => d3.max(p.rows, (r) => d3.sum(PEAK, ([k]) => Math.max(0, r.v[k] || 0)))) || 1;
   const peakDraw = (i) => (el) => {
     const d = dash.data('day_profile');
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
     const p = peakPair()[i];
-    ED.hourStack(el, p ? p.rows : [], p ? peakKeys() : [], [], {height: 240, yMax: peakMax(), empty: 'No data for this period'});
+    ED.hourStack(el, p ? p.rows : [], p ? peakKeys() : [], [], {height: 240, yMax: peakMax(), shade: {...SOLAR, max: solarMax()}, empty: 'No data for this period'});
   };
   dash.draw('dp-peak-a-title', (el) => { const p = peakPair()[0]; el.textContent = p ? p.full : '—'; });
   dash.draw('dp-peak-b-title', (el) => { const p = peakPair()[1]; el.textContent = p ? p.full : '—'; });

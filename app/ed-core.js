@@ -196,6 +196,11 @@ window.ED = (function () {
     ya.attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(fmt));
     ya.select('.domain').remove(); ya.selectAll('line').style('stroke', 'var(--cds-chart-grid)');
     svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues([0, 3, 6, 9, 12, 15, 18, 21]).tickFormat((h) => String(h).padStart(2, '0') + ':00')).selectAll('line,path').style('stroke', 'var(--cds-chart-axis)');
+    if (o.shade) {
+      const sm = o.shade.max || d3.max(rows, (r) => r.v[o.shade.key]) || 1, top = y.domain()[1];
+      svg.append('path').datum(rows.filter((r) => Number.isFinite(r.v[o.shade.key]))).style('fill', o.shade.color).style('fill-opacity', 0.22)
+        .attr('d', d3.area().curve(d3.curveMonotoneX).x((r) => x(r.h)).y0(y(0)).y1((r) => y(top * 0.95 * Math.max(0, r.v[o.shade.key]) / sm)));
+    }
     const area = d3.area().x((d) => x(d.data.h)).y0((d) => y(d[0])).y1((d) => y(d[1]));
     st.forEach((s) => { const k = keys.find((z) => z.key === s.key); svg.append('path').datum(s).attr('d', area).style('fill', k.color).style('fill-opacity', k.neg ? 0.55 : 0.9); });
     if (lo < 0) svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--cds-chart-reference)');
@@ -207,7 +212,7 @@ window.ED = (function () {
         const [px] = d3.pointer(ev); const hh = Math.max(0, Math.min(23, Math.round(x.invert(px * W / svg.node().getBoundingClientRect().width))));
         const r = rows.find((z) => z.h === hh); if (!r) return;
         rule.attr('x1', x(hh)).attr('x2', x(hh)).style('display', null);
-        tip.replaceChildren(); const h = document.createElement('div'); h.className = 'muted'; h.textContent = String(hh).padStart(2, '0') + ':00–' + String(hh + 1).padStart(2, '0') + ':00' + (o.line && isFinite(r.v[o.line]) ? ' · demand ' + f.n0(r.v[o.line]) + ' MW' : ''); tip.append(h);
+        tip.replaceChildren(); const h = document.createElement('div'); h.className = 'muted'; h.textContent = String(hh).padStart(2, '0') + ':00–' + String(hh + 1).padStart(2, '0') + ':00' + (o.line && isFinite(r.v[o.line]) ? ' · demand ' + f.n0(r.v[o.line]) + ' MW' : '') + (o.shade && isFinite(r.v[o.shade.key]) ? ' · ' + o.shade.label.toLowerCase() + ' ' + f.n0(r.v[o.shade.key]) + ' MW' : ''); tip.append(h);
         pos.slice().reverse().concat(neg).forEach((k) => { const v = r.v[k.key]; if (!(v > 0.5)) return; const d = document.createElement('div'); const ii = document.createElement('i'); ii.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:${k.color};opacity:${k.neg ? 0.55 : 1}`; d.append(ii, document.createTextNode(k.label + ': ' + (k.neg ? '−' : '') + f.n0(v) + ' MW')); tip.append(d); });
         tip.hidden = false; const bw = el.clientWidth, sx = x(hh) * bw / W; tip.style.left = Math.min(Math.max(0, sx + 12), bw - tip.offsetWidth) + 'px'; tip.style.top = '0px';
       })

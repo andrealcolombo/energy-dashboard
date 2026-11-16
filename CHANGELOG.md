@@ -8,6 +8,7 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-16 | Andrea | Claude | Removed hour-by-hour mix chart; solar shape added to the evening-peak chart |
 | 2026-11-16 | Andrea | Claude | Battery notes: no example country singled out; EU27 note lists reporting countries |
 | 2026-11-16 | Andrea | Claude | Prices through the day: compare countries and seasons too; full-width text |
 | 2026-11-16 | Andrea | Claude | New chart: who covers the evening peak (gas, pumped storage, batteries) |
@@ -49,6 +50,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-16
 
+- **Simpler "Prices through the day"** (asked by Andrea). The chart "What produced the power, hour by hour" is
+  removed: it repeated the Generation mix tab. The evening-peak chart now shows solar as a light background
+  shape (not to scale, MW on hover), so one can see gas and storage taking over when solar fades.
 - **Neutral battery notes** (asked by Andrea). Notes and indicator definitions no longer name Germany as the
   example of a country without battery data. For the EU27, the coverage box now says how many countries report
   batteries and lists them.
