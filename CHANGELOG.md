@@ -8,6 +8,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-16 | Andrea | Claude | Prices through the day: compare countries and seasons too; full-width text |
+| 2026-11-16 | Andrea | Claude | New chart: who covers the evening peak (gas, pumped storage, batteries) |
+| 2026-11-16 | Andrea | Claude | Country profile: four day-shape indicators (price swing, evening, midday, storage) |
 | 2026-11-13 | Andrea | Claude | New section "Prices through the day" in Electricity prices: hourly price, mix, swing |
 | 2026-11-13 | Andrea | Claude | Day profiles: hour-by-hour prices, load and generation by month, from ENTSO-E |
 | 2026-11-13 | Andrea | Claude | Second daily data run at 17:07 UTC, as a backup to the 13:23 run |
@@ -42,6 +45,17 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 "Requested by: Claude" means a fix Claude found and made while working on another request.
 
 ## Details
+
+### 2026-11-16
+
+- **Prices through the day: more comparisons** (asked by Andrea). A "Compare" switch: years (as before),
+  countries (one year and season, several countries) or seasons (one country and year). The swing bars follow
+  the choice. Explanatory text under titles now uses the full width of the page.
+- **Who covers the evening peak** (asked by Andrea, after an Australian chart he shared). Gas, pumped storage and
+  batteries by hour for two periods side by side, on the same scale. A coverage box says when batteries are not
+  reported to ENTSO-E (e.g. Germany) or only partly. Pumped storage and batteries are shown as two layers.
+- **Country profile** (asked by Andrea). Four new spider indicators from the average day of the last 12 months:
+  daily price swing, evening and midday price (% of day average), storage output in the evening (% of demand).
 
 ### 2026-11-13
 

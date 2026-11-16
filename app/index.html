@@ -5,9 +5,9 @@
   .ed h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0 0 var(--cds-gap-xs); }
   .ed h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-lg) 0 var(--cds-gap-xs); }
   .ed h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-md) 0 var(--cds-gap-xs); }
-  .ed .lede { color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); max-width: 75ch; }
+  .ed .lede { color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); max-width: none; }
   .ed .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
-  .ed .note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: var(--cds-gap-xs) 0 0; max-width: 85ch; }
+  .ed .note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: var(--cds-gap-xs) 0 0; max-width: none; }
   .ed .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--cds-gap-sm); }
   .ed .ti { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
   .ed .ti .lab { font-size: 11px; line-height: 1.3; color: var(--color-fg-muted); }
@@ -23,6 +23,7 @@
   .ed .card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); min-width: 0; }
   .ed .chart { position: relative; min-height: 260px; width: 100%; }
   .ed .chart.short { min-height: 200px; }
+  .ed .chart.bars { min-height: 60px; }
   .ed .chart svg text { font-size: 11px; fill: var(--cds-text-secondary); }
   .ed .legend { display:flex; flex-wrap:wrap; gap: 4px 12px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0 0 4px; min-height: 18px; }
   .ed .legend i { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
@@ -43,6 +44,9 @@
   .ed .defs > div { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 8px 10px; }
   .ed .defs dt { font-weight: var(--cds-font-weight-medium); }
   .ed .note.wide { max-width: none; }
+  .ed .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--cds-gap-md); }
+  .ed .pair h4 { margin: var(--cds-gap-sm) 0 0; font-size: var(--cds-font-size-body); }
+  .ed .warn { margin: var(--cds-gap-sm) 0 0; padding: var(--cds-gap-sm) var(--cds-gap-md); border-left: 3px solid var(--color-warning, #b7791f); background: var(--color-bg-subtle, rgba(183,121,31,.08)); font-size: var(--cds-font-size-caption); }
   .ed .news { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-sm); }
   .ed .news article { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
   .ed .news .meta { font-size: 11px; color: var(--color-fg-muted); margin: 0 0 4px; }
@@ -137,10 +141,16 @@
       <span data-draw="dp-season"></span>
       <span data-draw="dp-unit"></span>
     </div>
-    <h3><span data-draw="dp-price-title">Average price by hour</span></h3>
+    <div class="row" data-draw="dp-mode"></div>
+    <h3><span data-draw="dp-price-title" data-source="day_profile">Average price by hour</span></h3>
     <div class="row" data-draw="dp-years" data-source="day_profile"></div>
+    <div class="row" data-draw="dp-countries" data-source="day_profile"></div>
     <div class="chart" data-draw="dp-price" data-source="day_profile" role="img" aria-label="Average day-ahead price by hour of the day, one line per year"></div>
     <p class="note" data-draw="dp-note" data-source="day_profile"></p>
+
+    <h3 data-draw="dp-swing-title">Daily price swing · highest hour minus lowest hour, % of the day's average</h3>
+    <div class="chart bars" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day, by year"></div>
+    <p class="note">Measured on the average day of each period, so it shows the regular daily pattern, not single extreme days. A smaller swing means a flatter day. Storage, demand response, interconnections and the mix all play a part: these data alone cannot separate their effects.</p>
 
     <h3>What produced the power, hour by hour · <span data-draw="dp-mix-title" data-source="day_profile">—</span></h3>
     <div class="row" data-draw="dp-mix-years" data-source="day_profile"></div>
@@ -148,9 +158,17 @@
     <div class="chart" data-draw="dp-mix" data-source="day_profile" role="img" aria-label="Average generation by source for each hour of the day, with storage charging below zero and demand as a line"></div>
     <p class="note">Average output for each hour, MW. Below zero: storage charging. Line: demand. Where demand is above generation the country imports, where it is below it exports. ENTSO-E reports batteries only from 2025 and for some countries (not Germany); pumped hydro is reported since 2021.</p>
 
-    <h3>Daily price swing · highest hour minus lowest hour, % of the day's average</h3>
-    <div class="chart short" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day, by year"></div>
-    <p class="note">Measured on the average day of each period, so it shows the regular daily pattern, not single extreme days. A smaller swing means a flatter day. Storage, demand response, interconnections and the mix all play a part: these data alone cannot separate their effects.</p>
+
+    <h3>Who covers the evening peak · gas and storage, hour by hour</h3>
+    <p class="note">When solar fades in the evening, gas plants and storage fill the gap. If storage grows, it should take over part of the evening peak from gas. Average output for each hour, MW, same scale in both panels.</p>
+    <div class="row" data-draw="dp-peak-years" data-source="day_profile"></div>
+    <div class="legend" data-draw="dp-peak-legend"></div>
+    <div class="pair">
+      <div><h4 data-draw="dp-peak-a-title" data-source="day_profile">—</h4><div class="chart" data-draw="dp-peak-a" data-source="day_profile" role="img" aria-label="Gas, pumped storage and battery output by hour, first period"></div></div>
+      <div><h4 data-draw="dp-peak-b-title" data-source="day_profile">—</h4><div class="chart" data-draw="dp-peak-b" data-source="day_profile" role="img" aria-label="Gas, pumped storage and battery output by hour, second period"></div></div>
+    </div>
+    <p class="warn" data-draw="dp-peak-warn" data-source="day_profile"></p>
+    <p class="note">Pumped storage and batteries do the same job here: they store cheap power and release it when it is dear. They are shown separately because pumped hydro is old, large and limited by geography, while batteries are new and growing fast. ENTSO-E does not split gas into peaking and mid-merit plants.</p>
   </section>
 
   <!-- ============ MIX ============ -->
@@ -221,6 +239,9 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Prices through the day: compare countries and seasons too; full-width text</td></tr>
+          <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>New chart: who covers the evening peak (gas, pumped storage, batteries)</td></tr>
+          <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Country profile: four day-shape indicators (price swing, evening, midday, storage)</td></tr>
           <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>New section "Prices through the day" in Electricity prices: hourly price, mix, swing</td></tr>
           <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>Day profiles: hour-by-hour prices, load and generation by month, from ENTSO-E</td></tr>
           <tr><td>2026-11-13</td><td>Andrea</td><td>Claude</td><td>Second daily data run at 17:07 UTC, as a backup to the 13:23 run</td></tr>

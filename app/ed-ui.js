@@ -241,6 +241,10 @@ window.EDL = {
     {id: 'nuclear_12m', label: 'Nuclear share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of nuclear in generation over the last 12 complete months.'},
     {id: 'gas_12m', label: 'Gas share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of gas-fired plants in generation over the last 12 complete months. A high share ties power prices to the gas price.'},
     {id: 'coal_12m', label: 'Coal share, 12 months', unit: '% of generation', fmt: ED.f.n1, def: 'Share of hard coal and lignite in generation over the last 12 complete months.'},
+    {id: 'swing_12m', label: 'Daily price swing, 12 months', unit: '% of day average', fmt: ED.f.n0, def: 'On the average day of the last 12 complete months: price of the most expensive hour minus the cheapest, as a share of the day\'s average price. Higher means a more uneven day, with more value in shifting power across hours.'},
+    {id: 'eve_12m', label: 'Evening price, 12 months', unit: '% of day average', fmt: ED.f.n0, def: 'Average price from 17:00 to 21:00 (Brussels time) as a share of the day\'s average, last 12 complete months. 150 means evenings cost 50% more than the average hour.'},
+    {id: 'mid_12m', label: 'Midday price, 12 months', unit: '% of day average', fmt: ED.f.n0, def: 'Average price from 11:00 to 15:00 as a share of the day\'s average, last 12 complete months. Low values mean solar pushes midday prices down.'},
+    {id: 'sto_eve_12m', label: 'Storage in the evening, 12 months', unit: '% of demand', fmt: ED.f.n1, def: 'Output of pumped hydro and batteries from 17:00 to 21:00 as a share of demand in those hours, last 12 complete months. Batteries count only where reported to ENTSO-E (from 2025, some countries; not Germany), so this understates storage in many countries.'},
     {id: 'bat_3m', label: 'Battery storage, 3 months', unit: '% of generation', fmt: ED.f.n2, def: 'Electricity discharged from storage reported to ENTSO-E as "energy storage" (mostly batteries), as a share of generation over the last 3 complete months. Many countries, including Germany, do not report it: shown as n/a. The EU27 value counts reporting countries only, so it understates the real total.'},
   ];
   const P = () => EDS.profile;
@@ -347,83 +351,142 @@ window.EDL = {
 (function () {
   const {f} = ED;
   const SEASONS = [['year', 'Whole year', null], ['spring', 'Spring', [3, 4, 5]], ['summer', 'Summer', [6, 7, 8]], ['autumn', 'Autumn', [9, 10, 11]], ['winter', 'Winter', [12, 1, 2]]];
+  const SNAME = Object.fromEntries(SEASONS.map(([k, l]) => [k, l]));
   const COLS = ['price', 'load', 'solar', 'wind', 'gas', 'coal', 'nuclear', 'hydro', 'other', 'pumped_out', 'pumped_in', 'battery_out', 'battery_in'];
   const POS = [['nuclear', 'Nuclear'], ['coal', 'Coal & lignite'], ['gas', 'Gas'], ['hydro', 'Hydro'], ['wind', 'Wind'], ['solar', 'Solar'], ['other', 'Other'], ['pumped_out', 'Pumped storage'], ['battery_out', 'Battery storage']];
   const NEG = [['pumped_in', 'Pumped storage charging', 'Pumped storage'], ['battery_in', 'Battery charging', 'Battery storage']];
-  const ALL = ['dp-select', 'dp-season', 'dp-unit', 'dp-price-title', 'dp-years', 'dp-price', 'dp-note', 'dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix', 'dp-swing'];
+  const PEAK = [['gas', 'Gas'], ['pumped_out', 'Pumped storage'], ['battery_out', 'Battery storage']];
+  const MODES = [['years', 'Years'], ['countries', 'Countries'], ['seasons', 'Seasons']];
+  const ALL = ['dp-select', 'dp-season', 'dp-unit', 'dp-mode', 'dp-price-title', 'dp-years', 'dp-countries', 'dp-price', 'dp-note', 'dp-swing-title', 'dp-swing',
+    'dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix', 'dp-peak-years', 'dp-peak-legend', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'];
   const redraw = () => ALL.forEach((n) => dash.draw(n));
   const hourDate = (h) => new Date(Date.UTC(2000, 0, 1, h));
+  const mode = () => EDS.dpMode || 'years';
+  const labelFor = (season, y) => (season === 'winter' ? (y - 1) + '/' + String(y).slice(2) : String(y));
 
-  // Average day per period (year or season) for the selected country: [{label, full, rows:[{h, v}]}]
-  // Periods are computed in src/build_dashboard_files.py (mean of the monthly profiles).
-  let memo = {key: null, val: []};
-  function periods() {
+  // Average days of one area and season: [{label, full, rows:[{h, v}]}], computed in src/build_dashboard_files.py.
+  const memo = new Map();
+  function prof(area, season) {
     const d = dash.data('day_profile');
     if (d.status !== 'ok') return [];
-    const key = EDS.dp + '|' + EDS.dpSeason + '|' + d.data.length;
-    if (memo.key === key) return memo.val;
-    const by = d3.group(d.data.filter((r) => r.area === EDS.dp && r.season === EDS.dpSeason), (r) => r.period);
+    const key = area + '|' + season + '|' + d.data.length;
+    if (memo.has(key)) return memo.get(key);
+    const by = d3.group(d.data.filter((r) => r.area === area && r.season === season), (r) => r.period);
     const out = Array.from(by, ([label, rs]) => ({label, full: label + (rs[0].span ? ' (' + rs[0].span + ')' : ''),
       rows: d3.range(24).map((h) => { const r = rs.find((z) => +z.hour === h) || {}; const v = {}; COLS.forEach((c) => { v[c] = ED.num(r[c]); }); return {h, v}; })}))
       .sort((a, b) => (a.label < b.label ? -1 : 1));
-    memo = {key, val: out};
+    memo.set(key, out);
     return out;
   }
+  const periods = () => prof(EDS.dp, EDS.dpSeason);
+  const calYears = () => prof(EDS.dp, 'year').map((p) => +p.label);
+  const year = () => { const ys = calYears(); return ys.includes(+EDS.dpYear) ? +EDS.dpYear : ys[ys.length - 1]; };
   const shown = () => { const ps = periods(); const sel = EDS.dpYears || ps.slice(-4).map((p) => p.label); return ps.filter((p) => sel.includes(p.label)); };
   const colorOf = (p) => { const ps = periods(); const i = ps.findIndex((z) => z.label === p.label); return dash.colors[(ps.length - 1 - i) % dash.colors.length]; };
+
+  // The lines of the price chart, in the selected comparison mode: [{label, color, width, rows}]
+  function lines(all) {
+    if (mode() === 'countries') {
+      const y = year();
+      return [EDS.dp].concat((EDS.dpCmp || []).filter((c) => c !== EDS.dp)).map((a, i) => {
+        const p = prof(a, EDS.dpSeason).find((z) => z.label === labelFor(EDS.dpSeason, y));
+        return p && {label: ED.name(a), color: dash.colors[i % dash.colors.length], width: i === 0 ? 2.6 : 1.6, rows: p.rows};
+      }).filter(Boolean);
+    }
+    if (mode() === 'seasons') {
+      const y = year();
+      return SEASONS.map(([k, lab], i) => { const p = prof(EDS.dp, k).find((z) => z.label === labelFor(k, y)); return p && {label: lab + (k === 'winter' ? ' ' + p.label : '') + (p.full.includes('(') ? ' ' + p.full.slice(p.full.indexOf('(')) : ''), color: k === 'year' ? 'var(--color-fg)' : dash.colors[(i - 1) % dash.colors.length], width: k === 'year' ? 2.6 : 1.6, dash: k === 'year' ? '6 4' : null, rows: p.rows}; }).filter(Boolean);
+    }
+    const last = periods().slice(-1)[0];
+    return (all ? periods() : shown()).map((p) => ({label: p.full, color: colorOf(p), width: last && p.label === last.label ? 2.6 : 1.5, rows: p.rows, on: shown().includes(p)}));
+  }
+
   const mixPeriod = () => { const ps = periods(); return ps.find((p) => p.label === EDS.dpMix) || ps[ps.length - 1]; };
   const chip = (text, on, click, sw) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = text; b.setAttribute('aria-pressed', String(on)); if (sw) { const i = document.createElement('i'); i.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:${sw}`; b.prepend(i); } b.onclick = click; return b; };
+  const lab = (text) => { const s = document.createElement('span'); s.className = 'muted'; s.textContent = text; s.style.marginRight = '4px'; return s; };
+  const areas = () => { const d = dash.data('day_profile'); const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.area))) : ['EU27'];
+    return cs.sort((a, b) => (a === 'EU27' ? -1 : b === 'EU27' ? 1 : ED.name(a).localeCompare(ED.name(b), 'en'))); };
 
   dash.draw('dp-select', (sel) => {
-    const d = dash.data('day_profile');
-    const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.area))) : ['EU27'];
-    cs.sort((a, b) => (a === 'EU27' ? -1 : b === 'EU27' ? 1 : ED.name(a).localeCompare(ED.name(b), 'en')));
-    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
+    sel.replaceChildren(...areas().map((c) => new Option(ED.name(c), c)));
     sel.value = EDS.dp;
-    sel.onchange = () => { EDS.dp = sel.value; EDS.dpYears = null; EDS.dpMix = null; redraw(); };
+    sel.onchange = () => { EDS.dp = sel.value; EDS.dpYears = null; EDS.dpMix = null; EDS.dpPeak = null; redraw(); };
   });
-  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, lab]) => chip(lab, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; EDS.dpMix = null; redraw(); }))); });
+  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, l]) => chip(l, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; EDS.dpMix = null; EDS.dpPeak = null; redraw(); }))); });
   dash.draw('dp-unit', (el) => { el.replaceChildren(chip('€/MWh', !EDS.dpRel, () => { EDS.dpRel = false; redraw(); }), chip('% of day average', EDS.dpRel, () => { EDS.dpRel = true; redraw(); })); });
-  dash.draw('dp-price-title', (el) => { el.textContent = 'Average price by hour · ' + ED.name(EDS.dp) + (EDS.dpRel ? ' (day average = 100)' : ' (€/MWh)'); });
+  dash.draw('dp-mode', (el) => { el.replaceChildren(lab('Compare'), ...MODES.map(([k, l]) => chip(l, mode() === k, () => { EDS.dpMode = k; redraw(); }))); });
+
+  dash.draw('dp-price-title', (el) => {
+    const u = EDS.dpRel ? ' (day average = 100)' : ' (€/MWh)';
+    const m = mode(), y = year();
+    el.textContent = 'Average price by hour · ' + (m === 'years' ? ED.name(EDS.dp) + ', ' + SNAME[EDS.dpSeason].toLowerCase() + ', by year'
+      : m === 'countries' ? SNAME[EDS.dpSeason] + ' ' + (y ? labelFor(EDS.dpSeason, y) : '') + ', by country'
+      : ED.name(EDS.dp) + ', ' + (y || '') + ', by season') + u;
+  });
 
   dash.draw('dp-years', (el) => {
     el.replaceChildren();
-    const ps = periods(), on = shown().map((p) => p.label);
-    ps.forEach((p) => el.append(chip(p.full, on.includes(p.label), () => {
-      const cur = on.includes(p.label) ? on.filter((x) => x !== p.label) : on.concat(p.label);
-      EDS.dpYears = cur; ['dp-years', 'dp-price', 'dp-swing'].forEach((n) => dash.draw(n));
-    }, on.includes(p.label) ? colorOf(p) : null)));
+    if (mode() === 'years') {
+      const ps = periods(), on = shown().map((p) => p.label);
+      ps.forEach((p) => el.append(chip(p.full, on.includes(p.label), () => {
+        EDS.dpYears = on.includes(p.label) ? on.filter((x) => x !== p.label) : on.concat(p.label);
+        ['dp-years', 'dp-price', 'dp-swing'].forEach((n) => dash.draw(n));
+      }, on.includes(p.label) ? colorOf(p) : null)));
+      return;
+    }
+    el.append(lab('Year'));
+    calYears().forEach((y) => el.append(chip(String(y), y === year(), () => { EDS.dpYear = y; ['dp-years', 'dp-price-title', 'dp-price', 'dp-note', 'dp-swing-title', 'dp-swing'].forEach((n) => dash.draw(n)); })));
+  });
+
+  dash.draw('dp-countries', (el) => {
+    el.replaceChildren(); el.style.display = mode() !== 'countries' ? 'none' : '';
+    if (mode() !== 'countries') return;
+    const cmp = (EDS.dpCmp || []).filter((c) => c !== EDS.dp);
+    el.append(lab('Compare ' + ED.name(EDS.dp) + ' with'));
+    cmp.forEach((c, i) => { const b = chip(ED.name(c) + ' ×', true, () => { EDS.dpCmp = cmp.filter((x) => x !== c); redraw(); }, dash.colors[(i + 1) % dash.colors.length]); b.title = 'Remove ' + ED.name(c); el.append(b); });
+    const sel = document.createElement('select'); sel.className = 'dash-select'; sel.setAttribute('aria-label', 'Add a country to compare');
+    sel.append(new Option('+ add a country', ''), ...areas().filter((c) => c !== EDS.dp && !cmp.includes(c)).map((c) => new Option(ED.name(c), c)));
+    sel.onchange = () => { if (sel.value) { EDS.dpCmp = cmp.concat(sel.value); redraw(); } };
+    el.append(sel);
   });
 
   dash.draw('dp-price', (el) => {
     const d = dash.data('day_profile');
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
-    const ps = shown(), last = periods().slice(-1)[0];
-    const ser = ps.map((p) => {
-      const avg = d3.mean(p.rows, (r) => r.v.price);
-      return {label: p.full, color: colorOf(p), width: last && p.label === last.label ? 2.6 : 1.5, values: p.rows.map((r) => ({x: hourDate(r.h), y: EDS.dpRel ? 100 * r.v.price / avg : r.v.price}))};
-    });
-    ED.lineChart(el, ser, {height: 280, legend: false, unit: EDS.dpRel ? '' : '€/MWh', refY: EDS.dpRel ? 100 : undefined, zero: !EDS.dpRel,
+    const ser = lines().map((l) => {
+      const avg = d3.mean(l.rows, (r) => r.v.price);
+      return {label: l.label, color: l.color, width: l.width, dash: l.dash, values: l.rows.map((r) => ({x: hourDate(r.h), y: EDS.dpRel ? 100 * r.v.price / avg : r.v.price}))};
+    }).filter((s) => s.values.some((v) => Number.isFinite(v.y)));
+    ED.lineChart(el, ser, {height: 280, legend: mode() !== 'years', unit: EDS.dpRel ? '' : '€/MWh', refY: EDS.dpRel ? 100 : undefined, zero: !EDS.dpRel,
       xDomain: [hourDate(0), hourDate(23)], xTick: d3.utcFormat('%H:00'), tipX: (x) => d3.utcFormat('%H:00')(x) + '–' + String(x.getUTCHours() + 1).padStart(2, '0') + ':00', tipFmt: EDS.dpRel ? f.n0 : f.n1,
-      empty: periods().length ? 'Pick at least one year' : 'No hourly data for this country'});
+      empty: mode() === 'years' && periods().length ? 'Pick at least one year' : 'No hourly price data for this choice'});
   });
 
   dash.draw('dp-note', (el) => {
-    const ps = periods(); if (!ps.length) { el.textContent = ''; return; }
-    el.textContent = 'Click the years to compare them. Hours in Brussels time; each point is the average of that hour over all days of the period.' +
-      (EDS.dpRel ? ' "% of day average" removes the effect of the price level (gas, CO2), so only the shape of the day is compared.' : ' Switch to "% of day average" to compare shapes across years with very different price levels (2022).') +
-      (EDS.dp === 'EU27' ? ' EU27: country prices weighted by each country\'s demand in that hour.' : '');
+    if (!periods().length && !prof('EU27', 'year').length) { el.textContent = ''; return; }
+    const m = mode();
+    el.textContent = (m === 'years' ? 'Click the years to compare them. ' : m === 'countries' ? 'Pick the year above and add countries to compare. The season buttons apply. ' : 'One line per season of the chosen year; the black dashed line is the whole year. Winter runs from December of the year before to February. Seasons not yet complete are left out. ') +
+      'Hours in Brussels time; each point is the average of that hour over all days of the period.' +
+      (EDS.dpRel ? ' "% of day average" removes the effect of the price level (gas, CO2), so only the shape of the day is compared.' : ' Switch to "% of day average" to compare shapes when price levels differ a lot.') +
+      (EDS.dp === 'EU27' || (m === 'countries' && (EDS.dpCmp || []).includes('EU27')) ? ' EU27: country prices weighted by each country\'s demand in that hour.' : '');
   });
 
-  dash.draw('dp-mix-title', (el) => { const p = mixPeriod(); el.textContent = ED.name(EDS.dp) + (p ? ', ' + p.full : ''); });
+  dash.draw('dp-swing-title', (el) => { el.textContent = 'Daily price swing · highest hour minus lowest hour, % of the day\'s average' + (mode() === 'years' ? '' : mode() === 'countries' ? ' · by country' : ' · by season'); });
+  dash.draw('dp-swing', (el) => {
+    const data = lines(true).map((l) => { const v = l.rows.map((r) => r.v.price).filter(Number.isFinite); const avg = d3.mean(v); return {label: l.label, value: v.length && avg > 0 ? 100 * (d3.max(v) - d3.min(v)) / avg : NaN, color: l.on === false ? 'var(--cds-chart-muted)' : l.color}; }).filter((x) => Number.isFinite(x.value));
+    ED.divBars(el, data, {unit: '%', noSign: true, fmt: f.n0});
+  });
+
+  dash.draw('dp-mix-title', (el) => { const p = mixPeriod(); el.textContent = ED.name(EDS.dp) + (p ? ', ' + SNAME[EDS.dpSeason].toLowerCase() + ' ' + p.full : ''); });
   dash.draw('dp-mix-years', (el) => { el.replaceChildren(); const p0 = mixPeriod(); periods().forEach((p) => el.append(chip(p.full, p0 && p.label === p0.label, () => { EDS.dpMix = p.label; ['dp-mix-title', 'dp-mix-years', 'dp-mix-legend', 'dp-mix'].forEach((n) => dash.draw(n)); }))); });
   const parts = () => { const p = mixPeriod(); if (!p) return [[], []]; const has = (k) => p.rows.some((r) => r.v[k] > 0.5);
     return [POS.filter(([k]) => has(k)).map(([key, label]) => ({key, label, color: ED.MIXC[label]})), NEG.filter(([k]) => has(k)).map(([key, label, c]) => ({key, label, color: ED.MIXC[c], neg: true}))]; };
-  dash.draw('dp-mix-legend', (el) => {
-    el.replaceChildren(); const [pos, neg] = parts();
-    pos.concat(neg).forEach((k) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = k.color; if (k.neg) i.style.opacity = 0.55; sp.append(i, document.createTextNode(k.label)); el.append(sp); });
-    if (pos.length) { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.cssText = 'background:none;border-top:2px dashed var(--color-fg);height:0;margin-top:6px'; sp.append(i, document.createTextNode('Demand')); el.append(sp); }
-  });
+  const legend = (el, items, demand) => {
+    el.replaceChildren();
+    items.forEach((k) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = k.color; if (k.neg) i.style.opacity = 0.55; sp.append(i, document.createTextNode(k.label)); el.append(sp); });
+    if (demand) { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.cssText = 'background:none;border-top:2px dashed var(--color-fg);height:0;margin-top:6px'; sp.append(i, document.createTextNode('Demand')); el.append(sp); }
+  };
+  dash.draw('dp-mix-legend', (el) => { const [pos, neg] = parts(); legend(el, pos.concat(neg), pos.length > 0); });
   dash.draw('dp-mix', (el) => {
     const d = dash.data('day_profile');
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
@@ -431,9 +494,51 @@ window.EDL = {
     ED.hourStack(el, p && pos.length ? p.rows : [], pos, neg, {line: 'load', empty: 'No generation data for this country'});
   });
 
-  dash.draw('dp-swing', (el) => {
-    const ps = periods();
-    const data = ps.map((p) => { const v = p.rows.map((r) => r.v.price).filter(Number.isFinite); const avg = d3.mean(v); return {label: p.full, value: v.length && avg > 0 ? 100 * (d3.max(v) - d3.min(v)) / avg : NaN, color: shown().some((s) => s.label === p.label) ? colorOf(p) : 'var(--cds-chart-muted)'}; }).filter((x) => Number.isFinite(x.value));
-    ED.divBars(el, data, {unit: '%', noSign: true, fmt: f.n0});
+  // ---- Who covers the evening peak: gas and storage, two periods side by side ----
+  const peakPair = () => {
+    const ps = periods(); const lab2 = EDS.dpPeak || [];
+    const a = ps.find((p) => p.label === lab2[0]) || ps[ps.length - 2] || ps[0];
+    const b = ps.find((p) => p.label === lab2[1]) || ps[ps.length - 1];
+    return [a, b];
+  };
+  const peakKeys = () => PEAK.map(([key, label]) => ({key, label, color: ED.MIXC[label]}));
+  dash.draw('dp-peak-years', (el) => {
+    el.replaceChildren();
+    const ps = periods(), [a, b] = peakPair();
+    if (!ps.length) return;
+    const mk = (cur, i) => { const s = document.createElement('select'); s.className = 'dash-select'; s.setAttribute('aria-label', i ? 'Second period' : 'First period');
+      s.append(...ps.map((p) => new Option(p.full, p.label))); s.value = cur ? cur.label : ''; s.onchange = () => { const v = peakPair().map((p) => p && p.label); v[i] = s.value; EDS.dpPeak = v; ['dp-peak-years', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'].forEach((n) => dash.draw(n)); }; return s; };
+    el.append(lab(ED.name(EDS.dp) + ', ' + SNAME[EDS.dpSeason].toLowerCase() + ':'), mk(a, 0), lab('compared with'), mk(b, 1));
+  });
+  dash.draw('dp-peak-legend', (el) => legend(el, peakKeys(), false));
+  const peakMax = () => d3.max(peakPair().filter(Boolean), (p) => d3.max(p.rows, (r) => d3.sum(PEAK, ([k]) => Math.max(0, r.v[k] || 0)))) || 1;
+  const peakDraw = (i) => (el) => {
+    const d = dash.data('day_profile');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const p = peakPair()[i];
+    ED.hourStack(el, p ? p.rows : [], p ? peakKeys() : [], [], {height: 240, yMax: peakMax(), empty: 'No data for this period'});
+  };
+  dash.draw('dp-peak-a-title', (el) => { const p = peakPair()[0]; el.textContent = p ? p.full : '—'; });
+  dash.draw('dp-peak-b-title', (el) => { const p = peakPair()[1]; el.textContent = p ? p.full : '—'; });
+  dash.draw('dp-peak-a', peakDraw(0));
+  dash.draw('dp-peak-b', peakDraw(1));
+  dash.draw('dp-peak-warn', (el) => {
+    const [a, b] = peakPair(); el.replaceChildren(); el.style.display = 'none';
+    if (!a || !b) return;
+    const has = (p, k) => p.rows.some((r) => Number.isFinite(r.v[k]));
+    const msg = [];
+    if (EDS.dp === 'EU27') {
+      const rep = areas().filter((c) => c !== 'EU27' && prof(c, EDS.dpSeason).some((p) => p.label === b.label && has(p, 'battery_out')));
+      msg.push('EU27 batteries are the sum of the countries that report them to ENTSO-E' + (rep.length ? ' (' + rep.map(ED.name).join(', ') + ')' : '') + '. Germany and the other countries do not report batteries, so their total is understated.');
+    } else if (!has(a, 'battery_out') && !has(b, 'battery_out')) {
+      msg.push(ED.name(EDS.dp) + ' does not report batteries to ENTSO-E. The chart shows only gas and pumped storage: any batteries in the country are invisible here.');
+    } else if (!has(a, 'battery_out')) {
+      msg.push(ED.name(EDS.dp) + ' reports batteries only from ' + b.label + ' on, not in ' + a.label + ': part of the increase may reflect the start of reporting, not new batteries.');
+    } else {
+      msg.push(ED.name(EDS.dp) + ' reports batteries to ENTSO-E. Reporting may still be incomplete: compare with national sources before quoting the numbers.');
+    }
+    if (!has(a, 'pumped_out') && !has(b, 'pumped_out')) msg.push('No pumped storage reported.');
+    const b0 = document.createElement('strong'); b0.textContent = 'Data coverage: ';
+    el.append(b0, document.createTextNode(msg.join(' '))); el.style.display = '';
   });
 })();

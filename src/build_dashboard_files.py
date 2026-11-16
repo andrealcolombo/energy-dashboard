@@ -234,6 +234,14 @@ def periods(d: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
             a.loc[part, "span"] = (a.loc[part, "min"].str[5:].astype(int).map(lambda i: MON[i - 1]) + "–" +
                                    a.loc[part, "max"].str[5:].astype(int).map(lambda i: MON[i - 1]))
         frames.append(a.drop(columns=["min", "max", "nunique"]))
+    # Last 12 complete months (for the country-profile indicators)
+    months = sorted(d["month"].unique())[-12:]
+    sel = d[d["month"].isin(months)]
+    if len(months) == 12:
+        a = sel.groupby(["area", "hour"])[cols].mean().reset_index()
+        a["season"], a["period"] = "last12", "last 12 months"
+        a["span"] = MON[int(months[0][5:]) - 1] + " " + months[0][:4] + "–" + MON[int(months[-1][5:]) - 1] + " " + months[-1][:4]
+        frames.append(a)
     out = pd.concat(frames, ignore_index=True)
     out["price"] = out["price"].round(1)
     mw = [c for c in cols if c != "price"]

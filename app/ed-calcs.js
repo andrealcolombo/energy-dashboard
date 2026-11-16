@@ -70,8 +70,8 @@ dash.calc('mix_ytd', {
 dash.calc('profile', {
   title: 'Country profile indicators',
   description: 'One value per country and indicator, and the same for the EU27 (load-weighted price; EU27 generation totals; EU averages from Eurostat and the Oil Bulletin; for negative-price hours, the mean of countries). Battery storage only for countries that report it.',
-  inputs: ['prices_daily', 'prices_monthly', 'retail_semiannual', 'fuels_weekly', 'mix_monthly'],
-  fn: (prices_daily, prices_monthly, retail_semiannual, fuels_weekly, mix_monthly) => {
+  inputs: ['prices_daily', 'prices_monthly', 'retail_semiannual', 'fuels_weekly', 'mix_monthly', 'day_profile'],
+  fn: (prices_daily, prices_monthly, retail_semiannual, fuels_weekly, mix_monthly, day_profile) => {
     const out = [];
     const put = (country, indicator, value) => { if (Number.isFinite(value)) out.push({key: country + '|' + indicator, country, indicator, value: Math.round(value * 1000) / 1000}); };
     const lastDate = d3.max(prices_daily, (d) => d.date);
@@ -108,6 +108,20 @@ dash.calc('profile', {
       put(c, 'solar_12m', sh(m12, ['Solar'])); put(c, 'wind_12m', sh(m12, ['Wind'])); put(c, 'hydro_12m', sh(m12, ['Hydro']));
       put(c, 'nuclear_12m', sh(m12, ['Nuclear'])); put(c, 'gas_12m', sh(m12, ['Gas'])); put(c, 'coal_12m', sh(m12, ['Coal & lignite']));
       if (c === 'EU27' || v.some((d) => d.group === 'Battery storage')) put(c, 'bat_3m', sh(ms.slice(-3), ['Battery storage']));
+    }
+    // Shape of the day, last 12 complete months (average day by hour)
+    for (const [c, v] of d3.group((day_profile || []).filter((d) => d.season === 'last12'), (d) => d.area)) {
+      const h = (a, b, k) => d3.mean(v.filter((d) => +d.hour >= a && +d.hour < b), (d) => (d[k] === '' || d[k] == null ? NaN : Number(d[k])));
+      const p = v.filter((d) => d.price !== '' && d.price != null).map((d) => Number(d.price)).filter(Number.isFinite);
+      const avg = d3.mean(p);
+      if (p.length === 24 && avg > 0) {
+        put(c, 'swing_12m', 100 * (d3.max(p) - d3.min(p)) / avg);
+        put(c, 'eve_12m', 100 * h(17, 21, 'price') / avg);
+        put(c, 'mid_12m', 100 * h(11, 15, 'price') / avg);
+      }
+      const sto = (k) => h(17, 21, k);
+      const out17 = (sto('pumped_out') || 0) + (sto('battery_out') || 0);
+      if (Number.isFinite(sto('load')) && (Number.isFinite(sto('pumped_out')) || Number.isFinite(sto('battery_out')))) put(c, 'sto_eve_12m', 100 * out17 / sto('load'));
     }
     return out;
   },

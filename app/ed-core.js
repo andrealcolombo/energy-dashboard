@@ -184,7 +184,7 @@ window.ED = (function () {
     const rr = rows.map((r) => { const o2 = {h: r.h}; pos.forEach((k) => { o2[k.key] = Math.max(0, r.v[k.key] || 0); }); neg.forEach((k) => { o2[k.key] = -Math.max(0, r.v[k.key] || 0); }); return o2; });
     const st = d3.stack().keys(pos.map((k) => k.key))(rr).concat(neg.length ? d3.stack().keys(neg.map((k) => k.key)).offset(d3.stackOffsetDiverging)(rr.map((r) => { const o2 = {h: r.h}; neg.forEach((k) => { o2[k.key] = r[k.key] || -1e-9; }); return o2; })) : []);
     const lineV = o.line ? rows.map((r) => ({h: r.h, y: r.v[o.line]})) : [];
-    const hi = Math.max(d3.max(st, (s) => d3.max(s, (d) => d[1])) || 0, d3.max(lineV, (d) => d.y) || 0);
+    const hi = o.yMax || Math.max(d3.max(st, (s) => d3.max(s, (d) => d[1])) || 0, d3.max(lineV, (d) => d.y) || 0);
     const lo = Math.min(0, d3.min(st, (s) => d3.min(s, (d) => d[0])) || 0);
     const y = d3.scaleLinear().domain([lo, hi]).nice();
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
@@ -218,4 +218,4 @@ window.ED = (function () {
 })();
 
 // page state (not data): what the reader has selected
-window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', dp: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMix: null, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
+window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', dp: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMix: null, dpMode: 'years', dpCmp: [], dpYear: null, dpPeak: null, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
