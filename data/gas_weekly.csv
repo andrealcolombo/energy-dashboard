@@ -1,0 +1,3 @@
+edition,week_start,week_end,order,indicator,label,value,unit,wow_pct,mom_pct,yoy_pct,ref_period
+2026-11-10,2026-11-02,2026-11-08,2,gas_ttf,TTF gas day-ahead,90.0,€/MWh,-10.0,16.0,187.0,week
+2026-11-10,2026-11-02,2026-11-08,5,gas_storage,EU gas storage,72.0,% of capacity,-2.2,,-10.0,end of week
