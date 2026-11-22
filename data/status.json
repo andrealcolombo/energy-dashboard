@@ -1,12 +1,12 @@
 {
-  "last_run_utc": "2026-11-21T22:14:06Z",
+  "last_run_utc": "2026-11-22T20:44:43Z",
   "rows": {
-    "prices_daily": 73142,
+    "prices_daily": 73176,
     "generation_monthly": 19949,
     "load_monthly": 1775
   },
   "latest": {
-    "prices_daily": "2026-11-22",
+    "prices_daily": "2026-11-23",
     "generation_monthly": "2026-11",
     "load_monthly": "2026-11"
   },
