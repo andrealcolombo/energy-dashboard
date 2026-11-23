@@ -1,5 +1,5 @@
 {
-  "last_run_utc": "2026-11-23T00:10:26Z",
+  "last_run_utc": "2026-11-23T00:27:31Z",
   "rows": {
     "prices_daily": 73176,
     "generation_monthly": 19949,
@@ -11,10 +11,10 @@
     "load_monthly": "2026-11"
   },
   "failures": [
-    "generation MT: NoMatchingDataError: "
+    "load MT: NoMatchingDataError: "
   ],
   "parts": [
-    "generation"
+    "load"
   ],
   "failures_by_part": {
     "prices": [],
