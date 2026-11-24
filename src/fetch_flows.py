@@ -12,6 +12,8 @@ differ from the commercial schedules agreed in the market.
 Borders are listed in config.FLOW_BORDERS (country level). Where ENTSO-E has
 no country-level data, FLOW_ZONE_FALLBACK lists bidding-zone pairs to add up.
 
+KIND=commercial downloads scheduled commercial exchanges into data/exchanges_daily.csv,
+same layout.
 Modes (env MODE):
   probe   query the last 2 days for every border and direction, print what works
   (empty) first run from config.START_DATE; later runs refetch the last 4 days
@@ -32,7 +34,9 @@ import config  # noqa: E402
 from fetch_entsoe import with_retry  # noqa: E402
 
 DATA = Path(os.environ.get("DATA_DIR") or Path(__file__).resolve().parent.parent / "data")
-OUT = DATA / "flows_daily.csv"
+# KIND=commercial: scheduled commercial exchanges (day-ahead + intraday, [12.1.F]) instead of physical flows
+KIND = os.environ.get("KIND", "physical")
+OUT = DATA / ("exchanges_daily.csv" if KIND == "commercial" else "flows_daily.csv")
 REFETCH_DAYS = 4
 KEYS = ["date", "from", "to"]
 
@@ -44,12 +48,21 @@ FLOW_ZONE_FALLBACK: dict[tuple[str, str], list[tuple[str, str]]] = {
 }
 
 
+def query(client, x, y, start, end):
+    if KIND == "commercial":
+        return with_retry(client.query_scheduled_exchanges, x, y, start=start, end=end, dayahead=False)
+    return with_retry(client.query_crossborder_flows, x, y, start=start, end=end)
+
+# Commercial exchanges: zone pairs to use instead of countries (filled in from the probe).
+EXCHANGE_ZONES: dict[tuple[str, str], list[tuple[str, str]]] = {}
+
+
 def series(client, a: str, b: str, start, end) -> pd.Series:
     """MW from a to b, hourly means in UTC."""
-    pairs = FLOW_ZONE_FALLBACK.get((a, b)) or [(a, b)]
+    pairs = (EXCHANGE_ZONES if KIND == "commercial" else FLOW_ZONE_FALLBACK).get((a, b)) or [(a, b)]
     parts = []
     for x, y in pairs:
-        s = with_retry(client.query_crossborder_flows, x, y, start=start, end=end)
+        s = query(client, x, y, start, end)
         parts.append(s.tz_convert("UTC").resample("1h").mean())
     return pd.concat(parts, axis=1).sum(axis=1, min_count=1)
 
@@ -98,7 +111,7 @@ def main() -> None:
         start = end - pd.Timedelta(days=2)
         for a, b in directed(borders):
             try:
-                s = with_retry(client.query_crossborder_flows, a, b, start=start, end=end)
+                s = query(client, a, b, start, end)
                 print(f"PROBE {a}>{b} ok {len(s)} points, mean {s.mean():.0f} MW", flush=True)
             except Exception as exc:  # noqa: BLE001
                 print(f"PROBE {a}>{b} {type(exc).__name__}: {str(exc)[:80]}", flush=True)
