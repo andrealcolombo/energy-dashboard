@@ -543,7 +543,8 @@ window.EDL = {
     UA: 'Ukraine', MD: 'Moldova', BY: 'Belarus', RU: 'Russia', TR: 'Türkiye', MA: 'Morocco', AD: 'Andorra', NIE: 'Northern Ireland (UK)'};
   const nm = (c) => NM[c] || ED.name(c);
   const PERS = [['day', 'Day'], ['week', 'Week'], ['month', 'Month'], ['year', 'Year']];
-  const ALL = ['fl-select', 'fl-per', 'fl-period', 'fl-kpis', 'fl-legend', 'fl-map', 'fl-warn', 'fl-th-imp', 'fl-th-exp', 'fl-th-net', 'fl-table'];
+  const ALL = ['fl-select', 'fl-per', 'fl-period', 'fl-kpis', 'fl-legend', 'fl-map', 'fl-warn', 'fl-th-imp', 'fl-th-exp', 'fl-th-net', 'fl-table', 'fl-hours-title', 'fl-hours', 'fl-hours-note',
+    'fl-when-name', 'fl-when-season', 'fl-when-month', 'fl-when-years', 'fl-when', 'fl-when-note'];
   const redraw = () => ALL.forEach((n) => dash.draw(n));
   const IMP = () => dash.colors[0], EXP = () => dash.colors[1];
   const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -712,5 +713,88 @@ window.EDL = {
     const tr = document.createElement('tr'); tr.style.fontWeight = '600';
     tr.append(td('Total'), td(fmt(v.imp)), td(fmt(v.exp)), td((v.imp - v.exp < 0 ? '−' : '') + fmt(Math.abs(v.imp - v.exp))), td(''));
     tb.append(tr);
+  });
+
+  // ---- Hour by hour: imports above zero, exports below, net as a line ----
+  function hourBars(el, rows, o = {}) {
+    el.replaceChildren();
+    if (!rows.length) { ED.placeholder(el, 'empty', o.empty || 'No hourly data'); return; }
+    const W = Math.max(280, el.clientWidth), H = o.height || 220, m = {t: 10, r: 12, b: 22, l: 52};
+    const x = d3.scaleBand().domain(rows.map((r) => r.h)).range([m.l, W - m.r]).padding(0.15);
+    const hi = d3.max(rows, (r) => r.imp) || 1, lo = d3.max(rows, (r) => r.exp) || 1;
+    const y = d3.scaleLinear().domain([-lo, hi]).nice().range([H - m.b, m.t]);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const ya = svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat((v) => f.n0(Math.abs(v))));
+    ya.select('.domain').remove(); ya.selectAll('line').style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues(rows.map((r) => r.h).filter((h) => h % 3 === 0)).tickFormat((h) => String(h).padStart(2, '0') + ':00')).selectAll('line,path').style('stroke', 'var(--cds-chart-axis)');
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.h)).attr('width', x.bandwidth()).attr('y', (r) => y(r.imp)).attr('height', (r) => y(0) - y(r.imp)).style('fill', IMP());
+    svg.append('g').selectAll('rect').data(rows).join('rect').attr('x', (r) => x(r.h)).attr('width', x.bandwidth()).attr('y', y(0)).attr('height', (r) => y(-r.exp) - y(0)).style('fill', EXP());
+    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(0)).attr('y2', y(0)).style('stroke', 'var(--color-fg)').attr('stroke-width', 1);
+    svg.append('path').datum(rows).attr('fill', 'none').style('stroke', 'var(--color-fg)').attr('stroke-width', 2).attr('d', d3.line().x((r) => x(r.h) + x.bandwidth() / 2).y((r) => y(r.imp - r.exp)));
+    svg.append('text').attr('x', m.l + 4).attr('y', m.t + 10).style('fill', 'var(--color-fg-muted)').text('MW · imports ↑ exports ↓ · line = net');
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [px] = d3.pointer(ev); const k = px * W / svg.node().getBoundingClientRect().width;
+        const r = rows.reduce((a, b) => (Math.abs(x(b.h) + x.bandwidth() / 2 - k) < Math.abs(x(a.h) + x.bandwidth() / 2 - k) ? b : a));
+        const net = r.imp - r.exp;
+        tip.textContent = String(r.h).padStart(2, '0') + ':00–' + String(r.h + 1).padStart(2, '0') + ':00 · imports ' + f.n0(r.imp) + ' MW · exports ' + f.n0(r.exp) + ' MW · net ' + (net < 0 ? '−' : '') + f.n0(Math.abs(net)) + ' MW';
+        tip.hidden = false; tip.style.left = Math.min(Math.max(0, (x(r.h) + 12) * el.clientWidth / W), el.clientWidth - tip.offsetWidth) + 'px'; tip.style.top = '0px';
+      }).on('pointerleave', () => { tip.hidden = true; });
+  }
+
+  const recentRows = (area, date) => (ok('flows_hours_recent') || []).filter((r) => r.area === area && r.date === date).map((r) => ({h: +r.hour, imp: +r.imp, exp: +r.exp})).sort((a, b) => a.h - b.h);
+  dash.draw('fl-hours-title', (el) => {
+    const p = period(); el.textContent = per() === 'day' && p ? 'Hour by hour · ' + ED.name(EDS.fl || 'EU27') + ', ' + p.label : 'Hour by hour';
+  });
+  dash.draw('fl-hours', (el) => {
+    const p = period();
+    if (per() !== 'day') { ED.placeholder(el, 'empty', 'Choose "Day" above to see that day hour by hour (last 35 days).'); return; }
+    hourBars(el, p ? recentRows(EDS.fl || 'EU27', p.key) : [], {empty: 'Hour-by-hour data are kept for the last 35 days only: pick a more recent day.'});
+  });
+  dash.draw('fl-hours-note', (el) => { el.textContent = 'Average power in each hour, MW (equal to MWh in that hour). Hours in Brussels time.'; });
+
+  // ---- When does the country import or export during the day ----
+  const WS = [['year', 'Whole year'], ['spring', 'Spring'], ['summer', 'Summer'], ['autumn', 'Autumn'], ['winter', 'Winter']];
+  const wseason = () => EDS.flWhen || 'year';
+  const wprof = () => { const d = ok('flows_hours_profile') || []; const A = EDS.fl || 'EU27';
+    const by = d3.group(d.filter((r) => r.area === A && r.season === wseason()), (r) => r.period);
+    return Array.from(by, ([label, rs]) => ({label, full: label + (rs[0].span ? ' (' + rs[0].span + ')' : ''), rows: d3.range(24).map((h) => { const r = rs.find((z) => +z.hour === h) || {}; return {h, imp: +r.imp || 0, exp: +r.exp || 0}; })})).sort((a, b) => (a.label < b.label ? -1 : 1)); };
+  const wshown = () => { const ps = wprof(); const sel = EDS.flWhenYears || ps.slice(-3).map((p) => p.label); return ps.filter((p) => sel.includes(p.label)); };
+  const wcolor = (p) => { const ps = wprof(); const i = ps.findIndex((z) => z.label === p.label); return dash.colors[(ps.length - 1 - i) % dash.colors.length]; };
+  dash.draw('fl-when-name', (el) => { el.textContent = ED.name(EDS.fl || 'EU27'); });
+  dash.draw('fl-when-season', (el) => {
+    el.replaceChildren(...WS.map(([k, l]) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = l; b.setAttribute('aria-pressed', String(wseason() === k)); b.onclick = () => { EDS.flWhen = k; EDS.flWhenYears = null; redraw(); }; return b; }));
+  });
+  dash.draw('fl-when-month', (sel) => {
+    sel.replaceChildren(new Option('or a month…', ''), ...MON.map((mm, i) => new Option(mm, 'm' + String(i + 1).padStart(2, '0'))));
+    sel.value = wseason().startsWith('m') ? wseason() : '';
+    sel.onchange = () => { if (sel.value) { EDS.flWhen = sel.value; EDS.flWhenYears = null; redraw(); } };
+  });
+  dash.draw('fl-when-years', (el) => {
+    el.replaceChildren();
+    const ps = wprof(), on = wshown().map((p) => p.label);
+    ps.forEach((p) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = p.full; b.setAttribute('aria-pressed', String(on.includes(p.label)));
+      if (on.includes(p.label)) { const i = document.createElement('i'); i.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:${wcolor(p)}`; b.prepend(i); }
+      b.onclick = () => { EDS.flWhenYears = on.includes(p.label) ? on.filter((z) => z !== p.label) : on.concat(p.label); ['fl-when-years', 'fl-when', 'fl-when-note'].forEach((n) => dash.draw(n)); };
+      el.append(b); });
+  });
+  dash.draw('fl-when', (el) => {
+    const d = dash.data('flows_hours_profile');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const hd = (h) => new Date(Date.UTC(2000, 0, 1, h));
+    const ps = wshown(), last = wprof().slice(-1)[0];
+    const ser = ps.map((p) => ({label: p.full, color: wcolor(p), width: last && p.label === last.label ? 2.6 : 1.5, values: p.rows.map((r) => ({x: hd(r.h), y: r.imp - r.exp}))}));
+    ED.lineChart(el, ser, {height: 260, legend: false, unit: 'MW', refY: 0, xDomain: [hd(0), hd(23)], xTick: d3.utcFormat('%H:00'),
+      tipX: (x) => d3.utcFormat('%H:00')(x) + '–' + String(x.getUTCHours() + 1).padStart(2, '0') + ':00 · net imports', tipFmt: f.n0, empty: wprof().length ? 'Pick at least one year' : 'No hourly data for this country'});
+  });
+  dash.draw('fl-when-note', (el) => {
+    const ps = wshown(); if (!ps.length) { el.textContent = ''; return; }
+    const p = ps[ps.length - 1];
+    const tot = (k) => d3.sum(p.rows, (r) => r[k]) / 1000;
+    const imin = p.rows.reduce((a, b) => (b.imp - b.exp < a.imp - a.exp ? b : a)), imax = p.rows.reduce((a, b) => (b.imp - b.exp > a.imp - a.exp ? b : a));
+    const hh = (h) => String(h).padStart(2, '0') + ':00';
+    el.textContent = p.full + ', average day: imports ' + f.n1(tot('imp')) + ' GWh, exports ' + f.n1(tot('exp')) + ' GWh. Highest net imports at ' + hh(imax.h) + ' (' + f.n0(imax.imp - imax.exp) + ' MW), lowest at ' + hh(imin.h) + ' (' + f.n0(imin.imp - imin.exp) + ' MW).' +
+      (wseason().startsWith('m') ? '' : wseason() === 'winter' ? ' Winter runs from December of the year before to February.' : '');
   });
 })();

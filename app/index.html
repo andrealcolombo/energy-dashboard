@@ -221,11 +221,23 @@
     <div class="legend" data-draw="fl-legend"></div>
     <div class="chart map" data-draw="fl-map" data-source="geo_europe" role="img" aria-label="Map of the selected country with arrows for electricity imported from and exported to each neighbour"></div>
     <p class="warn" data-draw="fl-warn" data-source="flows_daily"></p>
+    <h3 data-draw="fl-hours-title" data-source="flows_hours_recent">Hour by hour</h3>
+    <div class="chart short" data-draw="fl-hours" data-source="flows_hours_recent" role="img" aria-label="Imports and exports of the selected country hour by hour"></div>
+    <p class="note" data-draw="fl-hours-note" data-source="flows_hours_recent"></p>
     <h3>By border</h3>
     <table>
       <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
       <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
     </table>
+    <h2>When does <span data-draw="fl-when-name" data-source="flows_hours_profile">the country</span> import or export during the day?</h2>
+    <p class="note">Net imports by hour of the day: above zero the country imports more than it exports in that hour, below zero it exports more. Each line is the average day of one year, for the whole year, a season or a month. Hover for the values; the note under the chart gives imports and exports separately for the latest year shown.</p>
+    <div class="row">
+      <span data-draw="fl-when-season"></span>
+      <select class="dash-select" data-draw="fl-when-month" aria-label="Month of the year"></select>
+    </div>
+    <div class="row" data-draw="fl-when-years" data-source="flows_hours_profile"></div>
+    <div class="chart" data-draw="fl-when" data-source="flows_hours_profile" role="img" aria-label="Average net imports by hour of the day, one line per year"></div>
+    <p class="note" data-draw="fl-when-note" data-source="flows_hours_profile"></p>
     <p class="note">Source: ENTSO-E Transparency Platform, cross-border physical flows. Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: see the last column. For the EU27, only flows with non-EU countries count. Map: Natural Earth.</p>
   </section>
 
