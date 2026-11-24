@@ -9,6 +9,9 @@ on:
       mode:
         description: "probe or backfill"
         default: "probe"
+      kind:
+        description: "physical (flows) or commercial (scheduled exchanges)"
+        default: "physical"
 
 permissions:
   contents: write
@@ -28,6 +31,7 @@ jobs:
       - env:
           ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
           MODE: probe
+          KIND: ${{ inputs.kind }}
         run: python -u src/fetch_flows.py
 
   fetch:
@@ -49,12 +53,13 @@ jobs:
       - env:
           ENTSOE_API_KEY: ${{ secrets.ENTSOE_API_KEY }}
           ONLY_CHUNK: ${{ matrix.chunk }}/10
+          KIND: ${{ inputs.kind }}
           DATA_DIR: out
         run: python -u src/fetch_flows.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: flows-${{ matrix.chunk }}
+          name: ${{ inputs.kind }}-${{ matrix.chunk }}
           path: out/
           if-no-files-found: ignore
 
@@ -73,18 +78,24 @@ jobs:
           path: parts
       - run: git pull --ff-only origin main
       - name: Merge
+        env:
+          KIND: ${{ inputs.kind }}
         run: |
           python - <<'PY'
           from pathlib import Path
           import pandas as pd
-          keys = ["date", "from", "to"]
-          target = Path("data/flows_daily.csv")
-          frames = [pd.read_csv(p) for p in Path("parts").glob("*/flows_daily.csv") if p.stat().st_size > 0]
-          if target.exists():
-              frames.insert(0, pd.read_csv(target))
-          out = pd.concat(frames, ignore_index=True).drop_duplicates(keys, keep="last").sort_values(keys)
-          out.to_csv(target, index=False)
-          print(len(out), "rows,", out.groupby(["from", "to"]).ngroups, "directed borders")
+          import os
+          pre = "exchanges" if os.environ.get("KIND") == "commercial" else "flows"
+          for name, keys in [("daily", ["date", "from", "to"]), ("profile", ["month", "hour", "from", "to"]), ("hourly", ["date", "hour", "from", "to"])]:
+              target = Path("data") / f"{pre}_{name}.csv"
+              frames = [pd.read_csv(p) for p in Path("parts").glob(f"*/{pre}_{name}.csv") if p.stat().st_size > 0]
+              if target.exists():
+                  frames.insert(0, pd.read_csv(target))
+              if not frames:
+                  continue
+              out = pd.concat(frames, ignore_index=True).drop_duplicates(keys, keep="last").sort_values(keys)
+              out.to_csv(target, index=False)
+              print(target, len(out), "rows,", out.groupby(["from", "to"]).ngroups, "directed borders")
           PY
       - name: Dashboard files
         run: python src/build_dashboard_files.py
@@ -92,7 +103,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data/flows_daily.csv data/dashboard/
+          git add data/
           git diff --cached --quiet && exit 0
-          git commit -m "Backfill cross-border flows ($(date -u +%Y-%m-%d))"
+          git commit -m "Backfill cross-border ${{ inputs.kind }} ($(date -u +%Y-%m-%d))"
           git push

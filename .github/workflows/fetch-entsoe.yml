@@ -98,6 +98,13 @@ jobs:
         continue-on-error: true
         timeout-minutes: 60
         run: python -u src/fetch_flows.py
+      - name: Cross-border flows, hour-of-day profiles (last two months)
+        if: always() && steps.when.outputs.weekly == 'true' && !inputs.only_oil
+        continue-on-error: true
+        timeout-minutes: 120
+        env:
+          MODE: profile
+        run: python -u src/fetch_flows.py
       - name: Commit cross-border flows
         if: always()
         run: /tmp/commit.sh flows

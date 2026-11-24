@@ -12,6 +12,8 @@ differ from the commercial schedules agreed in the market.
 Borders are listed in config.FLOW_BORDERS (country level). Where ENTSO-E has
 no country-level data, FLOW_ZONE_FALLBACK lists bidding-zone pairs to add up.
 
+KIND=commercial downloads scheduled commercial exchanges into data/exchanges_daily.csv,
+same layout.
 Modes (env MODE):
   probe   query the last 2 days for every border and direction, print what works
   (empty) first run from config.START_DATE; later runs refetch the last 4 days
@@ -32,9 +34,18 @@ import config  # noqa: E402
 from fetch_entsoe import with_retry  # noqa: E402
 
 DATA = Path(os.environ.get("DATA_DIR") or Path(__file__).resolve().parent.parent / "data")
-OUT = DATA / "flows_daily.csv"
+# KIND=commercial: scheduled commercial exchanges (day-ahead + intraday, [12.1.F]) instead of physical flows
+KIND = os.environ.get("KIND", "physical")
+PRE = "exchanges" if KIND == "commercial" else "flows"
+OUT = DATA / f"{PRE}_daily.csv"          # date, from, to, gwh
+PROFILE = DATA / f"{PRE}_profile.csv"    # month, hour, from, to, mw: average MW by hour of day, per month
+RECENT = DATA / f"{PRE}_hourly.csv"      # date, hour, from, to, mw: hour by hour, last RECENT_DAYS days
 REFETCH_DAYS = 4
+RECENT_DAYS = 35
+PROFILE_MONTHS = 2  # MODE=profile (weekly): refresh the last two complete months
 KEYS = ["date", "from", "to"]
+PKEYS = ["month", "hour", "from", "to"]
+HKEYS = ["date", "hour", "from", "to"]
 
 # Country pairs with no country-level series: zone pairs to add up instead.
 # Filled in from the probe run.
@@ -44,19 +55,30 @@ FLOW_ZONE_FALLBACK: dict[tuple[str, str], list[tuple[str, str]]] = {
 }
 
 
+def query(client, x, y, start, end):
+    if KIND == "commercial":
+        return with_retry(client.query_scheduled_exchanges, x, y, start=start, end=end, dayahead=False)
+    return with_retry(client.query_crossborder_flows, x, y, start=start, end=end)
+
+# Commercial exchanges: zone pairs to use instead of countries (filled in from the probe).
+EXCHANGE_ZONES: dict[tuple[str, str], list[tuple[str, str]]] = {}
+
+
 def series(client, a: str, b: str, start, end) -> pd.Series:
     """MW from a to b, hourly means in UTC."""
-    pairs = FLOW_ZONE_FALLBACK.get((a, b)) or [(a, b)]
+    pairs = (EXCHANGE_ZONES if KIND == "commercial" else FLOW_ZONE_FALLBACK).get((a, b)) or [(a, b)]
     parts = []
     for x, y in pairs:
-        s = with_retry(client.query_crossborder_flows, x, y, start=start, end=end)
+        s = query(client, x, y, start, end)
         parts.append(s.tz_convert("UTC").resample("1h").mean())
     return pd.concat(parts, axis=1).sum(axis=1, min_count=1)
 
 
-def daily(client, a: str, b: str, start, end) -> pd.DataFrame:
-    rows = []
+def fetch(client, a: str, b: str, start, end, recent_from=None):
+    """Daily GWh, monthly hour-of-day profile (MW) and recent hourly MW, for flows a -> b."""
+    days, prof, hours = [], [], []
     cur = start
+    this_month = pd.Timestamp.now(tz=config.LOCAL_TZ).strftime("%Y-%m")
     while cur < end:  # one year at a time: a failure loses one year only
         nxt = min(end, pd.Timestamp(year=cur.year + 1, month=1, day=1, tz=cur.tz))
         t0 = time.time()
@@ -65,12 +87,24 @@ def daily(client, a: str, b: str, start, end) -> pd.DataFrame:
             d = (s.resample("1D").sum(min_count=1) / 1000).round(3)  # MWh/h summed over hours -> GWh
             n = s.resample("1D").count()
             d = d[n >= 20]  # keep days with almost all hours
-            rows.append(pd.DataFrame({"date": d.index.strftime("%Y-%m-%d"), "from": a, "to": b, "gwh": d.values}))
+            days.append(pd.DataFrame({"date": d.index.strftime("%Y-%m-%d"), "from": a, "to": b, "gwh": d.values}))
+            h = s.dropna().to_frame("mw")
+            h["month"], h["hour"] = h.index.strftime("%Y-%m"), h.index.hour
+            p = h[h["month"] < this_month].groupby(["month", "hour"])["mw"].mean().round(1).reset_index()
+            prof.append(p.assign(**{"from": a, "to": b}))
+            if recent_from is not None:
+                r = h[h.index >= recent_from]
+                hours.append(pd.DataFrame({"date": r.index.strftime("%Y-%m-%d"), "hour": r["hour"].values, "from": a, "to": b, "mw": r["mw"].round(1).values}))
             print(f"  {a}>{b} {cur.year}: ok ({time.time() - t0:.0f}s)", flush=True)
         except Exception as exc:  # noqa: BLE001
             print(f"  {a}>{b} {cur.year}: {type(exc).__name__} ({time.time() - t0:.0f}s)", flush=True)
         cur = nxt
-    return pd.concat(rows, ignore_index=True) if rows else pd.DataFrame(columns=KEYS + ["gwh"])
+    cat = lambda xs, cols: pd.concat(xs, ignore_index=True) if xs else pd.DataFrame(columns=cols)  # noqa: E731
+    return cat(days, KEYS + ["gwh"]), cat(prof, PKEYS + ["mw"]), cat(hours, HKEYS + ["mw"])
+
+
+def load(path, cols):
+    return pd.read_csv(path) if path.exists() and path.stat().st_size > 0 else pd.DataFrame(columns=cols)
 
 
 def directed(borders):
@@ -98,24 +132,37 @@ def main() -> None:
         start = end - pd.Timedelta(days=2)
         for a, b in directed(borders):
             try:
-                s = with_retry(client.query_crossborder_flows, a, b, start=start, end=end)
+                s = query(client, a, b, start, end)
                 print(f"PROBE {a}>{b} ok {len(s)} points, mean {s.mean():.0f} MW", flush=True)
             except Exception as exc:  # noqa: BLE001
                 print(f"PROBE {a}>{b} {type(exc).__name__}: {str(exc)[:80]}", flush=True)
         return
 
     DATA.mkdir(exist_ok=True)
-    old = pd.read_csv(OUT) if OUT.exists() and OUT.stat().st_size > 0 else pd.DataFrame(columns=KEYS + ["gwh"])
+    old = load(OUT, KEYS + ["gwh"])
+    prof = load(PROFILE, PKEYS + ["mw"])
+    hrs = load(RECENT, HKEYS + ["mw"])
     end = pd.Timestamp.now(tz=tz).normalize()  # up to yesterday included
     first = pd.Timestamp(config.START_DATE, tz=tz)
+    recent_from = end - pd.DateOffset(days=RECENT_DAYS)  # calendar days (safe across DST)
+    profile_mode = os.environ.get("MODE") == "profile"
     for a, b in directed(borders):
         have = old[(old["from"] == a) & (old["to"] == b)]
-        start = first if have.empty else max(first, end - pd.Timedelta(days=REFETCH_DAYS))
-        new = daily(client, a, b, start, end)
-        if new.empty:
-            continue
-        old = pd.concat([old, new], ignore_index=True).drop_duplicates(KEYS, keep="last")
-        old.sort_values(KEYS).to_csv(OUT, index=False)  # save as we go
+        if profile_mode:
+            start = end.replace(day=1) - pd.DateOffset(months=PROFILE_MONTHS)
+        else:
+            start = first if have.empty else max(first, end - pd.Timedelta(days=REFETCH_DAYS))
+        d, p, h = fetch(client, a, b, start, end, recent_from)
+        if not d.empty and not profile_mode:
+            old = pd.concat([old, d], ignore_index=True).drop_duplicates(KEYS, keep="last")
+        if not p.empty and (profile_mode or have.empty):
+            prof = pd.concat([prof, p], ignore_index=True).drop_duplicates(PKEYS, keep="last")
+        if not h.empty:
+            hrs = pd.concat([hrs, h], ignore_index=True).drop_duplicates(HKEYS, keep="last")
+        # save as we go
+        old.sort_values(KEYS).to_csv(OUT, index=False)
+        prof.sort_values(PKEYS).to_csv(PROFILE, index=False)
+        hrs[hrs["date"] >= recent_from.strftime("%Y-%m-%d")].sort_values(HKEYS).to_csv(RECENT, index=False)
 
 
 if __name__ == "__main__":
