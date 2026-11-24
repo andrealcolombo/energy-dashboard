@@ -61,7 +61,16 @@ def query(client, x, y, start, end):
     return with_retry(client.query_crossborder_flows, x, y, start=start, end=end)
 
 # Commercial exchanges: zone pairs to use instead of countries (filled in from the probe).
-EXCHANGE_ZONES: dict[tuple[str, str], list[tuple[str, str]]] = {}
+# From the probe of 24 Nov 2026. BE-LU has no series: Luxembourg is in the DE-LU zone, so its
+# exchanges with Belgium are inside BE-DE. No commercial exchanges with RU and BY.
+EXCHANGE_ZONES: dict[tuple[str, str], list[tuple[str, str]]] = {
+    ("DK", "SE"): [("DK_1", "SE_3"), ("DK_2", "SE_4")],
+    ("SE", "DK"): [("SE_3", "DK_1"), ("SE_4", "DK_2")],
+    ("DK", "GB"): [("DK_1", "GB")],
+    ("GB", "DK"): [("GB", "DK_1")],
+    ("FI", "NO"): [("FI", "NO_4")],
+    ("NO", "FI"): [("NO_4", "FI")],
+}
 
 
 def series(client, a: str, b: str, start, end) -> pd.Series:
