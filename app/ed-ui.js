@@ -534,3 +534,183 @@ window.EDL = {
     el.append(b0, document.createTextNode(msg.join(' '))); el.style.display = '';
   });
 })();
+
+// ---------- Cross-border flows ----------
+(function () {
+  const {f} = ED;
+  const EU = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'];
+  const NM = {GB: 'United Kingdom', NO: 'Norway', CH: 'Switzerland', RS: 'Serbia', BA: 'Bosnia and Herzegovina', ME: 'Montenegro', MK: 'North Macedonia', AL: 'Albania',
+    UA: 'Ukraine', MD: 'Moldova', BY: 'Belarus', RU: 'Russia', TR: 'Türkiye', MA: 'Morocco', AD: 'Andorra', NIE: 'Northern Ireland (UK)'};
+  const nm = (c) => NM[c] || ED.name(c);
+  const PERS = [['day', 'Day'], ['week', 'Week'], ['month', 'Month'], ['year', 'Year']];
+  const ALL = ['fl-select', 'fl-per', 'fl-period', 'fl-kpis', 'fl-legend', 'fl-map', 'fl-warn', 'fl-th-imp', 'fl-th-exp', 'fl-th-net', 'fl-table'];
+  const redraw = () => ALL.forEach((n) => dash.draw(n));
+  const IMP = () => dash.colors[0], EXP = () => dash.colors[1];
+  const MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = (s) => new Date(s + 'T00:00:00Z');
+  const iso = (d) => d.toISOString().slice(0, 10);
+  const short = (d) => d.getUTCDate() + ' ' + MON[d.getUTCMonth()];
+  const ok = (id) => { const d = dash.data(id); return d.status === 'ok' ? d.data : null; };
+  const per = () => EDS.flPer || 'month';
+  const big = () => per() === 'year';
+  const fmt = (gwh) => (big() ? f.n1(gwh / 1000) : gwh >= 100 ? f.n0(gwh) : f.n1(gwh));
+  const unit = () => (big() ? 'TWh' : 'GWh');
+
+  // Last day with data, and the periods available for the selected period type: [{key, label, start, end}]
+  const lastDay = () => { const d = ok('flows_daily'); return d && d.length ? d3.max(d, (r) => r.date) : null; };
+  function periods() {
+    const d = ok('flows_daily'), m = ok('flows_monthly'), last = lastDay();
+    if (!d || !m || !last) return [];
+    const L = day(last);
+    if (per() === 'day') return Array.from(new Set(d.map((r) => r.date))).sort().reverse().slice(0, 120)
+      .map((k) => ({key: k, label: d3.utcFormat('%a %-d %b %Y')(day(k)), start: k, end: k}));
+    if (per() === 'week') {
+      const out = []; let mon = d3.utcMonday.floor(L); if (iso(d3.utcDay.offset(mon, 6)) > last) mon = d3.utcDay.offset(mon, -7);
+      const first = d3.min(d, (r) => r.date);
+      while (iso(mon) >= first && out.length < 52) { const sun = d3.utcDay.offset(mon, 6); out.push({key: iso(mon), label: short(mon) + ' – ' + short(sun) + ' ' + sun.getUTCFullYear(), start: iso(mon), end: iso(sun)}); mon = d3.utcDay.offset(mon, -7); }
+      return out;
+    }
+    if (per() === 'month') return Array.from(new Set(m.map((r) => r.month))).sort().reverse().map((k) => {
+      const s0 = day(k + '-01'), e0 = d3.utcDay.offset(d3.utcMonth.offset(s0, 1), -1), e = e0 > L ? L : e0;
+      return {key: k, label: MON[s0.getUTCMonth()] + ' ' + s0.getUTCFullYear() + (e0 > L ? ' (to ' + short(L) + ')' : ''), start: iso(s0), end: iso(e)};
+    });
+    return Array.from(new Set(m.map((r) => r.month.slice(0, 4)))).sort().reverse().map((k) => {
+      const e0 = day(k + '-12-31'), e = e0 > L ? L : e0;
+      return {key: k, label: k + (e0 > L ? ' (to ' + short(L) + ')' : ''), start: k + '-01-01', end: iso(e)};
+    });
+  }
+  const period = () => { const ps = periods(); return ps.find((p) => p.key === EDS.flSel) || ps[0]; };
+
+  // Flows of the selected country with each partner in the selected period
+  function view() {
+    const p = period(), X = EDS.fl || 'EU27';
+    if (!p) return null;
+    const inside = (c) => (X === 'EU27' ? EU.includes(c) : c === X);
+    let rows;
+    if (per() === 'month' || per() === 'year') rows = (ok('flows_monthly') || []).filter((r) => r.month.startsWith(p.key)).map((r) => ({a: r.from, b: r.to, gwh: +r.gwh, days: +r.days}));
+    else rows = (ok('flows_daily') || []).filter((r) => r.date >= p.start && r.date <= p.end).map((r) => ({a: r.from, b: r.to, gwh: +r.gwh, days: 1}));
+    const need = d3.utcDay.count(day(p.start), day(p.end)) + 1;
+    const by = new Map(), via = new Map();
+    const get = (k) => { if (!by.has(k)) by.set(k, {partner: k, imp: 0, exp: 0, dImp: 0, dExp: 0}); return by.get(k); };
+    for (const r of rows) {
+      if (inside(r.b) && !inside(r.a)) { const o = get(r.a); o.imp += r.gwh; o.dImp += r.days; via.set(r.a + '|' + r.b, (via.get(r.a + '|' + r.b) || 0) + r.gwh); }
+      else if (inside(r.a) && !inside(r.b)) { const o = get(r.b); o.exp += r.gwh; o.dExp += r.days; via.set(r.b + '|' + r.a, (via.get(r.b + '|' + r.a) || 0) + r.gwh); }
+    }
+    // For the EU27: each partner's arrows point at the EU country it trades most with
+    const hub = (partner) => (X === 'EU27' ? (Array.from(via).filter(([k]) => k.startsWith(partner + '|')).sort((a, b) => b[1] - a[1])[0] || [partner + '|DE'])[0].split('|')[1] : X);
+    const list = Array.from(by.values()).map((o) => ({...o, net: o.imp - o.exp, hub: hub(o.partner)})).sort((a, b) => (b.imp + b.exp) - (a.imp + a.exp));
+    // For the EU27 the day counts are summed over the EU countries bordering the partner: show the share only for single countries
+    return {p, X, need, list, imp: d3.sum(list, (o) => o.imp), exp: d3.sum(list, (o) => o.exp)};
+  }
+
+  dash.draw('fl-select', (sel) => {
+    const m = ok('flows_monthly') || [];
+    const have = new Set(m.flatMap((r) => [r.from, r.to]));
+    const cs = ['EU27'].concat(EU.filter((c) => have.has(c)).sort((a, b) => ED.name(a).localeCompare(ED.name(b), 'en')));
+    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
+    sel.value = EDS.fl || 'EU27';
+    sel.onchange = () => { EDS.fl = sel.value; redraw(); };
+  });
+  dash.draw('fl-per', (el) => {
+    el.replaceChildren(...PERS.map(([k, l]) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = l; b.setAttribute('aria-pressed', String(per() === k)); b.onclick = () => { EDS.flPer = k; EDS.flSel = null; redraw(); }; return b; }));
+  });
+  dash.draw('fl-period', (sel) => {
+    const ps = periods(), p = period();
+    sel.replaceChildren(...ps.map((x) => new Option(x.label, x.key)));
+    if (p) sel.value = p.key;
+    sel.onchange = () => { EDS.flSel = sel.value; redraw(); };
+  });
+  ['imp', 'exp', 'net'].forEach((k) => dash.draw('fl-th-' + k, (el) => { el.textContent = {imp: 'Imports', exp: 'Exports', net: 'Net imports'}[k] + ' (' + unit() + ')'; }));
+
+  dash.draw('fl-kpis', (el) => {
+    el.replaceChildren();
+    const v = view(); if (!v) { el.textContent = 'No data yet.'; return; }
+    const card = (lab, val, sub) => { const d = document.createElement('div'); d.className = 'ti'; const a = document.createElement('div'); a.className = 'lab'; a.textContent = lab; const b = document.createElement('div'); b.className = 'v'; const n = document.createElement('span'); n.textContent = val; const u = document.createElement('span'); u.className = 'u'; u.textContent = unit(); b.append(n, u); const c = document.createElement('div'); c.className = 'c'; c.textContent = sub; d.append(a, b, c); return d; };
+    const net = v.imp - v.exp;
+    el.append(card('Imports · ' + v.p.label, fmt(v.imp), 'from ' + v.list.filter((o) => o.imp > 0.05).length + ' neighbours'),
+      card('Exports · ' + v.p.label, fmt(v.exp), 'to ' + v.list.filter((o) => o.exp > 0.05).length + ' neighbours'),
+      card('Net · ' + v.p.label, (net < 0 ? '−' : '') + fmt(Math.abs(net)), net >= 0 ? 'net importer' : 'net exporter'));
+  });
+
+  dash.draw('fl-legend', (el) => {
+    el.replaceChildren();
+    [['Imports (into the country)', IMP()], ['Exports (out of the country)', EXP()]].forEach(([t, c]) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = c; sp.append(i, document.createTextNode(t)); el.append(sp); });
+    const sp = document.createElement('span'); sp.textContent = 'Arrow width grows with the amount; hover an arrow for details.'; el.append(sp);
+  });
+
+  let geo = null;
+  dash.draw('fl-map', (el) => {
+    el.replaceChildren();
+    const g = ok('geo_europe'), v = view();
+    if (!g) { ED.placeholder(el, dash.data('geo_europe').status); return; }
+    if (!v) { ED.placeholder(el, 'empty', 'No flow data yet'); return; }
+    if (!geo) geo = g.map((r) => ({id: r.id, name: r.name, lon: +r.lon, lat: +r.lat, geometry: r.geometry ? JSON.parse(r.geometry) : null}));
+    const F = new Map(geo.map((x) => [x.id, x]));
+    const inside = (c) => (v.X === 'EU27' ? EU.includes(c) : c === v.X);
+    const W = Math.max(300, el.clientWidth), H = Math.max(380, Math.min(620, Math.round(W * 0.62)));
+    const pt = (c) => { const x = F.get(c); return x ? [x.lon, x.lat] : null; };
+    const focus = {type: 'FeatureCollection', features: geo.filter((x) => x.geometry && inside(x.id)).map((x) => ({type: 'Feature', geometry: x.geometry}))
+      .concat(v.list.map((o) => pt(o.partner)).filter(Boolean).map((c) => ({type: 'Feature', geometry: {type: 'Point', coordinates: c}})))};
+    const proj = d3.geoAzimuthalEqualArea().rotate([-12, -52]).fitExtent([[40, 30], [W - 40, H - 30]], focus).clipExtent([[0, 0], [W, H]]);
+    const path = d3.geoPath(proj);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const partners = new Set(v.list.map((o) => o.partner));
+    svg.append('g').selectAll('path').data(geo.filter((x) => x.geometry)).join('path').attr('d', (x) => path({type: 'Feature', geometry: x.geometry}))
+      .style('fill', (x) => (inside(x.id) ? 'var(--cds-chart-muted)' : partners.has(x.id) ? 'var(--color-bg-subtle, rgba(127,127,127,.12))' : 'transparent'))
+      .style('fill-opacity', (x) => (inside(x.id) ? 0.55 : 1)).style('stroke', 'var(--cds-chart-axis)').style('stroke-width', (x) => (inside(x.id) ? 1.2 : 0.5));
+    const max = d3.max(v.list, (o) => Math.max(o.imp, o.exp)) || 1;
+    const wid = d3.scaleSqrt().domain([0, max]).range([1.2, 11]);
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
+    const showTip = (ev, text) => { tip.textContent = text; tip.hidden = false; const r = el.getBoundingClientRect(); tip.style.left = Math.min(ev.clientX - r.left + 12, el.clientWidth - tip.offsetWidth) + 'px'; tip.style.top = Math.max(0, ev.clientY - r.top - 30) + 'px'; };
+    const G = svg.append('g');
+    const days = (n) => (v.X === 'EU27' ? '' : ' (' + Math.min(n, v.need) + ' of ' + v.need + ' days)');
+    for (const o of v.list) {
+      const P = pt(o.partner), C = pt(o.hub); if (!P || !C) continue;
+      const a = proj(P), b = proj(C); if (!a || !b) continue;
+      const dx = b[0] - a[0], dy = b[1] - a[1], len = Math.hypot(dx, dy) || 1, u = [dx / len, dy / len], n = [-u[1], u[0]];
+      const bp = F.get(o.hub + '|' + o.partner) || F.get(o.partner + '|' + o.hub), bpp = bp ? proj([bp.lon, bp.lat]) : null;
+      const M = bpp || [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2], L = Math.min(len * 0.55, 96);
+      const arrow = (val, sign, color, text) => {
+        if (!(val > 0.05)) return;
+        const w = wid(val), off = sign * (w / 2 + 4);
+        const s = [M[0] - sign * u[0] * L / 2 + n[0] * off, M[1] - sign * u[1] * L / 2 + n[1] * off];
+        const e = [M[0] + sign * u[0] * L / 2 + n[0] * off, M[1] + sign * u[1] * L / 2 + n[1] * off];
+        const d = [sign * u[0], sign * u[1]], hl = Math.max(7, w * 1.6), hw = Math.max(5, w * 1.1);
+        const base = [e[0] - d[0] * hl, e[1] - d[1] * hl];
+        const gg = G.append('g').style('cursor', 'default').on('pointermove', (ev) => showTip(ev, text)).on('pointerleave', () => { tip.hidden = true; });
+        gg.append('line').attr('x1', s[0]).attr('y1', s[1]).attr('x2', base[0]).attr('y2', base[1]).style('stroke', color).attr('stroke-width', w).attr('stroke-linecap', 'butt');
+        gg.append('path').attr('d', `M${e[0]},${e[1]}L${base[0] + n[0] * hw},${base[1] + n[1] * hw}L${base[0] - n[0] * hw},${base[1] - n[1] * hw}Z`).style('fill', color);
+        gg.append('text').attr('class', 'lbl').attr('x', s[0] + n[0] * sign * (w / 2 + 9)).attr('y', s[1] + n[1] * sign * (w / 2 + 9) + 4).attr('text-anchor', 'middle').style('fill', color).text(fmt(val));
+      };
+      arrow(o.imp, 1, IMP(), 'Imports from ' + nm(o.partner) + ': ' + fmt(o.imp) + ' ' + unit() + days(o.dImp));
+      arrow(o.exp, -1, EXP(), 'Exports to ' + nm(o.partner) + ': ' + fmt(o.exp) + ' ' + unit() + days(o.dExp));
+      const lp = proj(P); if (lp) G.append('text').attr('x', lp[0]).attr('y', lp[1]).attr('text-anchor', 'middle').style('fill', 'var(--color-fg-muted)').text(nm(o.partner).replace(' (UK)', ''));
+    }
+    if (v.X !== 'EU27') { const c = proj(pt(v.X)); if (c) svg.append('text').attr('class', 'lbl').attr('x', c[0]).attr('y', c[1]).attr('text-anchor', 'middle').style('fill', 'var(--color-fg)').text(ED.name(v.X)); }
+  });
+
+  dash.draw('fl-warn', (el) => {
+    el.replaceChildren(); el.style.display = 'none';
+    const v = view(); if (!v || v.X === 'EU27') return;
+    const gaps = v.list.filter((o) => (o.imp > 0.05 && o.dImp < v.need) || (o.exp > 0.05 && o.dExp < v.need) || (o.dImp === 0 && o.dExp === 0));
+    if (!gaps.length) return;
+    const b0 = document.createElement('strong'); b0.textContent = 'Data gaps: ';
+    el.append(b0, document.createTextNode('some days are missing for ' + gaps.map((o) => nm(o.partner)).join(', ') + '. Totals for these borders are understated; see the table.'));
+    el.style.display = '';
+  });
+
+  dash.draw('fl-table', (tb) => {
+    tb.replaceChildren();
+    const v = view(); if (!v) return;
+    const td = (t) => { const c = document.createElement('td'); c.textContent = t; return c; };
+    for (const o of v.list) {
+      const tr = document.createElement('tr');
+      const cov = v.X === 'EU27' ? '—' : Math.min(Math.max(o.dImp, o.dExp), v.need) + ' of ' + v.need;
+      tr.append(td(nm(o.partner)), td(fmt(o.imp)), td(fmt(o.exp)), td((o.net < 0 ? '−' : '') + fmt(Math.abs(o.net))), td(cov));
+      tb.append(tr);
+    }
+    const tr = document.createElement('tr'); tr.style.fontWeight = '600';
+    tr.append(td('Total'), td(fmt(v.imp)), td(fmt(v.exp)), td((v.imp - v.exp < 0 ? '−' : '') + fmt(Math.abs(v.imp - v.exp))), td(''));
+    tb.append(tr);
+  });
+})();

@@ -18,7 +18,7 @@ SITE = ROOT / "site"
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "_site"
 
 DATA = ["prices_daily", "prices_monthly", "mix_monthly", "mix_weekly", "load_monthly",
-        "fuels_weekly", "retail_semiannual", "day_profile"]
+        "fuels_weekly", "retail_semiannual", "day_profile", "flows_daily", "flows_monthly", "geo_europe"]
 
 THEME = """
 :root{--color-fg:#1f1e1d;--color-fg-muted:#5f5c56;--color-bg:#faf9f5;--color-panel:#fff;--color-border-line:#e5e2da;

@@ -24,6 +24,9 @@
   .ed .chart { position: relative; min-height: 260px; width: 100%; }
   .ed .chart.short { min-height: 200px; }
   .ed .chart.bars { min-height: 60px; }
+  .ed .chart.map { min-height: 420px; }
+  .ed .chart.map svg text { font-size: 11px; }
+  .ed .chart.map .lbl { font-weight: 600; paint-order: stroke; stroke: var(--color-bg, #fff); stroke-width: 3px; }
   .ed .chart svg text { font-size: 11px; fill: var(--cds-text-secondary); }
   .ed .legend { display:flex; flex-wrap:wrap; gap: 4px 12px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0 0 4px; min-height: 18px; }
   .ed .legend i { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
@@ -69,6 +72,7 @@
     <button class="tab" role="tab" data-tab="prices" aria-selected="false">Electricity prices</button>
     <button class="tab" role="tab" data-tab="mix" aria-selected="false">Generation mix</button>
     <button class="tab" role="tab" data-tab="profile" aria-selected="false">Country profile</button>
+    <button class="tab" role="tab" data-tab="flows" aria-selected="false">Cross-border flows</button>
     <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>
   </nav>
 
@@ -202,6 +206,27 @@
     <p class="note wide">How to read it: each axis is the country value divided by the value of the comparison (the EU27 average or the country chosen above). The grey shape is the comparison (1×); the rings mark 0.5×, 1.5×, 2× and 2.5×. A point outside the grey shape means the country is above the comparison on that indicator; inside means below. Values above 2.5× are capped (▲). Hover or click a point for the actual values.</p>
     <h3 id="profile-legend">The indicators shown</h3>
     <dl class="defs" data-draw="ind-legend" data-source="profile"></dl>
+  </section>
+
+  <section id="flows" data-section hidden>
+    <h2>Cross-border flows of electricity</h2>
+    <p class="note">How much electricity physically crossed each border of the selected country, in both directions. A country often imports and exports at the same time: power flows in on one border and out on another, or changes direction during the day.</p>
+    <div class="row">
+      <label class="muted" for="fl-country">Country</label>
+      <select id="fl-country" class="dash-select" data-draw="fl-select" data-source="flows_monthly" aria-label="Country for cross-border flows"></select>
+      <span data-draw="fl-per"></span>
+      <select class="dash-select" data-draw="fl-period" data-source="flows_daily" aria-label="Period"></select>
+    </div>
+    <div class="kpis" data-draw="fl-kpis" data-source="flows_daily"></div>
+    <div class="legend" data-draw="fl-legend"></div>
+    <div class="chart map" data-draw="fl-map" data-source="geo_europe" role="img" aria-label="Map of the selected country with arrows for electricity imported from and exported to each neighbour"></div>
+    <p class="warn" data-draw="fl-warn" data-source="flows_daily"></p>
+    <h3>By border</h3>
+    <table>
+      <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
+      <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
+    </table>
+    <p class="note">Source: ENTSO-E Transparency Platform, cross-border physical flows. Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: see the last column. For the EU27, only flows with non-EU countries count. Map: Natural Earth.</p>
   </section>
 
   <!-- ============ DG ENER ============ -->
