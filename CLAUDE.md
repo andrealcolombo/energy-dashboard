@@ -31,6 +31,8 @@ and the CSV files in `data/dashboard/`.
 - `src/build_dashboard_files.py` — compact files read by the app, in `data/dashboard/`.
 - `.github/workflows/fetch-entsoe.yml` — daily schedule; `backfill.yml` — one-off parallel history.
 - `src/fetch_intraday.py` — day profiles (average price, load, generation by hour, per month); `intraday-backfill.yml` for history.
+- `src/fetch_flows.py` — cross-border physical flows (daily GWh, hour-of-day profiles, last 35 days hourly); `KIND=commercial` for scheduled exchanges; `flows-backfill.yml` for probe, history and gap filling. Borders in `config.FLOW_BORDERS`.
+- `src/build_geo.py` — country borders for the flows map (Natural Earth), run by hand.
 - `src/fetch_ttf.py` — TTF monthly average (IMF via FRED), daily run.
 - `src/build_excel.py` — one Excel file with all public datasets.
 - `site/` — public website built from `app/` (`build_site.py`, `runtime.js`, `extra.js`);

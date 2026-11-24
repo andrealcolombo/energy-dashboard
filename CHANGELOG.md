@@ -8,6 +8,8 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-24 | Andrea | Claude | New tab "Cross-border flows": map of imports and exports by border, day to year |
+| 2026-11-24 | Andrea | Claude | Cross-border flows: hour-by-hour chart and import/export pattern through the day |
 | 2026-11-16 | Andrea | Claude | Evening-peak chart: clearer title and note; solar value shown as its own tooltip row |
 | 2026-11-16 | Andrea | Claude | Removed hour-by-hour mix chart; solar shape added to the evening-peak chart |
 | 2026-11-16 | Andrea | Claude | Battery notes: no example country singled out; EU27 note lists reporting countries |
@@ -48,6 +50,15 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 "Requested by: Claude" means a fix Claude found and made while working on another request.
 
 ## Details
+
+### 2026-11-24
+
+- **Cross-border flows tab** (asked by Andrea). For each EU country, or the EU27 with non-EU partners: a map with
+  arrows in and out on each border (GWh or TWh), totals, and a table by partner with days of data, for a chosen
+  day, week, month or year. Source: ENTSO-E physical flows since 2021, 76 borders, updated daily (last 4 days).
+- **Hourly detail** (asked by Andrea). Hour-by-hour imports and exports for a day in the last 35 days, and net
+  imports by hour of the day (one line per year; whole year, season or month), refreshed on Sundays.
+  Map borders: Natural Earth. The flows are also in the Excel file.
 
 ### 2026-11-16
 
