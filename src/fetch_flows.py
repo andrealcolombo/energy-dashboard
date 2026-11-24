@@ -155,13 +155,24 @@ def main() -> None:
     first = pd.Timestamp(config.START_DATE, tz=tz)
     recent_from = end - pd.DateOffset(days=RECENT_DAYS)  # calendar days (safe across DST)
     profile_mode = os.environ.get("MODE") == "profile"
+    fill_mode = os.environ.get("MODE") == "fill"  # fetch only the years missing for each direction
     for a, b in directed(borders):
         have = old[(old["from"] == a) & (old["to"] == b)]
-        if profile_mode:
+        if fill_mode:
+            # only the calendar years with (almost) no data for this direction
+            got = set(pd.to_datetime(have["date"]).dt.year.value_counts().loc[lambda c: c >= 300].index) if not have.empty else set()
+            todo = [y for y in range(first.year, end.year + 1) if y not in got and not (y == end.year and len(have[have["date"] >= f"{y}-01-01"]) >= (end.dayofyear - 30))]
+            if not todo:
+                continue
+            parts = [fetch(client, a, b, pd.Timestamp(f"{y}-01-01", tz=tz), min(end, pd.Timestamp(f"{y + 1}-01-01", tz=tz)), recent_from) for y in todo]
+            d, p, h = (pd.concat([x[i] for x in parts], ignore_index=True) for i in range(3))
+            have = have.iloc[0:0]  # let the profile rows in
+        elif profile_mode:
             start = end.replace(day=1) - pd.DateOffset(months=PROFILE_MONTHS)
+            d, p, h = fetch(client, a, b, start, end, recent_from)
         else:
             start = first if have.empty else max(first, end - pd.Timedelta(days=REFETCH_DAYS))
-        d, p, h = fetch(client, a, b, start, end, recent_from)
+            d, p, h = fetch(client, a, b, start, end, recent_from)
         if not d.empty and not profile_mode:
             old = pd.concat([old, d], ignore_index=True).drop_duplicates(KEYS, keep="last")
         if not p.empty and (profile_mode or have.empty):
