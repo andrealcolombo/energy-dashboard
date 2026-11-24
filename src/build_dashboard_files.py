@@ -251,6 +251,36 @@ def periods(d: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         ["area", "season", "period", "hour"])
 
 
+def flows() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Cross-border physical flows (from fetch_flows.py): daily GWh for the last 400 days
+    and monthly GWh since 2021, by direction (from -> to). Days count the days with data."""
+    f = DATA / "flows_daily.csv"
+    if not f.exists():
+        return pd.DataFrame(), pd.DataFrame()
+    d = pd.read_csv(f)
+    last = pd.Timestamp(d["date"].max())
+    daily = d[pd.to_datetime(d["date"]) > last - pd.Timedelta(days=400)].copy()
+    daily["gwh"] = daily["gwh"].round(2)
+    d["month"] = d["date"].str[:7]
+    monthly = d.groupby(["month", "from", "to"]).agg(gwh=("gwh", "sum"), days=("gwh", "size")).reset_index()
+    monthly["gwh"] = monthly["gwh"].round(1)
+    return daily.sort_values(["date", "from", "to"]), monthly.sort_values(["month", "from", "to"])
+
+
+def geo() -> pd.DataFrame:
+    """Country borders for the flows map, one row per country, geometry as a JSON string."""
+    import json
+    f = DATA / "geo" / "europe.geojson"
+    if not f.exists():
+        return pd.DataFrame()
+    gj = json.load(open(f))
+    pts = [{"id": k, "name": "border", "lon": v[0], "lat": v[1], "geometry": ""} for k, v in gj.get("border_points", {}).items()]
+    rows = pts + [{"id": ft["id"], "name": ft["properties"]["name"], "lon": ft["properties"]["lon"], "lat": ft["properties"]["lat"],
+             "geometry": json.dumps(ft["geometry"], separators=(",", ":")) if ft["geometry"] else ""}
+            for ft in gj["features"]]
+    return pd.DataFrame(rows)
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     load = pd.read_csv(DATA / "load_monthly.csv")
@@ -262,6 +292,13 @@ def main():
     mw = mix_weekly()
     if not mw.empty:
         mw.to_csv(OUT / "mix_weekly.csv", index=False)
+    fd, fm = flows()
+    if not fd.empty:
+        fd.to_csv(OUT / "flows_daily.csv", index=False)
+        fm.to_csv(OUT / "flows_monthly.csv", index=False)
+    g = geo()
+    if not g.empty:
+        g.to_csv(OUT / "geo_europe.csv", index=False)
     dp = day_profile()
     if not dp.empty:
         dp.to_csv(OUT / "day_profile.csv", index=False)
