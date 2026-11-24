@@ -29,3 +29,33 @@ PRICE_ZONES = {
     "RO": "RO", "SK": "SK", "SI": "SI", "ES": "ES",
     "SE_1": "SE", "SE_2": "SE", "SE_3": "SE", "SE_4": "SE",
 }
+
+# Cross-border physical flows: borders of EU27 countries, as pairs of ENTSO-E
+# country areas (each pair once). Non-EU neighbours are included as partners.
+# A pair with no data at country level may need bidding-zone codes instead
+# (see FLOW_ZONE_FALLBACK in src/fetch_flows.py).
+FLOW_BORDERS = [
+    ("AT", "DE"), ("AT", "CZ"), ("AT", "HU"), ("AT", "SI"), ("AT", "IT"), ("AT", "CH"),
+    ("BE", "FR"), ("BE", "NL"), ("BE", "DE"), ("BE", "LU"), ("BE", "GB"),
+    ("BG", "RO"), ("BG", "GR"), ("BG", "RS"), ("BG", "MK"), ("BG", "TR"),
+    ("HR", "SI"), ("HR", "HU"), ("HR", "RS"), ("HR", "BA"),
+    ("CZ", "DE"), ("CZ", "PL"), ("CZ", "SK"),
+    ("DK", "DE"), ("DK", "SE"), ("DK", "NO"), ("DK", "NL"), ("DK", "GB"),
+    ("EE", "FI"), ("EE", "LV"), ("EE", "RU"),
+    ("FI", "SE"), ("FI", "NO"), ("FI", "RU"),
+    ("FR", "DE"), ("FR", "CH"), ("FR", "IT"), ("FR", "ES"), ("FR", "GB"), ("FR", "IE"), ("FR", "LU"),
+    ("DE", "NL"), ("DE", "LU"), ("DE", "CH"), ("DE", "PL"), ("DE", "SE"), ("DE", "NO"), ("DE", "GB"),
+    ("GR", "MK"), ("GR", "AL"), ("GR", "TR"), ("GR", "IT"),
+    ("HU", "SK"), ("HU", "RO"), ("HU", "RS"), ("HU", "SI"), ("HU", "UA"),
+    ("IE", "GB"), ("IE", "NIE"),
+    ("IT", "CH"), ("IT", "SI"), ("IT", "MT"), ("IT", "ME"),
+    ("LV", "LT"), ("LV", "RU"),
+    ("LT", "PL"), ("LT", "SE"), ("LT", "BY"), ("LT", "RU"),
+    ("NL", "NO"), ("NL", "GB"),
+    ("PL", "SK"), ("PL", "SE"), ("PL", "UA"),
+    ("PT", "ES"),
+    ("RO", "RS"), ("RO", "UA"), ("RO", "MD"),
+    ("SK", "UA"),
+    ("ES", "MA"), ("ES", "AD"),
+    ("SE", "NO"),
+]
