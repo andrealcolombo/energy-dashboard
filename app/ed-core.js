@@ -223,4 +223,4 @@ window.ED = (function () {
 })();
 
 // page state (not data): what the reader has selected
-window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', dp: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMix: null, dpMode: 'years', dpCmp: [], dpYear: null, dpPeak: null, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
+window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', dp: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMix: null, dpMode: 'years', dpCmp: [], dpYear: null, dpPeak: null, fl: 'EU27', flPer: 'month', flSel: null, flWhen: 'year', flWhenYears: null, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};

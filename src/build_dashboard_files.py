@@ -204,7 +204,7 @@ SEASONS = {"year": None, "spring": [3, 4, 5], "summer": [6, 7, 8], "autumn": [9,
 MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 
-def periods(d: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+def periods(d: pd.DataFrame, cols: list[str], seasons: dict | None = None) -> pd.DataFrame:
     """Average day per year and per season (mean of the monthly profiles).
 
     Seasons with fewer than three months are dropped; the running year is kept
@@ -215,13 +215,13 @@ def periods(d: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
     y = d["month"].str[:4].astype(int)
     m = d["month"].str[5:].astype(int)
     frames = []
-    for season, months in SEASONS.items():
+    for season, months in (seasons or SEASONS).items():
         sel = d if months is None else d[m.isin(months)]
         py = y[sel.index] + ((m[sel.index] == 12) & (season == "winter")).astype(int)
         lab = py.astype(str) if season != "winter" else (py - 1).astype(str) + "/" + py.astype(str).str[2:]
         sel = sel.assign(season=season, period=lab.values, _py=py.values)
         n = sel.groupby(["area", "period"])["month"].transform("nunique")
-        need = 12 if months is None else 3
+        need = 12 if months is None else len(months)
         if months is not None:
             sel = sel[n >= need]
         g = sel.groupby(["area", "season", "period", "hour"])
@@ -243,7 +243,8 @@ def periods(d: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
         a["span"] = MON[int(months[0][5:]) - 1] + " " + months[0][:4] + "–" + MON[int(months[-1][5:]) - 1] + " " + months[-1][:4]
         frames.append(a)
     out = pd.concat(frames, ignore_index=True)
-    out["price"] = out["price"].round(1)
+    if "price" in out:
+        out["price"] = out["price"].round(1)
     mw = [c for c in cols if c != "price"]
     out[mw] = out[mw].round(0).astype("Int64")  # whole MW, no ".0" in the file
     out = out.dropna(how="all", axis=1)
@@ -281,6 +282,42 @@ def geo() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+EU27 = ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU",
+        "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE"]
+MONTH_SEASONS = {f"m{m:02d}": [m] for m in range(1, 13)}
+
+
+def by_area(d: pd.DataFrame, keys: list[str], val: str) -> pd.DataFrame:
+    """Imports (imp) and exports (exp) of each EU country and of the EU27 (flows with non-EU only)."""
+    out = []
+    for c in EU27:
+        i = d[d["to"] == c].groupby(keys)[val].sum().rename("imp")
+        e = d[d["from"] == c].groupby(keys)[val].sum().rename("exp")
+        if len(i) or len(e):
+            out.append(pd.concat([i, e], axis=1).reset_index().assign(area=c))
+    ext_in = d[d["to"].isin(EU27) & ~d["from"].isin(EU27)].groupby(keys)[val].sum().rename("imp")
+    ext_out = d[d["from"].isin(EU27) & ~d["to"].isin(EU27)].groupby(keys)[val].sum().rename("exp")
+    out.append(pd.concat([ext_in, ext_out], axis=1).reset_index().assign(area="EU27"))
+    return pd.concat(out, ignore_index=True).fillna(0)
+
+
+def flows_hours() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Hour-of-day imports and exports (MW) by area: years, seasons and months of the year;
+    and the last 35 days hour by hour."""
+    prof, recent = pd.DataFrame(), pd.DataFrame()
+    f = DATA / "flows_profile.csv"
+    if f.exists():
+        a = by_area(pd.read_csv(f), ["month", "hour"], "mw")
+        prof = periods(a, ["imp", "exp"], {**SEASONS, **MONTH_SEASONS})
+        prof = prof[prof["season"] != "last12"]
+    f = DATA / "flows_hourly.csv"
+    if f.exists():
+        recent = by_area(pd.read_csv(f), ["date", "hour"], "mw")
+        recent[["imp", "exp"]] = recent[["imp", "exp"]].round(0).astype(int)
+        recent = recent[["area", "date", "hour", "imp", "exp"]].sort_values(["area", "date", "hour"])
+    return prof, recent
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     load = pd.read_csv(DATA / "load_monthly.csv")
@@ -296,6 +333,11 @@ def main():
     if not fd.empty:
         fd.to_csv(OUT / "flows_daily.csv", index=False)
         fm.to_csv(OUT / "flows_monthly.csv", index=False)
+    hp, hr = flows_hours()
+    if not hp.empty:
+        hp.to_csv(OUT / "flows_hours_profile.csv", index=False)
+    if not hr.empty:
+        hr.to_csv(OUT / "flows_hours_recent.csv", index=False)
     g = geo()
     if not g.empty:
         g.to_csv(OUT / "geo_europe.csv", index=False)
