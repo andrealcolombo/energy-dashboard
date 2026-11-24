@@ -86,11 +86,13 @@ jobs:
           out.to_csv(target, index=False)
           print(len(out), "rows,", out.groupby(["from", "to"]).ngroups, "directed borders")
           PY
+      - name: Dashboard files
+        run: python src/build_dashboard_files.py
       - name: Commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data/flows_daily.csv
+          git add data/flows_daily.csv data/dashboard/
           git diff --cached --quiet && exit 0
           git commit -m "Backfill cross-border flows ($(date -u +%Y-%m-%d))"
           git push

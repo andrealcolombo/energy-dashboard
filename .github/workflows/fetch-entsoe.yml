@@ -93,6 +93,15 @@ jobs:
         if: always() && steps.when.outputs.weekly == 'true'
         run: /tmp/commit.sh day-profiles
 
+      - name: Cross-border flows (last 4 days)
+        if: always() && !inputs.only_oil
+        continue-on-error: true
+        timeout-minutes: 60
+        run: python -u src/fetch_flows.py
+      - name: Commit cross-border flows
+        if: always()
+        run: /tmp/commit.sh flows
+
       - name: EC Weekly Oil Bulletin
         if: always() && steps.when.outputs.weekly == 'true'
         continue-on-error: true

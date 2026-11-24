@@ -14,7 +14,7 @@ no country-level data, FLOW_ZONE_FALLBACK lists bidding-zone pairs to add up.
 
 Modes (env MODE):
   probe   query the last 2 days for every border and direction, print what works
-  (empty) first run from config.START_DATE; later runs refetch the last 10 days
+  (empty) first run from config.START_DATE; later runs refetch the last 4 days
 Env ONLY_CHUNK=i/n runs one slice of the borders (for parallel backfills).
 """
 
@@ -33,12 +33,15 @@ from fetch_entsoe import with_retry  # noqa: E402
 
 DATA = Path(os.environ.get("DATA_DIR") or Path(__file__).resolve().parent.parent / "data")
 OUT = DATA / "flows_daily.csv"
-REFETCH_DAYS = 10
+REFETCH_DAYS = 4
 KEYS = ["date", "from", "to"]
 
 # Country pairs with no country-level series: zone pairs to add up instead.
 # Filled in from the probe run.
-FLOW_ZONE_FALLBACK: dict[tuple[str, str], list[tuple[str, str]]] = {}
+FLOW_ZONE_FALLBACK: dict[tuple[str, str], list[tuple[str, str]]] = {
+    ("DK", "GB"): [("DK_1", "GB")],  # Viking Link: no country-level series
+    ("GB", "DK"): [("GB", "DK_1")],
+}
 
 
 def series(client, a: str, b: str, start, end) -> pd.Series:

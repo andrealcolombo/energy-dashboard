@@ -31,6 +31,10 @@ SHEETS = [
      "European Commission, Weekly Oil Bulletin"),
     ("retail_semiannual", "Household prices with all taxes (€/kWh), by half-year: electricity 2,500–4,999 kWh/yr "
      "(nrg_pc_204, band DC); gas 20–200 GJ/yr (nrg_pc_202, band D2).", "Eurostat"),
+    ("flows_monthly", "Cross-border physical flows of electricity, monthly (GWh), by border and direction (from -> to), "
+     "since 2021; days = days with data.", "ENTSO-E Transparency Platform"),
+    ("flows_daily", "Cross-border physical flows of electricity, daily (GWh), by border and direction (from -> to). Last 400 days; "
+     "the full history is in the GitHub repository (data/flows_daily.csv).", "ENTSO-E Transparency Platform"),
 ]
 
 METHOD = [
@@ -39,6 +43,7 @@ METHOD = [
     "EU27 price: country prices weighted by monthly electricity demand.",
     "Days and months follow Brussels time.",
     "Battery storage = ENTSO-E 'Energy storage', reported by only some countries.",
+    "Cross-border flows are physical flows (what crossed the border), not commercial exchanges; days with more than four missing hours are left out.",
 ]
 
 

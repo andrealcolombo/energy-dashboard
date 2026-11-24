@@ -34,6 +34,9 @@ PRICE_ZONES = {
 # country areas (each pair once). Non-EU neighbours are included as partners.
 # A pair with no data at country level may need bidding-zone codes instead
 # (see FLOW_ZONE_FALLBACK in src/fetch_flows.py).
+# Left out after the probe of 24 Nov 2026 (no data at ENTSO-E): FR-IE and DE-GB (cables not yet in
+# operation), FR-LU, IE-NIE (inside the all-island market), ES-MA and ES-AD (no ENTSO-E area code).
+# Baltic borders with RU and BY are kept for the history up to the 2025 desynchronisation.
 FLOW_BORDERS = [
     ("AT", "DE"), ("AT", "CZ"), ("AT", "HU"), ("AT", "SI"), ("AT", "IT"), ("AT", "CH"),
     ("BE", "FR"), ("BE", "NL"), ("BE", "DE"), ("BE", "LU"), ("BE", "GB"),
@@ -43,11 +46,11 @@ FLOW_BORDERS = [
     ("DK", "DE"), ("DK", "SE"), ("DK", "NO"), ("DK", "NL"), ("DK", "GB"),
     ("EE", "FI"), ("EE", "LV"), ("EE", "RU"),
     ("FI", "SE"), ("FI", "NO"), ("FI", "RU"),
-    ("FR", "DE"), ("FR", "CH"), ("FR", "IT"), ("FR", "ES"), ("FR", "GB"), ("FR", "IE"), ("FR", "LU"),
-    ("DE", "NL"), ("DE", "LU"), ("DE", "CH"), ("DE", "PL"), ("DE", "SE"), ("DE", "NO"), ("DE", "GB"),
+    ("FR", "DE"), ("FR", "CH"), ("FR", "IT"), ("FR", "ES"), ("FR", "GB"), 
+    ("DE", "NL"), ("DE", "LU"), ("DE", "CH"), ("DE", "PL"), ("DE", "SE"), ("DE", "NO"),
     ("GR", "MK"), ("GR", "AL"), ("GR", "TR"), ("GR", "IT"),
     ("HU", "SK"), ("HU", "RO"), ("HU", "RS"), ("HU", "SI"), ("HU", "UA"),
-    ("IE", "GB"), ("IE", "NIE"),
+    ("IE", "GB"),
     ("IT", "CH"), ("IT", "SI"), ("IT", "MT"), ("IT", "ME"),
     ("LV", "LT"), ("LV", "RU"),
     ("LT", "PL"), ("LT", "SE"), ("LT", "BY"), ("LT", "RU"),
@@ -56,6 +59,5 @@ FLOW_BORDERS = [
     ("PT", "ES"),
     ("RO", "RS"), ("RO", "UA"), ("RO", "MD"),
     ("SK", "UA"),
-    ("ES", "MA"), ("ES", "AD"),
     ("SE", "NO"),
 ]
