@@ -110,9 +110,6 @@
       <div><div class="legend" data-draw="wk-legend"></div><p class="note" data-draw="week-note">—</p></div>
     </div>
 
-    <h2 id="latest-news">News that may help explain the moves <span class="tag beta">Beta</span></h2>
-    <p class="note wide">Selected and summarised by Claude from public sources, updated weekly. These are possible links to the figures above, not proven causes. Six items: news about the selected country first, then EU-wide news if there are fewer than six. For the EU27, EU-wide news only. Bidding zones use the news of their country.</p>
-    <div class="news" data-draw="news-list" data-source="news"></div>
   </section>
 
   <!-- ============ PRICES ============ -->
@@ -269,6 +266,9 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-25</td><td>Andrea</td><td>Claude</td><td>DG ENER editions of 17 and 24 Nov added (TTF, storage, weekly indicators)</td></tr>
+          <tr><td>2026-11-25</td><td>Andrea</td><td>Claude</td><td>Claude dashboard aligned with the site: news feed removed</td></tr>
+          <tr><td>2026-11-25</td><td>Andrea</td><td>Claude</td><td>Country profile: imports and exports as % of demand (12 months)</td></tr>
           <tr><td>2026-11-24</td><td>Andrea</td><td>Claude</td><td>New tab "Cross-border flows": map of imports and exports by border, day to year</td></tr>
           <tr><td>2026-11-24</td><td>Andrea</td><td>Claude</td><td>Cross-border flows: hour-by-hour chart and import/export pattern through the day</td></tr>
           <tr><td>2026-11-16</td><td>Andrea</td><td>Claude</td><td>Evening-peak chart: clearer title and note; solar value shown as its own tooltip row</td></tr>
@@ -316,7 +316,7 @@
     <summary>Sources and method</summary>
     <p>Day-ahead prices (updated daily), generation by source and demand (updated weekly): ENTSO-E Transparency Platform. Daily averages are weighted by interval length (hourly until September 2025, 15-minute after). Days and months follow Brussels time.</p>
     <p>Country price for countries with several zones (Italy, Denmark, Sweden): simple mean of the zones, not the PUN. EU27 price: country prices weighted by monthly demand. Cyprus and Malta have no coupled day-ahead market.</p>
-    <p>Household prices: Eurostat (nrg_pc_204, nrg_pc_202), half-yearly, all taxes included. Pump prices: European Commission Weekly Oil Bulletin. TTF, storage and the weekly indicators: DG ENER weekly newsletter. News: public news sites and reports, each linked to its source.</p>
+    <p>Household prices: Eurostat (nrg_pc_204, nrg_pc_202), half-yearly, all taxes included. Pump prices: European Commission Weekly Oil Bulletin. TTF, storage and the weekly indicators: DG ENER weekly newsletter.</p>
   </details>
 </div>
 

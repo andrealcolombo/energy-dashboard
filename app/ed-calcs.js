@@ -70,8 +70,8 @@ dash.calc('mix_ytd', {
 dash.calc('profile', {
   title: 'Country profile indicators',
   description: 'One value per country and indicator, and the same for the EU27 (load-weighted price; EU27 generation totals; EU averages from Eurostat and the Oil Bulletin; for negative-price hours, the mean of countries). Battery storage only for countries that report it.',
-  inputs: ['prices_daily', 'prices_monthly', 'retail_semiannual', 'fuels_weekly', 'mix_monthly', 'day_profile'],
-  fn: (prices_daily, prices_monthly, retail_semiannual, fuels_weekly, mix_monthly, day_profile) => {
+  inputs: ['prices_daily', 'prices_monthly', 'retail_semiannual', 'fuels_weekly', 'mix_monthly', 'day_profile', 'load_monthly', 'flows_monthly'],
+  fn: (prices_daily, prices_monthly, retail_semiannual, fuels_weekly, mix_monthly, day_profile, load_monthly, flows_monthly) => {
     const out = [];
     const put = (country, indicator, value) => { if (Number.isFinite(value)) out.push({key: country + '|' + indicator, country, indicator, value: Math.round(value * 1000) / 1000}); };
     const lastDate = d3.max(prices_daily, (d) => d.date);
@@ -109,6 +109,19 @@ dash.calc('profile', {
       put(c, 'nuclear_12m', sh(m12, ['Nuclear'])); put(c, 'gas_12m', sh(m12, ['Gas'])); put(c, 'coal_12m', sh(m12, ['Coal & lignite']));
       if (c === 'EU27' || v.some((d) => d.group === 'Battery storage')) put(c, 'bat_3m', sh(ms.slice(-3), ['Battery storage']));
     }
+    // Cross-border flows, last 12 complete months: imports and exports as % of demand.
+    // EU27 reference: simple mean of the member states (all their borders), as for negative-price hours.
+    const shares = {imp: [], exp: []};
+    for (const [c, v] of d3.group((load_monthly || []).filter((d) => d.country !== 'EU27'), (d) => d.country)) {
+      const ms = Array.from(new Set(v.map((d) => d.month))).sort().slice(-12);
+      if (ms.length < 12) continue;
+      const load = d3.sum(v.filter((d) => ms.includes(d.month)), (d) => Number(d.gwh));
+      const fl = (flows_monthly || []).filter((d) => ms.includes(d.month));
+      const imp = d3.sum(fl.filter((d) => d.to === c), (d) => Number(d.gwh));
+      const exp = d3.sum(fl.filter((d) => d.from === c), (d) => Number(d.gwh));
+      if (load > 0 && imp + exp > 0) { put(c, 'imp_12m', 100 * imp / load); put(c, 'exp_12m', 100 * exp / load); shares.imp.push(100 * imp / load); shares.exp.push(100 * exp / load); }
+    }
+    if (shares.imp.length) { put('EU27', 'imp_12m', d3.mean(shares.imp)); put('EU27', 'exp_12m', d3.mean(shares.exp)); }
     // Shape of the day, last 12 complete months (average day by hour)
     for (const [c, v] of d3.group((day_profile || []).filter((d) => d.season === 'last12'), (d) => d.area)) {
       const h = (a, b, k) => d3.mean(v.filter((d) => +d.hour >= a && +d.hour < b), (d) => (d[k] === '' || d[k] == null ? NaN : Number(d[k])));

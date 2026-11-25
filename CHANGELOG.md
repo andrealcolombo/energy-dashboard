@@ -8,6 +8,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-25 | Andrea | Claude | DG ENER editions of 17 and 24 Nov added (TTF, storage, weekly indicators) |
+| 2026-11-25 | Andrea | Claude | Claude dashboard aligned with the site: news feed removed |
+| 2026-11-25 | Andrea | Claude | Country profile: imports and exports as % of demand (12 months) |
 | 2026-11-24 | Andrea | Claude | New tab "Cross-border flows": map of imports and exports by border, day to year |
 | 2026-11-24 | Andrea | Claude | Cross-border flows: hour-by-hour chart and import/export pattern through the day |
 | 2026-11-16 | Andrea | Claude | Evening-peak chart: clearer title and note; solar value shown as its own tooltip row |
@@ -50,6 +53,16 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 "Requested by: Claude" means a fix Claude found and made while working on another request.
 
 ## Details
+
+### 2026-11-25
+
+- **Newsletter catch-up** (asked by Andrea). Editions of 17 and 24 Nov added; on GitHub only the TTF and storage rows.
+  The weekly task now processes every edition not yet labelled "Dashboard-Data" in Gmail, labels it and marks it
+  read, so late forwards are no longer missed.
+- **No news feed** (asked by Andrea): the Claude dashboard should match the public site. The weekly task no longer
+  collects news. The DG ENER tab and the change log stay in the Claude version only.
+- **Country profile** (asked by Andrea): imports and exports as a share of demand over the last 12 months, from
+  ENTSO-E physical flows; EU27 reference = simple mean of the member states.
 
 ### 2026-11-24
 

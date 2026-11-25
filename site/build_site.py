@@ -61,12 +61,11 @@ def page():
     s = s.replace('<meta name="dash-one-writer">\n', "")
     s = must(s, "<h1>EU Energy Markets Dashboard</h1>", "<h1>" + BOLT_SVG.replace("<svg ", '<svg class="bolt" aria-hidden="true" ', 1) + "EU Energy Markets Dashboard</h1>")
     s = must(s, '    <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>\n', "")
-    s = cut(s, '    <h2 id="latest-news">', 'data-source="news"></div>\n')
     s = cut(s, "  <!-- ============ DG ENER ============ -->", "  </section>\n")
     s = cut(s, '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Change log</summary>', "  </details>\n\n")
     s = must(s, '  <details class="note">\n    <summary>Sources and method</summary>',
              '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Sources and method</summary>')
-    s = must(s, "TTF, storage and the weekly indicators: DG ENER weekly newsletter. News: public news sites and reports, each linked to its source.",
+    s = must(s, "TTF, storage and the weekly indicators: DG ENER weekly newsletter.",
              "TTF day-ahead (weekly average) and EU gas storage: internal elaborations of the European Commission "
              "(DG ENER), updated weekly.")
     stamp = datetime.now(timezone.utc).strftime("%d %b %Y, %H:%M UTC")
