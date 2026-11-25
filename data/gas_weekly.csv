@@ -1,3 +1,7 @@
 edition,week_start,week_end,order,indicator,label,value,unit,wow_pct,mom_pct,yoy_pct,ref_period
 2026-11-10,2026-11-02,2026-11-08,2,gas_ttf,TTF gas day-ahead,90.0,€/MWh,-10.0,16.0,187.0,week
 2026-11-10,2026-11-02,2026-11-08,5,gas_storage,EU gas storage,72.0,% of capacity,-2.2,,-10.0,end of week
+2026-11-17,2026-11-09,2026-11-15,2,gas_ttf,TTF gas day-ahead,88.0,€/MWh,-3.0,1.0,190.0,week
+2026-11-17,2026-11-09,2026-11-15,5,gas_storage,EU gas storage,70.0,% of capacity,-2.0,,-12.0,end of week
+2026-11-24,2026-11-16,2026-11-22,2,gas_ttf,TTF gas day-ahead,85.0,€/MWh,-3.0,-5.0,171.0,week
+2026-11-24,2026-11-16,2026-11-22,5,gas_storage,EU gas storage,69.0,% of capacity,-1.5,,-10.0,end of week
