@@ -7,7 +7,7 @@ Dashboard: claude.ai artifact "Mercati energetici UE", slug 05f1ae8e-2868-4ba7-b
    - `git clone --depth 1 https://github.com/andrealcolombo/energy-dashboard` (read-only is enough).
    - Check `data/status.json` and the last runs of `fetch-entsoe.yml` (gh api .../actions/runs).
    - Upload with upload_asset every file in `data/dashboard/`: prices_daily.csv, prices_monthly.csv,
-     mix_monthly.csv, load_monthly.csv, mix_weekly.csv, fuels_weekly.csv, retail_semiannual.csv, day_profile.csv,
+     mix_monthly.csv, load_monthly.csv, mix_weekly.csv, fuels_weekly.csv, retail_semiannual.csv, day_profile.csv, day_mix.csv,
      flows_daily.csv, flows_monthly.csv, flows_hours_profile.csv, flows_hours_recent.csv (those that exist;
      geo_europe.csv is static, upload it only if it changed). Up to 10 files per upload_asset call.
      Copy them under /home/claude first (files under /tmp are refused).
