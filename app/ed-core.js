@@ -27,6 +27,21 @@ window.ED = (function () {
     else if (msg) { const p = document.createElement('p'); p.className = 'muted'; p.textContent = msg; el.append(p); }
   }
 
+  // "Download the data" link under a chart: the numbers drawn, as CSV (built only when clicked)
+  function dl(el, header, rows) {
+    const p = document.createElement('div'); p.className = 'dl';
+    const a = document.createElement('a'); a.href = '#'; a.textContent = 'Download the data of this chart (CSV)';
+    a.onclick = (ev) => {
+      ev.preventDefault();
+      const q = (v) => { if (typeof v === 'number') v = Number.isFinite(v) ? Math.round(v * 100) / 100 : ''; const t = v === null || v === undefined ? '' : String(v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+      const csv = [header].concat(rows).map((r) => r.map(q).join(',')).join('\n');
+      const url = URL.createObjectURL(new Blob(['\ufeff' + csv], {type: 'text/csv;charset=utf-8'}));
+      const l = document.createElement('a'); l.href = url; l.download = (el.dataset.draw || 'chart') + (window.EDS ? '_' + EDS.c : '') + '.csv';
+      document.body.append(l); l.click(); l.remove(); setTimeout(() => URL.revokeObjectURL(url), 2000);
+    };
+    p.append(a); el.append(p);
+  }
+
   // Multi-series line chart. series: [{label, color, values:[{x:Date, y:Number}], dash?, width?}]
   function lineChart(el, series, o = {}) {
     el.replaceChildren();
@@ -76,6 +91,10 @@ window.ED = (function () {
         tip.style.left = Math.min(Math.max(0, sx + 10), bw - tw) + 'px'; tip.style.top = ((series.length > 1 || o.legend) && o.legend !== false ? 22 : 0) + 'px';
       })
       .on('pointerleave', () => { tip.hidden = true; rule.style('display', 'none'); });
+    const hourly = xs.every((t) => new Date(t).getUTCFullYear() === 2000);
+    const cx = (t) => (hourly ? String(new Date(t).getUTCHours()).padStart(2, '0') + ':00' : new Date(t).toISOString().slice(0, o.monthly ? 7 : 10));
+    dl(el, [hourly ? 'hour' : o.monthly ? 'month' : 'date'].concat(series.map((z) => z.label + (o.unit ? ' (' + o.unit + ')' : ''))),
+      xs.map((t) => [cx(t)].concat(series.map((z) => { const v = z.values.find((d) => +d.x === t); return v ? v.y : null; }))));
   }
 
   // Stacked monthly shares. rows: [{x:Date, parts:{group:value}, total}]
@@ -102,6 +121,7 @@ window.ED = (function () {
         tip.hidden = false; const bw = el.clientWidth, sx = x(+d.x) * bw / W; tip.style.left = Math.min(Math.max(0, sx + 12), bw - tip.offsetWidth) + 'px'; tip.style.top = '0px';
       })
       .on('pointerleave', () => { tip.hidden = true; });
+    dl(el, ['month'].concat(groups.map((g) => g + ' (%)'), ['total generation (GWh)']), rows.map((r) => [r.x.toISOString().slice(0, 7)].concat(groups.map((g) => r.parts[g] || 0), [r.total])));
   }
 
   // Diverging horizontal bars. data: [{label, value, color}] (value can be negative)
@@ -119,6 +139,7 @@ window.ED = (function () {
       svg.append('rect').attr('x', Math.min(x(0), x(d.value))).attr('y', y + 3).attr('height', 14).attr('width', Math.abs(x(d.value) - x(0))).style('fill', d.color);
       svg.append('text').attr('x', d.value >= 0 ? x(d.value) + 4 : x(d.value) - 4).attr('y', y + 14).attr('text-anchor', d.value >= 0 ? 'start' : 'end').text((d.value > 0 && !o.noSign ? '+' : '') + (o.fmt || f.n1)(d.value) + (o.unit || ''));
     });
+    dl(el, ['period', 'value' + (o.unit ? ' (' + o.unit + ')' : '')], data.map((d) => [d.label, d.value]));
   }
 
   // Pie (donut) chart. parts: [{label, value, color}], values in %.
@@ -137,6 +158,7 @@ window.ED = (function () {
       .on('pointerleave', () => { tip.hidden = true; });
     g.selectAll('text.pl').data(arcs.filter((d) => d.data.value >= 6)).join('text').attr('class', 'pl').attr('transform', (d) => `translate(${lab.centroid(d)})`).attr('text-anchor', 'middle').attr('dy', '0.35em').style('fill', '#fff').style('font-weight', '600').text((d) => f.n0(d.data.value) + '%');
     if (o.center) g.append('text').attr('text-anchor', 'middle').attr('dy', '0.35em').style('font-size', '13px').style('fill', 'var(--color-fg)').text(o.center);
+    dl(el, ['source', 'share (%)'], parts.map((p) => [p.label, p.value]));
   }
 
   // Spider (radar) chart of ratios to a reference (1 = reference).
@@ -173,6 +195,7 @@ window.ED = (function () {
         .on('click', () => o.onPick && o.onPick(a));
       if (a.ratio > max) g.append('text').attr('x', x).attr('y', y - 10).attr('text-anchor', 'middle').text('▲');
     });
+    dl(el, ['indicator', 'unit', o.names ? o.names[0] : 'country', o.names ? o.names[1] : 'comparison', 'ratio'], axes.map((a) => [a.label, a.unit, a.a, a.e, a.ratio]));
   }
 
   // Hour-of-day stacked areas (MW). rows: [{h, v:{key:value}}]; pos/neg: [{key,label,color}]; line: key drawn as a line.
@@ -269,10 +292,12 @@ window.ED = (function () {
         tip.hidden = false; const bw = el.clientWidth, sx = x(h) * bw / W; tip.style.left = (sx + 14 + tip.offsetWidth > bw ? Math.max(0, sx - 14 - tip.offsetWidth) : sx + 14) + 'px'; tip.style.top = '20px';
       })
       .on('pointerleave', () => { tip.hidden = true; });
+    dl(el, ['hour', 'demand (MW)'].concat(pos.concat(neg).map((k) => k.label + ' (MW)'), pos.concat(neg).map((k) => k.label + ' (% of demand)')),
+      P.rows.map((r) => [hh(r.h), r.v.load].concat(pos.concat(neg).map((k) => r.v[k.key]), pos.concat(neg).map((k) => sh(r, k.key)))));
     return {setH};
   }
 
-  return {f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider, hourStack, shareStack};
+  return {dl, f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider, hourStack, shareStack};
 })();
 
 // page state (not data): what the reader has selected. One country (c) for every tab.

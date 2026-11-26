@@ -8,6 +8,9 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-26 | Andrea | Claude | Download link under every chart: the data drawn, as CSV |
+| 2026-11-26 | Andrea | Claude | Flows: table by border visible again; monthly demand chart removed |
+| 2026-11-26 | Andrea | Claude | Country selector larger, on its own row on phones |
 | 2026-11-26 | Andrea | Claude | New chart: what covers demand hour by hour, with batteries, imports and exports |
 | 2026-11-26 | Andrea | Claude | Removed the gas-and-storage evening chart (replaced by the chart above) |
 | 2026-11-26 | Andrea | Claude | One country selector for all tabs; links like #IT/flows open a country and tab |
@@ -61,6 +64,10 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 ### 2026-11-26
 
+- **Follow-up** (asked by Andrea). Every chart now has a "Download the data of this chart (CSV)" link with the
+  numbers drawn, for the selected country, so anyone can rebuild the chart. The table by border is back in view in
+  Cross-border flows; the monthly demand chart is removed. The country selector is larger and sits on its own row
+  on phones, where it was hard to tap.
 - **Daily mix chart** (asked by Andrea). New chart in Power system: share of demand covered by each source, hour by
   hour, two periods side by side (whole year, summer, winter or a month). Gross imports above zero, exports and storage
   charging below. It replaces the gas-and-storage evening chart, which said the same thing less completely.

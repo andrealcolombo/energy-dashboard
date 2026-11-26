@@ -198,14 +198,14 @@ window.EDL = {
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
     const ser = EDS.areas.map((a) => ({label: label(a), color: colorFor(a), width: a === 'EU27' ? 2.2 : 1.4, values: d.data.filter((r) => r.area === a).map((r) => ({x: ED.parseMonth(r.month), y: +r.avg_eur_mwh}))}));
     const ref = d3.mean(d.data.filter((r) => r.area === 'EU27' && r.month >= '2021-01' && r.month <= '2021-06'), (r) => +r.avg_eur_mwh);
-    ED.lineChart(el, ser, {unit: '€/MWh', legend: true, refY: ref, tipX: (x) => ED.mLabel(x), empty: 'Pick at least one area'});
+    ED.lineChart(el, ser, {monthly: true, unit: '€/MWh', legend: true, refY: ref, tipX: (x) => ED.mLabel(x), empty: 'Pick at least one area'});
   });
 
   dash.draw('price-neg', (el) => {
     const d = dash.data('prices_monthly');
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
     const ser = EDS.areas.filter((a) => a !== 'EU27').map((a) => ({label: label(a), color: colorFor(a), values: d.data.filter((r) => r.area === a).map((r) => ({x: ED.parseMonth(r.month), y: +r.negative_hours}))}));
-    ED.lineChart(el, ser, {height: 200, unit: 'h', legend: true, tipFmt: ED.f.n0, tipX: (x) => ED.mLabel(x), empty: 'Pick a country or a bidding zone (not computed for the EU27)'});
+    ED.lineChart(el, ser, {monthly: true, height: 200, unit: 'h', legend: true, tipFmt: ED.f.n0, tipX: (x) => ED.mLabel(x), empty: 'Pick a country or a bidding zone (not computed for the EU27)'});
   });
 })();
 
@@ -328,7 +328,7 @@ window.EDL = {
     const d = dash.data('profile');
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
     if (P() === 'EU27') { ED.placeholder(el, 'empty', 'Choose a country at the top of the page.'); return; }
-    ED.spider(el, axes(), {color: dash.colors[1], onPick: (a) => { EDS.picked = a.id; dash.draw('spider-pick'); }});
+    ED.spider(el, axes(), {names: [ED.name(P()), R() === 'EU27' ? 'EU27 average' : ED.name(R())], color: dash.colors[1], onPick: (a) => { EDS.picked = a.id; dash.draw('spider-pick'); }});
   });
 
   dash.draw('spider-pick', (el) => {
@@ -670,6 +670,7 @@ window.EDL = {
       arrow(o.exp, -1, EXP(), 'Exports to ' + nm(o.partner) + ': ' + fmt(o.exp) + ' ' + unit() + days(o.dExp));
       const lp = proj(P); if (lp) G.append('text').attr('x', lp[0]).attr('y', lp[1]).attr('text-anchor', 'middle').style('fill', 'var(--color-fg-muted)').text(nm(o.partner).replace(' (UK)', ''));
     }
+    ED.dl(el, ['partner', 'imports (' + unit() + ')', 'exports (' + unit() + ')', 'net imports (' + unit() + ')', 'period'], v.list.map((o) => [nm(o.partner), o.imp, o.exp, o.net, v.p.label]));
     if (v.X !== 'EU27') { const c = proj(pt(v.X)); if (c) svg.append('text').attr('class', 'lbl').attr('x', c[0]).attr('y', c[1]).attr('text-anchor', 'middle').style('fill', 'var(--color-fg)').text(ED.name(v.X)); }
   });
 
@@ -679,7 +680,7 @@ window.EDL = {
     const gaps = v.list.filter((o) => (o.imp > 0.05 && o.dImp < v.need) || (o.exp > 0.05 && o.dExp < v.need) || (o.dImp === 0 && o.dExp === 0));
     if (!gaps.length) return;
     const b0 = document.createElement('strong'); b0.textContent = 'Data gaps: ';
-    el.append(b0, document.createTextNode('some days are missing for ' + gaps.map((o) => nm(o.partner)).join(', ') + '. Totals for these borders are understated; see the table under More detail.'));
+    el.append(b0, document.createTextNode('some days are missing for ' + gaps.map((o) => nm(o.partner)).join(', ') + '. Totals for these borders are understated; see the table below.'));
     el.style.display = '';
   });
 
@@ -724,6 +725,7 @@ window.EDL = {
         tip.textContent = String(r.h).padStart(2, '0') + ':00–' + String(r.h + 1).padStart(2, '0') + ':00 · imports ' + f.n0(r.imp) + ' MW · exports ' + f.n0(r.exp) + ' MW · net ' + (net < 0 ? '−' : '') + f.n0(Math.abs(net)) + ' MW';
         tip.hidden = false; tip.style.left = Math.min(Math.max(0, (x(r.h) + 12) * el.clientWidth / W), el.clientWidth - tip.offsetWidth) + 'px'; tip.style.top = '0px';
       }).on('pointerleave', () => { tip.hidden = true; });
+    ED.dl(el, ['hour', 'imports (MW)', 'exports (MW)', 'net imports (MW)'], rows.map((r) => [String(r.h).padStart(2, '0') + ':00', r.imp, r.exp, r.imp - r.exp]));
   }
 
   const recentRows = (area, date) => (ok('flows_hours_recent') || []).filter((r) => r.area === area && r.date === date).map((r) => ({h: +r.hour, imp: +r.imp, exp: +r.exp})).sort((a, b) => a.h - b.h);

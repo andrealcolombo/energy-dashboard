@@ -65,7 +65,10 @@
   .ed .topbar { position: sticky; top: 0; z-index: 20; background: var(--color-bg, #fff); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cds-gap-sm); padding: var(--cds-gap-xs) 0; margin-bottom: var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
   .ed .topbar .tabs { border-bottom: 0; margin: 0; padding: 0; }
   .ed .topbar .gc { display: flex; align-items: center; gap: var(--cds-gap-xs); }
-  .ed .topbar .gc select { font-weight: var(--cds-font-weight-medium); }
+  .ed .topbar .gc select { font-weight: var(--cds-font-weight-medium); min-height: 34px; font-size: 16px; padding: 2px 8px; }
+  @media (max-width: 640px) { .ed .topbar { flex-direction: column-reverse; align-items: stretch; } .ed .topbar .gc select { flex: 1; } }
+  .ed .dl { display: block; text-align: right; font-size: 11px; margin: 2px 0 0; }
+  .ed .dl a { color: var(--color-fg-muted); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
   .ed .take { font-size: var(--cds-font-size-heading); line-height: 1.4; margin: var(--cds-gap-xs) 0 var(--cds-gap-sm); }
   .ed .take:empty { display: none; }
   .ed details.more { margin: var(--cds-gap-md) 0 0; border-top: 1px dashed var(--color-border-line); padding-top: var(--cds-gap-xs); }
@@ -196,12 +199,6 @@
     </div>
     <p class="warn" data-draw="dm-warn" data-source="day_mix"></p>
     <p class="note">Share of demand, average day. Above zero: generation and imports. Below zero: exports, batteries charging and pumping. Hover to move the marker. Why the total can pass 100: see Methods.</p>
-
-    <details class="more">
-      <summary>More detail · monthly demand</summary>
-      <h3 id="mix-load">Monthly electricity demand (TWh) · vs the year before</h3>
-      <div class="chart short" data-draw="load-chart" data-source="load_monthly" role="img" aria-label="Monthly electricity demand, this year and the year before"></div>
-    </details>
   </section>
 
   <!-- ============ FLOWS ============ -->
@@ -216,6 +213,11 @@
     <div class="legend" data-draw="fl-legend"></div>
     <div class="chart map" data-draw="fl-map" data-source="geo_europe" role="img" aria-label="Map of the selected country with arrows for electricity imported from and exported to each neighbour"></div>
     <p class="warn" data-draw="fl-warn" data-source="flows_daily"></p>
+    <h3>By border</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
+      <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
+    </table></div>
 
     <h2>When does <span data-draw="fl-when-name" data-source="flows_hours_profile">the country</span> import or export during the day?</h2>
     <p class="note">Net imports by hour: above zero the country imports more than it exports in that hour, below zero it exports more. One line per year.</p>
@@ -228,12 +230,7 @@
     <p class="note" data-draw="fl-when-note" data-source="flows_hours_profile"></p>
 
     <details class="more">
-      <summary>More detail · by border, and a single day hour by hour</summary>
-      <h3>By border</h3>
-      <table>
-        <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
-        <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
-      </table>
+      <summary>More detail · a single day hour by hour</summary>
       <h3 data-draw="fl-hours-title" data-source="flows_hours_recent">Hour by hour</h3>
       <div class="chart short" data-draw="fl-hours" data-source="flows_hours_recent" role="img" aria-label="Imports and exports of the selected country hour by hour"></div>
       <p class="note" data-draw="fl-hours-note" data-source="flows_hours_recent"></p>
@@ -281,7 +278,7 @@
     <p>Batteries are what ENTSO-E reports as "Energy storage", available from 2025 and only for some countries; pumped hydro is shown separately. Many countries, Germany included, do not report batteries: a missing band does not mean there are no batteries. The EU27 battery figure is the sum of the reporting countries and is understated. For the EU27, imports and exports are with non-EU countries only. Winter runs from December of the year before to February.</p>
 
     <h3>Cross-border flows</h3>
-    <p>Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: the table under "More detail" shows the days with data. Hour-by-hour data for single days are kept for the last 35 days.</p>
+    <p>Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: the table "By border" shows the days with data. Hour-by-hour data for single days are kept for the last 35 days.</p>
 
     <h3>Compare countries</h3>
     <p>Each axis is the country value divided by the value of the comparison (the EU27 average or another country). The grey shape is the comparison (1×). Values above 2.5× are capped (▲). Indicators based on imports and exports use the simple mean of member states for the EU27, because flows between EU countries cancel out in an EU total.</p>
@@ -315,6 +312,9 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Download link under every chart: the data drawn, as CSV</td></tr>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Flows: table by border visible again; monthly demand chart removed</td></tr>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Country selector larger, on its own row on phones</td></tr>
           <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>New chart: what covers demand hour by hour, with batteries, imports and exports</td></tr>
           <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Removed the gas-and-storage evening chart (replaced by the chart above)</td></tr>
           <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>One country selector for all tabs; links like #IT/flows open a country and tab</td></tr>
