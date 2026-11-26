@@ -61,28 +61,43 @@
   .ed .changes td, .ed .changes th { text-align: left; }
   .ed .changes td:last-child { white-space: normal; }
   .ed .defs dd { margin: 0; color: var(--color-fg-muted); }
+  .ed { --c-imp:#CDBFAE; --c-exp:#8E9AA6; }
+  .ed .topbar { position: sticky; top: 0; z-index: 20; background: var(--color-bg, #fff); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cds-gap-sm); padding: var(--cds-gap-xs) 0; margin-bottom: var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
+  .ed .topbar .tabs { border-bottom: 0; margin: 0; padding: 0; }
+  .ed .topbar .gc { display: flex; align-items: center; gap: var(--cds-gap-xs); }
+  .ed .topbar .gc select { font-weight: var(--cds-font-weight-medium); }
+  .ed .take { font-size: var(--cds-font-size-heading); line-height: 1.4; margin: var(--cds-gap-xs) 0 var(--cds-gap-sm); }
+  .ed .take:empty { display: none; }
+  .ed details.more { margin: var(--cds-gap-md) 0 0; border-top: 1px dashed var(--color-border-line); padding-top: var(--cds-gap-xs); }
+  .ed details.more > summary { cursor: pointer; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); padding: 4px 0; }
+  .ed details.more[open] > summary { margin-bottom: var(--cds-gap-sm); }
+  .ed .methods h3 { margin-top: var(--cds-gap-lg); }
+  .ed .methods p { max-width: 900px; line-height: 1.55; margin: 0 0 var(--cds-gap-sm); }
+  .ed .dm-panel h4 { margin: var(--cds-gap-sm) 0 0; font-size: var(--cds-font-size-body); }
 </style>
 
 <div class="ed">
   <h1>EU Energy Markets Dashboard</h1>
   <p class="lede" data-draw="headline">—</p>
 
-  <nav class="tabs" role="tablist" aria-label="Sections">
-    <button class="tab" role="tab" data-tab="latest" aria-selected="true">Latest</button>
-    <button class="tab" role="tab" data-tab="prices" aria-selected="false">Electricity prices</button>
-    <button class="tab" role="tab" data-tab="mix" aria-selected="false">Generation mix</button>
-    <button class="tab" role="tab" data-tab="profile" aria-selected="false">Country profile</button>
-    <button class="tab" role="tab" data-tab="flows" aria-selected="false">Cross-border flows</button>
-    <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>
-  </nav>
+  <div class="topbar">
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" data-tab="latest" aria-selected="true">Latest</button>
+      <button class="tab" role="tab" data-tab="prices" aria-selected="false">Prices</button>
+      <button class="tab" role="tab" data-tab="mix" aria-selected="false">Power system</button>
+      <button class="tab" role="tab" data-tab="flows" aria-selected="false">Cross-border flows</button>
+      <button class="tab" role="tab" data-tab="profile" aria-selected="false">Compare countries</button>
+      <button class="tab" role="tab" data-tab="methods" aria-selected="false">Methods</button>
+      <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>
+    </nav>
+    <div class="gc">
+      <label class="muted" for="gc-select">Country</label>
+      <select id="gc-select" class="dash-select" data-draw="global-country" aria-label="Country shown in every tab"></select>
+    </div>
+  </div>
 
   <!-- ============ LATEST ============ -->
   <section id="latest" data-section>
-    <div class="row">
-      <label class="muted" for="country">Country</label>
-      <select id="country" class="dash-select" data-draw="country-select" data-source="prices_daily" aria-label="Country"></select>
-    </div>
-
     <h3 id="latest-elec">Electricity · wholesale (day-ahead) and household</h3>
     <div class="kpis">
       <div class="ti" id="t-whole"><div class="lab">Day-ahead · <span data-draw="t-whole-date">—</span></div><div class="v"><span data-draw="t-whole" data-source="kpi_power" data-field="last_day" data-where="area=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-whole-chg">—</div></div>
@@ -102,43 +117,42 @@
       <div class="ti" id="t-dsl"><div class="lab">Diesel · <span data-draw="t-dsl-per">—</span></div><div class="v"><span data-draw="t-dsl" data-source="fuels_latest" data-field="diesel" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-dsl-chg">—</div></div>
       <div class="ti" id="t-pet"><div class="lab">Petrol 95 · <span data-draw="t-pet-per">—</span></div><div class="v"><span data-draw="t-pet" data-source="fuels_latest" data-field="petrol_95" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-pet-chg">—</div></div>
     </div>
-    <p class="note wide">▲▼ change on: the previous day (d/d) for the day-ahead price; the previous week (w/w) for 7-day averages, TTF, storage and pump prices; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. H1/H2 = first/second half of the year. TTF and gas storage are EU-wide. Household prices: Eurostat, all taxes included.</p>
+    <p class="note wide">▲▼ change on: the previous day (d/d) for the day-ahead price; the previous week (w/w) for 7-day averages, TTF, storage and pump prices; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. TTF and gas storage are EU-wide.</p>
 
     <h2 id="latest-mix">Generation mix · last 7 days <span class="muted" data-draw="wk-period">—</span></h2>
     <div class="grid2">
       <div class="chart short" data-draw="week-pie" data-source="mix_weekly" role="img" aria-label="Generation mix over the last 7 days"></div>
       <div><div class="legend" data-draw="wk-legend"></div><p class="note" data-draw="week-note">—</p></div>
     </div>
-
   </section>
 
   <!-- ============ PRICES ============ -->
   <section id="prices" data-section hidden>
-    <h2 id="prices-areas">Compare countries and bidding zones</h2>
+    <h2 id="prices-areas">Wholesale electricity prices</h2>
+    <p class="take" data-draw="tk-prices" data-source="prices_monthly"></p>
     <div class="row" data-draw="area-chips" data-source="prices_daily"></div>
-    <p class="note">Up to six areas. Click an area to remove it.</p>
-
     <div class="row">
       <button class="chip" data-range="90" aria-pressed="false">90 days</button>
       <button class="chip" data-range="365" aria-pressed="true">12 months</button>
       <button class="chip" data-range="550" aria-pressed="false">18 months</button>
     </div>
-    <h3 id="prices-daily">Wholesale · daily day-ahead price (€/MWh)</h3>
+    <h3 id="prices-daily">Daily day-ahead price (€/MWh)</h3>
     <div class="chart" data-draw="price-daily" data-source="prices_daily" role="img" aria-label="Daily day-ahead prices for the selected areas"></div>
 
-    <h3 id="prices-monthly">Wholesale · monthly average since 2021 (€/MWh)</h3>
+    <h3 id="prices-monthly">Monthly average since 2021 (€/MWh)</h3>
     <div class="chart" data-draw="price-monthly" data-source="prices_monthly" role="img" aria-label="Monthly day-ahead prices since 2021 for the selected areas"></div>
     <p class="note">Dashed line: EU27 average in the first half of 2021, before the crisis.</p>
 
-    <h3 id="prices-neg">Hours with negative prices, by month</h3>
-    <div class="chart short" data-draw="price-neg" data-source="prices_monthly" role="img" aria-label="Monthly hours with negative day-ahead prices for the selected areas"></div>
-    <p class="note">For countries with several zones (Italy, Denmark, Sweden) this is the average of the zones; add single zones for detail.</p>
+    <details class="more">
+      <summary>More detail · hours with negative prices</summary>
+      <h3 id="prices-neg">Hours with negative prices, by month</h3>
+      <div class="chart short" data-draw="price-neg" data-source="prices_monthly" role="img" aria-label="Monthly hours with negative day-ahead prices for the selected areas"></div>
+      <p class="note">For countries with several zones (Italy, Denmark, Sweden) this is the average of the zones; add single zones for detail.</p>
+    </details>
 
     <h2 id="prices-day">Prices through the day</h2>
-    <p class="note">The price changes every hour. Solar pushes it down around midday; when the sun sets, demand is still high and the price rises. Storage charges when power is cheap and sells when it is dear, which flattens the day. These charts show an average day for each year, so the shapes can be compared.</p>
+    <p class="take" data-draw="tk-day" data-source="day_profile"></p>
     <div class="row">
-      <label class="muted" for="dp-country">Country</label>
-      <select id="dp-country" class="dash-select" data-draw="dp-select" data-source="day_profile" aria-label="Country for prices through the day"></select>
       <span data-draw="dp-season"></span>
       <span data-draw="dp-unit"></span>
     </div>
@@ -146,32 +160,21 @@
     <h3><span data-draw="dp-price-title" data-source="day_profile">Average price by hour</span></h3>
     <div class="row" data-draw="dp-years" data-source="day_profile"></div>
     <div class="row" data-draw="dp-countries" data-source="day_profile"></div>
-    <div class="chart" data-draw="dp-price" data-source="day_profile" role="img" aria-label="Average day-ahead price by hour of the day, one line per year"></div>
+    <div class="chart" data-draw="dp-price" data-source="day_profile" role="img" aria-label="Average day-ahead price by hour of the day"></div>
     <p class="note" data-draw="dp-note" data-source="day_profile"></p>
 
-    <h3 data-draw="dp-swing-title">Daily price swing · highest hour minus lowest hour, % of the day's average</h3>
-    <div class="chart bars" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day, by year"></div>
-    <p class="note">Measured on the average day of each period, so it shows the regular daily pattern, not single extreme days. A smaller swing means a flatter day. Storage, demand response, interconnections and the mix all play a part: these data alone cannot separate their effects.</p>
-
-    <h3>Gas and storage through the day · how they follow the evening peak</h3>
-    <p class="note">When solar fades in the evening, other sources must ramp up. This chart shows two of them: gas plants and storage (pumped hydro and batteries). If storage grows, it should take over part of the evening ramp from gas. Hydro reservoirs, coal, wind and imports also contribute and are not shown. Average output for each hour, MW, same scale in both panels. The light yellow shape shows when solar produces; it is not to scale (solar is much larger), hover for its output in MW.</p>
-    <div class="row" data-draw="dp-peak-years" data-source="day_profile"></div>
-    <div class="legend" data-draw="dp-peak-legend"></div>
-    <div class="pair">
-      <div><h4 data-draw="dp-peak-a-title" data-source="day_profile">—</h4><div class="chart" data-draw="dp-peak-a" data-source="day_profile" role="img" aria-label="Gas, pumped storage and battery output by hour, first period"></div></div>
-      <div><h4 data-draw="dp-peak-b-title" data-source="day_profile">—</h4><div class="chart" data-draw="dp-peak-b" data-source="day_profile" role="img" aria-label="Gas, pumped storage and battery output by hour, second period"></div></div>
-    </div>
-    <p class="warn" data-draw="dp-peak-warn" data-source="day_profile"></p>
-    <p class="note">Pumped storage and batteries do the same job here: they store cheap power and release it when it is dear. They are shown separately because pumped hydro is old, large and limited by geography, while batteries are new and growing fast. ENTSO-E does not split gas into peaking and mid-merit plants.</p>
+    <details class="more">
+      <summary>More detail · daily price swing</summary>
+      <h3 data-draw="dp-swing-title">Daily price swing · highest hour minus lowest hour, % of the day's average</h3>
+      <div class="chart bars" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day"></div>
+      <p class="note">Measured on the average day of each period: the regular daily pattern, not single extreme days. A smaller swing means a flatter day.</p>
+    </details>
   </section>
 
-  <!-- ============ MIX ============ -->
+  <!-- ============ POWER SYSTEM ============ -->
   <section id="mix" data-section hidden>
-    <div class="row">
-      <label class="muted" for="mix-select">Country</label>
-      <select id="mix-select" class="dash-select" data-draw="mix-select" data-source="mix_monthly" aria-label="Country for the generation mix"></select>
-    </div>
-    <h2 id="mix-ytd"><span data-draw="mix-country">—</span> · <span data-draw="ytd-period">—</span>: this year vs 2021</h2>
+    <h2 id="mix-ytd">Generation mix · <span data-draw="ytd-period">—</span>: this year vs 2021</h2>
+    <p class="take" data-draw="tk-mix" data-source="mix_ytd"></p>
     <div class="legend" data-draw="mix-legend"></div>
     <div class="grid2">
       <div><h3 data-draw="pie-cur-title">—</h3><div class="chart short" data-draw="pie-cur" data-source="mix_ytd" role="img" aria-label="Generation mix, this year to date"></div></div>
@@ -181,36 +184,31 @@
 
     <h2 id="mix-monthly">Monthly evolution · share by source (%)</h2>
     <div class="chart" data-draw="mix-stack" data-source="mix_monthly" role="img" aria-label="Monthly generation shares by source"></div>
-    <p class="note">ENTSO-E actual generation per production type. Some countries report with gaps; Malta does not report generation by source. Battery storage is reported by only a few countries.</p>
 
-    <h2 id="mix-load">Monthly electricity demand (TWh) · vs the year before</h2>
-    <div class="chart short" data-draw="load-chart" data-source="load_monthly" role="img" aria-label="Monthly electricity demand, this year and the year before"></div>
-  </section>
-
-  <!-- ============ PROFILE ============ -->
-  <section id="profile" data-section hidden>
-    <div class="row">
-      <label class="muted" for="profile-country">Country</label>
-      <select id="profile-country" class="dash-select" data-draw="profile-select" data-source="profile" aria-label="Country for the profile"></select>
-      <label class="muted" for="profile-ref">compared with</label>
-      <select id="profile-ref" class="dash-select" data-draw="ref-select" data-source="profile" aria-label="Country or average to compare with"></select>
-      <span class="muted" data-draw="ref-note">—</span>
+    <h2 id="mix-day">Through the day · what covers demand, hour by hour</h2>
+    <p class="take" data-draw="dm-take" data-source="day_mix"></p>
+    <div class="row" data-draw="dm-season" data-source="day_mix"></div>
+    <div class="row" data-draw="dm-years" data-source="day_mix"></div>
+    <div class="legend" data-draw="dm-legend"></div>
+    <div class="pair">
+      <div class="dm-panel"><h4 data-draw="dm-a-title" data-source="day_mix">—</h4><div class="chart" data-draw="dm-a" data-source="day_mix" role="img" aria-label="Share of demand covered by each source, hour by hour, first period"></div></div>
+      <div class="dm-panel"><h4 data-draw="dm-b-title" data-source="day_mix">—</h4><div class="chart" data-draw="dm-b" data-source="day_mix" role="img" aria-label="Share of demand covered by each source, hour by hour, second period"></div></div>
     </div>
-    <h3 id="profile-pick">Indicators</h3>
-    <div class="row" data-draw="ind-chips" data-source="profile"></div>
-    <div class="chart" data-draw="spider" data-source="profile" role="img" aria-label="Country indicators relative to the chosen comparison"></div>
-    <p class="pick" data-draw="spider-pick">—</p>
-    <p class="note wide">How to read it: each axis is the country value divided by the value of the comparison (the EU27 average or the country chosen above). The grey shape is the comparison (1×); the rings mark 0.5×, 1.5×, 2× and 2.5×. A point outside the grey shape means the country is above the comparison on that indicator; inside means below. Values above 2.5× are capped (▲). Hover or click a point for the actual values.</p>
-    <h3 id="profile-legend">The indicators shown</h3>
-    <dl class="defs" data-draw="ind-legend" data-source="profile"></dl>
+    <p class="warn" data-draw="dm-warn" data-source="day_mix"></p>
+    <p class="note">Share of demand, average day. Above zero: generation and imports. Below zero: exports, batteries charging and pumping. Hover to move the marker. Why the total can pass 100: see Methods.</p>
+
+    <details class="more">
+      <summary>More detail · monthly demand</summary>
+      <h3 id="mix-load">Monthly electricity demand (TWh) · vs the year before</h3>
+      <div class="chart short" data-draw="load-chart" data-source="load_monthly" role="img" aria-label="Monthly electricity demand, this year and the year before"></div>
+    </details>
   </section>
 
+  <!-- ============ FLOWS ============ -->
   <section id="flows" data-section hidden>
     <h2>Cross-border flows of electricity</h2>
-    <p class="note">How much electricity physically crossed each border of the selected country, in both directions. A country often imports and exports at the same time: power flows in on one border and out on another, or changes direction during the day.</p>
+    <p class="take" data-draw="tk-flows" data-source="flows_daily"></p>
     <div class="row">
-      <label class="muted" for="fl-country">Country</label>
-      <select id="fl-country" class="dash-select" data-draw="fl-select" data-source="flows_monthly" aria-label="Country for cross-border flows"></select>
       <span data-draw="fl-per"></span>
       <select class="dash-select" data-draw="fl-period" data-source="flows_daily" aria-label="Period"></select>
     </div>
@@ -218,16 +216,9 @@
     <div class="legend" data-draw="fl-legend"></div>
     <div class="chart map" data-draw="fl-map" data-source="geo_europe" role="img" aria-label="Map of the selected country with arrows for electricity imported from and exported to each neighbour"></div>
     <p class="warn" data-draw="fl-warn" data-source="flows_daily"></p>
-    <h3 data-draw="fl-hours-title" data-source="flows_hours_recent">Hour by hour</h3>
-    <div class="chart short" data-draw="fl-hours" data-source="flows_hours_recent" role="img" aria-label="Imports and exports of the selected country hour by hour"></div>
-    <p class="note" data-draw="fl-hours-note" data-source="flows_hours_recent"></p>
-    <h3>By border</h3>
-    <table>
-      <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
-      <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
-    </table>
+
     <h2>When does <span data-draw="fl-when-name" data-source="flows_hours_profile">the country</span> import or export during the day?</h2>
-    <p class="note">Net imports by hour of the day: above zero the country imports more than it exports in that hour, below zero it exports more. Each line is the average day of one year, for the whole year, a season or a month. Hover for the values; the note under the chart gives imports and exports separately for the latest year shown.</p>
+    <p class="note">Net imports by hour: above zero the country imports more than it exports in that hour, below zero it exports more. One line per year.</p>
     <div class="row">
       <span data-draw="fl-when-season"></span>
       <select class="dash-select" data-draw="fl-when-month" aria-label="Month of the year"></select>
@@ -235,7 +226,65 @@
     <div class="row" data-draw="fl-when-years" data-source="flows_hours_profile"></div>
     <div class="chart" data-draw="fl-when" data-source="flows_hours_profile" role="img" aria-label="Average net imports by hour of the day, one line per year"></div>
     <p class="note" data-draw="fl-when-note" data-source="flows_hours_profile"></p>
-    <p class="note">Source: ENTSO-E Transparency Platform, cross-border physical flows. Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: see the last column. For the EU27, only flows with non-EU countries count. Map: Natural Earth.</p>
+
+    <details class="more">
+      <summary>More detail · by border, and a single day hour by hour</summary>
+      <h3>By border</h3>
+      <table>
+        <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
+        <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
+      </table>
+      <h3 data-draw="fl-hours-title" data-source="flows_hours_recent">Hour by hour</h3>
+      <div class="chart short" data-draw="fl-hours" data-source="flows_hours_recent" role="img" aria-label="Imports and exports of the selected country hour by hour"></div>
+      <p class="note" data-draw="fl-hours-note" data-source="flows_hours_recent"></p>
+    </details>
+    <p class="note">Source: ENTSO-E, physical flows. For the EU27, only flows with non-EU countries count. Map: Natural Earth. Method and data gaps: see Methods.</p>
+  </section>
+
+  <!-- ============ COMPARE COUNTRIES ============ -->
+  <section id="profile" data-section hidden>
+    <h2 id="profile-pick">Compare <span data-draw="cmp-name">—</span> with other countries</h2>
+    <div class="row" data-draw="cmp-row">
+      <label class="muted" for="profile-ref">compared with</label>
+      <select id="profile-ref" class="dash-select" data-draw="ref-select" data-source="profile" aria-label="Country or average to compare with"></select>
+      <span class="muted" data-draw="ref-note">—</span>
+    </div>
+    <p class="take" data-draw="tk-cmp" data-source="profile"></p>
+    <h3>Indicators</h3>
+    <div class="row" data-draw="ind-chips" data-source="profile"></div>
+    <div class="chart" data-draw="spider" data-source="profile" role="img" aria-label="Country indicators relative to the chosen comparison"></div>
+    <p class="pick" data-draw="spider-pick">—</p>
+    <p class="note wide">Outside the grey shape: above the comparison on that indicator; inside: below. Rings at 0.5×, 1.5×, 2× and 2.5×.</p>
+    <details class="more">
+      <summary>More detail · what each indicator measures</summary>
+      <dl class="defs" data-draw="ind-legend" data-source="profile"></dl>
+    </details>
+  </section>
+
+  <!-- ============ METHODS ============ -->
+  <section id="methods" data-section hidden class="methods">
+    <h2>Methods and sources</h2>
+
+    <h3>Sources</h3>
+    <p>Day-ahead prices (updated daily), generation by source, demand and cross-border physical flows: ENTSO-E Transparency Platform. Household prices: Eurostat (nrg_pc_204, nrg_pc_202), half-yearly, all taxes included. Pump prices: European Commission Weekly Oil Bulletin. TTF, storage and the weekly indicators: DG ENER weekly newsletter. Country borders on the map: Natural Earth.</p>
+
+    <h3>Prices</h3>
+    <p>Daily averages are weighted by interval length (hourly until September 2025, 15-minute after). Days and months follow Brussels time. Country price for countries with several zones (Italy, Denmark, Sweden): simple mean of the zones, not the PUN. EU27 price: country prices weighted by monthly demand; by hour, weighted by each country's demand in that hour. Cyprus and Malta have no coupled day-ahead market.</p>
+    <p>Prices through the day: each point is the average of that hour over all days of the period. Solar pushes prices down around midday; when the sun sets, demand is still high and the price rises. "% of day average" removes the price level (gas, CO2), so only the shape of the day is compared. Storage, demand response, interconnections and the mix all affect the shape: these data alone cannot separate their effects.</p>
+
+    <h3>Generation mix and demand</h3>
+    <p>ENTSO-E actual generation per production type and actual load. Some countries report with gaps; Malta does not report generation by source. The running month is left out of the mix and demand.</p>
+
+    <h3>Through the day: what covers demand</h3>
+    <p>The chart is an hourly balance. Above zero: everything that enters the system in that hour, that is generation by source plus imports. Below zero: what is not consumed in the country in that hour: exports, power charging batteries and power pumping water into reservoirs. Above minus below equals demand, so the part above zero passes 100% by as much as the part below zero goes under zero. Imports and exports are gross, summed over all borders: a country can import on one border and export on another in the same hour, for example when power transits through it.</p>
+    <p>The balance never closes exactly, for three reasons: measured demand (ENTSO-E "actual load") does not always cover self-consumption and small plants; grid losses; and gaps in the data for some sources, borders or hours. The gap is a few points for most countries and larger for some, Germany included.</p>
+    <p>Batteries are what ENTSO-E reports as "Energy storage", available from 2025 and only for some countries; pumped hydro is shown separately. Many countries, Germany included, do not report batteries: a missing band does not mean there are no batteries. The EU27 battery figure is the sum of the reporting countries and is understated. For the EU27, imports and exports are with non-EU countries only. Winter runs from December of the year before to February.</p>
+
+    <h3>Cross-border flows</h3>
+    <p>Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: the table under "More detail" shows the days with data. Hour-by-hour data for single days are kept for the last 35 days.</p>
+
+    <h3>Compare countries</h3>
+    <p>Each axis is the country value divided by the value of the comparison (the EU27 average or another country). The grey shape is the comparison (1×). Values above 2.5× are capped (▲). Indicators based on imports and exports use the simple mean of member states for the EU27, because flows between EU countries cancel out in an EU total.</p>
   </section>
 
   <!-- ============ DG ENER ============ -->
@@ -266,6 +315,11 @@
       <table class="changes">
         <thead><tr><th>Date</th><th>Requested by</th><th>Made by</th><th>Change</th></tr></thead>
         <tbody>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>New chart: what covers demand hour by hour, with batteries, imports and exports</td></tr>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Removed the gas-and-storage evening chart (replaced by the chart above)</td></tr>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>One country selector for all tabs; links like #IT/flows open a country and tab</td></tr>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Tabs reorganised: Prices, Power system, Flows, Compare countries, Methods</td></tr>
+          <tr><td>2026-11-26</td><td>Andrea</td><td>Claude</td><td>Secondary charts moved into "More detail" blocks; one-line takeaway above main charts</td></tr>
           <tr><td>2026-11-25</td><td>Andrea</td><td>Claude</td><td>DG ENER editions of 17 and 24 Nov added (TTF, storage, weekly indicators)</td></tr>
           <tr><td>2026-11-25</td><td>Andrea</td><td>Claude</td><td>Claude dashboard aligned with the site: news feed removed</td></tr>
           <tr><td>2026-11-25</td><td>Andrea</td><td>Claude</td><td>Country profile: imports and exports as % of demand (12 months)</td></tr>
@@ -310,13 +364,6 @@
         </tbody>
       </table>
     </div>
-  </details>
-
-  <details class="note">
-    <summary>Sources and method</summary>
-    <p>Day-ahead prices (updated daily), generation by source and demand (updated weekly): ENTSO-E Transparency Platform. Daily averages are weighted by interval length (hourly until September 2025, 15-minute after). Days and months follow Brussels time.</p>
-    <p>Country price for countries with several zones (Italy, Denmark, Sweden): simple mean of the zones, not the PUN. EU27 price: country prices weighted by monthly demand. Cyprus and Malta have no coupled day-ahead market.</p>
-    <p>Household prices: Eurostat (nrg_pc_204, nrg_pc_202), half-yearly, all taxes included. Pump prices: European Commission Weekly Oil Bulletin. TTF, storage and the weekly indicators: DG ENER weekly newsletter.</p>
   </details>
 </div>
 

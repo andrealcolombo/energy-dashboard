@@ -18,7 +18,7 @@ SITE = ROOT / "site"
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "_site"
 
 DATA = ["prices_daily", "prices_monthly", "mix_monthly", "mix_weekly", "load_monthly",
-        "fuels_weekly", "retail_semiannual", "day_profile", "flows_daily", "flows_monthly", "flows_hours_profile", "flows_hours_recent", "geo_europe"]
+        "fuels_weekly", "retail_semiannual", "day_profile", "day_mix", "flows_daily", "flows_monthly", "flows_hours_profile", "flows_hours_recent", "geo_europe"]
 
 THEME = """
 :root{--color-fg:#1f1e1d;--color-fg-muted:#5f5c56;--color-bg:#faf9f5;--color-panel:#fff;--color-border-line:#e5e2da;
@@ -62,9 +62,7 @@ def page():
     s = must(s, "<h1>EU Energy Markets Dashboard</h1>", "<h1>" + BOLT_SVG.replace("<svg ", '<svg class="bolt" aria-hidden="true" ', 1) + "EU Energy Markets Dashboard</h1>")
     s = must(s, '    <button class="tab" role="tab" data-tab="dgener" aria-selected="false">DG ENER weekly</button>\n', "")
     s = cut(s, "  <!-- ============ DG ENER ============ -->", "  </section>\n")
-    s = cut(s, '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Change log</summary>', "  </details>\n\n")
-    s = must(s, '  <details class="note">\n    <summary>Sources and method</summary>',
-             '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Sources and method</summary>')
+    s = cut(s, '  <details class="note" style="margin-top:var(--cds-gap-lg)">\n    <summary>Change log</summary>', "  </details>\n")
     s = must(s, "TTF, storage and the weekly indicators: DG ENER weekly newsletter.",
              "TTF day-ahead (weekly average) and EU gas storage: internal elaborations of the European Commission "
              "(DG ENER), updated weekly.")
@@ -73,11 +71,11 @@ def page():
            '<a href="data/energy_dashboard_data.xlsx">Download all data (Excel)</a>'
            '<a href="https://github.com/andrealcolombo/energy-dashboard">Code and CSV files (GitHub)</a></div>\n')
     s = must(s, '  <p class="lede" data-draw="headline">—</p>\n', '  <p class="lede" data-draw="headline">—</p>\n' + bar)
-    s = s.replace("</details>\n</div>",
-                  "</details>\n  <p class=\"disclaimer\">Independent prototype built from public data "
+    s = must(s, "\n</div>\n\n<script",
+                  "\n  <p class=\"disclaimer\">Independent prototype built from public data "
                   "(ENTSO-E Transparency Platform, Eurostat, European Commission Weekly Oil Bulletin) and internal elaborations "
                   "of the European Commission for TTF and gas storage. "
-                  "Not an official publication of the European Commission.</p>\n</div>", 1)
+                  "Not an official publication of the European Commission.</p>\n</div>\n\n<script")
     for bad in ('data-tab="dgener"', 'id="dgener"', "news-list", "Claude", "Change log"):
         if bad in s:
             raise SystemExit(f"build_site: internal content left in page: {bad}")

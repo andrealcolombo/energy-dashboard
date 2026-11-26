@@ -219,8 +219,68 @@ window.ED = (function () {
       .on('pointerleave', () => { tip.hidden = true; rule.style('display', 'none'); });
   }
 
-  return {f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider, hourStack};
+  // Hour-of-day balance as shares of demand (%). P: {rows:[{h, v:{load, key:MW}}]} or null.
+  // pos: sources stacked above zero, neg: below zero ([{key, label, color, op}]).
+  // o: {yDomain, h (marker hour), bat (batteries reported?), onHover(h), empty}. Returns {setH(h)}.
+  function shareStack(el, P, pos, neg, o = {}) {
+    el.replaceChildren();
+    if (!P || !P.rows.length) { placeholder(el, 'empty', o.empty || 'No data'); return {setH() {}}; }
+    const W = Math.max(280, el.clientWidth), H = o.height || 300, m = {t: 26, r: 18, b: 22, l: 36};
+    const sh = (r, k) => { const l = r.v.load, x = r.v[k]; return l > 0 && Number.isFinite(x) ? 100 * Math.max(0, x) / l : 0; };
+    const layers = [];
+    let base = P.rows.map(() => 0);
+    pos.forEach((k) => { const top = P.rows.map((r, i) => base[i] + sh(r, k.key)); layers.push({k, lo: base, hi: top}); base = top; });
+    base = P.rows.map(() => 0);
+    neg.forEach((k) => { const bot = P.rows.map((r, i) => base[i] - sh(r, k.key)); layers.push({k, lo: bot, hi: base}); base = bot; });
+    const dom = o.yDomain || [Math.min(0, d3.min(layers, (l) => d3.min(l.lo))), Math.max(100, d3.max(layers, (l) => d3.max(l.hi)))];
+    const x = d3.scaleLinear().domain([0, 23]).range([m.l, W - m.r]);
+    const y = d3.scaleLinear().domain(dom).nice().range([H - m.b, m.t]);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', el.getAttribute('aria-label') || '');
+    const ya = svg.append('g').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickSize(-(W - m.l - m.r)).tickFormat((v) => f.n0(v)));
+    ya.select('.domain').remove(); ya.selectAll('line').style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).tickValues([0, 6, 12, 18, 23]).tickFormat((h) => String(h).padStart(2, '0') + ':00')).selectAll('line,path').style('stroke', 'var(--cds-chart-axis)');
+    layers.forEach((l) => svg.append('path').attr('d', d3.area().x((_, i) => x(P.rows[i].h)).y0((_, i) => y(l.lo[i])).y1((_, i) => y(l.hi[i]))(P.rows))
+      .style('fill', l.k.color).style('fill-opacity', l.k.op || 1).style('stroke', 'var(--color-bg, #fff)').attr('stroke-width', 0.6));
+    [0, 100].forEach((v) => svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v)).style('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', v ? '4 3' : null));
+    svg.append('text').attr('x', W - m.r).attr('y', y(100) - 4).attr('text-anchor', 'end').text('demand = 100');
+    const bat = (h) => { const r = P.rows.find((z) => z.h === h); return r ? sh(r, 'battery_out') : NaN; };
+    const rule = svg.append('line').attr('y1', m.t - 6).attr('y2', H - m.b).style('stroke', 'var(--color-fg)').attr('stroke-width', 1.6);
+    const lab = svg.append('text').attr('y', 13).style('fill', 'var(--color-fg)').style('font-size', '12px');
+    const hh = (h) => String(h).padStart(2, '0') + ':00';
+    const setH = (h) => {
+      rule.attr('x1', x(h)).attr('x2', x(h));
+      lab.attr('x', Math.min(Math.max(x(h), m.l + 80), W - m.r - 80)).attr('text-anchor', 'middle').text(null);
+      if (o.bat) { lab.append('tspan').text('Batteries at ' + hh(h) + ': '); lab.append('tspan').style('font-weight', '700').text((bat(h) < 1 ? f.n2(bat(h)) : f.n1(bat(h))) + '%'); }
+      else lab.append('tspan').text(hh(h) + ' · batteries not reported');
+    };
+    setH(o.h === undefined ? 19 : o.h);
+    const tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; el.append(tip);
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('pointermove', (ev) => {
+        const [px] = d3.pointer(ev); const h = Math.max(0, Math.min(23, Math.round(x.invert(px * W / svg.node().getBoundingClientRect().width))));
+        if (o.onHover) o.onHover(h); else setH(h);
+        const r = P.rows.find((z) => z.h === h); if (!r) return;
+        tip.replaceChildren(); const hd = document.createElement('div'); hd.className = 'muted'; hd.textContent = hh(h) + '–' + hh(h + 1) + ' · % of demand'; tip.append(hd);
+        const line = (k, v, sign) => { const d = document.createElement('div'); const ii = document.createElement('i'); ii.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:${k.color};opacity:${k.op || 1}`; d.append(ii, document.createTextNode(k.label + ': ' + sign + f.n1(v) + '%')); tip.append(d); };
+        pos.slice().reverse().forEach((k) => { const v = sh(r, k.key); if (k.key === 'battery_out' && !o.bat) return; if (v >= 0.05 || k.key === 'battery_out') line(k, v, ''); });
+        neg.forEach((k) => { const v = sh(r, k.key); if (v >= 0.05) line(k, v, '−'); });
+        const ni = sh(r, 'imp') - sh(r, 'exp'); const n = document.createElement('div'); n.style.fontWeight = '600'; n.textContent = 'Net ' + (ni >= 0 ? 'imports' : 'exports') + ': ' + f.n1(Math.abs(ni)) + '%'; tip.append(n);
+        const dm = document.createElement('div'); dm.className = 'muted'; dm.textContent = 'Demand: ' + f.n1(r.v.load / 1000) + ' GW'; tip.append(dm);
+        tip.hidden = false; const bw = el.clientWidth, sx = x(h) * bw / W; tip.style.left = (sx + 14 + tip.offsetWidth > bw ? Math.max(0, sx - 14 - tip.offsetWidth) : sx + 14) + 'px'; tip.style.top = '20px';
+      })
+      .on('pointerleave', () => { tip.hidden = true; });
+    return {setH};
+  }
+
+  return {f, parseDay, parseMonth, dayFmt, dayShort, mLabel, name, MIXC, MIXORDER, RES, num, chgSpan, placeholder, lineChart, stackChart, divBars, pie, spider, hourStack, shareStack};
 })();
 
-// page state (not data): what the reader has selected
-window.EDS = {country: 'EU27', mix: 'EU27', areas: ['EU27', 'IT', 'HU'], range: 365, nl: 'gas_ttf', profile: 'IT', ref: 'EU27', dp: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMix: null, dpMode: 'years', dpCmp: [], dpYear: null, dpPeak: null, fl: 'EU27', flPer: 'month', flSel: null, flWhen: 'year', flWhenYears: null, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
+// page state (not data): what the reader has selected. One country (c) for every tab.
+window.EDS = {c: 'EU27', extra: [], range: 365, nl: 'gas_ttf', ref: 'EU27', dpSeason: 'year', dpRel: false, dpYears: null, dpMode: 'years', dpCmp: [], dpYear: null,
+  flPer: 'month', flSel: null, flWhen: 'year', flWhenYears: null, dmSeason: 'year', dmPair: null, dmH: 19, ind: ['w7', 're_el', 'diesel', 'res_1m', 'gas_12m', 'solar_12m']};
+// Older names used by the tabs all point at the single country
+['country', 'mix', 'profile', 'dp', 'fl'].forEach((k) => Object.defineProperty(EDS, k, {get: () => EDS.c, set: (v) => { EDS.c = v; }, enumerable: true}));
+// Price comparison: the chosen country and the EU27 are always shown, plus up to four other areas
+Object.defineProperty(EDS, 'areas', {enumerable: true,
+  get: () => { const b = EDS.c === 'EU27' ? ['EU27'] : [EDS.c, 'EU27']; return b.concat(EDS.extra.filter((a) => !b.includes(a))).slice(0, 6); },
+  set: (v) => { const b = EDS.c === 'EU27' ? ['EU27'] : [EDS.c, 'EU27']; EDS.extra = v.filter((a) => !b.includes(a)); }});

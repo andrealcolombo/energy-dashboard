@@ -1,20 +1,47 @@
-// ---------- tabs and controls (listen + set attributes only) ----------
-(function () {
+// ---------- tabs, the single country selector, links and "More detail" blocks ----------
+window.EDU = (function () {
+  const EU = ['AT', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE'];
   const tabs = document.querySelectorAll('.ed .tab');
+  let tab = 'latest';
+  const link = () => { try { dash.setLink((EDS.c !== 'EU27' ? EDS.c + '/' : '') + tab); } catch (e) { /* links are optional */ } };
   const show = (id) => {
+    tab = id;
     document.querySelectorAll('.ed [data-section]').forEach((s) => { s.hidden = s.id !== id; });
     tabs.forEach((t) => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
-    dash.setLink(id);
+    link();
   };
   tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.tab)));
-  const h = (location.hash || '').slice(1);
-  if (h && document.getElementById(h) && document.getElementById(h).hasAttribute('data-section')) show(h);
+  // Links: #IT, #flows or #IT/flows
+  decodeURIComponent((location.hash || '').slice(1)).split('/').forEach((part) => {
+    const el = part && document.getElementById(part);
+    if (el && el.hasAttribute('data-section')) tab = part;
+    else if (part === 'EU27' || EU.includes(part)) EDS.c = part;
+  });
+  if (tab !== 'latest' || EDS.c !== 'EU27') show(tab);
+
+  const names = (root) => Array.from(new Set(Array.from(root.querySelectorAll('[data-draw]')).map((e) => e.dataset.draw)));
+  const redrawAll = () => names(document).forEach((n) => dash.draw(n));
+  // Charts in a closed block have no width: draw them again when the block opens
+  document.querySelectorAll('.ed details.more').forEach((d) => d.addEventListener('toggle', () => { if (d.open) names(d).forEach((n) => dash.draw(n)); }));
+
+  dash.draw('global-country', (sel) => {
+    const cs = ['EU27'].concat(EU.slice().sort((a, b) => ED.name(a).localeCompare(ED.name(b), 'en')));
+    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
+    sel.value = EDS.c;
+    sel.onchange = () => {
+      EDS.c = sel.value;
+      EDS.dpYears = null; EDS.dmPair = null; EDS.picked = null; EDS.flWhenYears = null;
+      if (EDS.ref === EDS.c) EDS.ref = 'EU27';
+      link(); redrawAll();
+    };
+  });
 
   document.querySelectorAll('.ed [data-range]').forEach((b) => b.addEventListener('click', () => {
     EDS.range = +b.dataset.range;
     document.querySelectorAll('.ed [data-range]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     dash.draw('price-daily');
   }));
+  return {EU, redrawAll};
 })();
 
 // ---------- shared lookups ----------
@@ -31,12 +58,6 @@ window.EDL = {
   const C = () => EDS.country;
   const fk = () => (C() === 'EU27' ? 'EU' : C());
   const TICK = ['t-whole', 't-whole-date', 't-whole-chg', 't-w7', 't-w7-per', 't-w7-chg', 't-relec', 't-relec-per', 't-relec-chg', 't-rgas', 't-rgas-per', 't-rgas-chg', 't-dsl', 't-dsl-per', 't-dsl-chg', 't-pet', 't-pet-per', 't-pet-chg', 'wk-period', 'week-pie', 'week-note', 'wk-legend', 'news-list'];
-
-  dash.draw('country-select', (sel) => {
-    sel.replaceChildren(...EDL.countries().map((c) => new Option(ED.name(c), c)));
-    sel.value = EDS.country;
-    sel.onchange = () => { EDS.country = sel.value; TICK.forEach((n) => dash.draw(n)); };
-  });
 
   dash.draw('headline', (el) => {
     const r = row('kpi_power', 'area', 'EU27'), n = row('nl_latest', 'indicator', 'gas_ttf');
@@ -134,15 +155,34 @@ window.EDL = {
     const d = dash.data('prices_daily');
     const rows = d.status === 'ok' ? d.data : [];
     EDS.areas.forEach((a) => {
-      const b = document.createElement('button'); b.className = 'chip sel'; b.setAttribute('aria-pressed', 'true'); b.textContent = label(a); b.title = 'Remove ' + label(a);
+      const fixed = a === EDS.c || a === 'EU27';
+      const b = document.createElement('button'); b.className = fixed ? 'chip' : 'chip sel'; b.setAttribute('aria-pressed', 'true'); b.textContent = label(a); b.title = fixed ? 'Change the country at the top of the page' : 'Remove ' + label(a);
       const sw = document.createElement('i'); sw.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;background:${colorFor(a)}`; b.prepend(sw);
-      b.onclick = () => { EDS.areas = EDS.areas.filter((x) => x !== a); redraw(); };
+      if (!fixed) b.onclick = () => { EDS.areas = EDS.areas.filter((x) => x !== a); redraw(); };
       el.append(b);
     });
     const zones = Array.from(new Set(rows.filter((r) => r.level === 'zone').map((r) => r.area))).sort();
     const mk = (title, list, lab) => { const sel = document.createElement('select'); sel.className = 'dash-select'; sel.setAttribute('aria-label', title); sel.append(new Option(title, '')); list.filter((a) => !EDS.areas.includes(a)).forEach((a) => sel.append(new Option(lab(a), a))); sel.onchange = () => { if (sel.value) { EDS.areas = EDS.areas.concat(sel.value).slice(-6); redraw(); } }; return sel; };
-    el.append(mk('+ country', EDL.countries(), (a) => ED.name(a)), mk('+ bidding zone', zones, (a) => a.replace('_', ' ')));
+    el.append(mk('+ compare with a country', EDL.countries(), (a) => ED.name(a)), mk('+ bidding zone', zones, (a) => a.replace('_', ' ')));
   });
+
+  // Takeaway: last complete month, against a year earlier and the EU27
+  dash.draw('tk-prices', (el) => {
+    const d = dash.data('prices_monthly'), pd = dash.data('prices_daily');
+    if (d.status !== 'ok' || pd.status !== 'ok') { el.textContent = ''; return; }
+    const cur = (d3.max(pd.data, (r) => r.date) || '').slice(0, 7);
+    const v = (a, m) => { const r = d.data.find((x) => x.area === a && x.month === m); return r ? +r.avg_eur_mwh : NaN; };
+    const ms = d.data.filter((r) => r.area === EDS.c && r.month < cur && r.avg_eur_mwh !== null).map((r) => r.month).sort();
+    const m = ms[ms.length - 1]; if (!m) { el.textContent = ''; return; }
+    const py = (+m.slice(0, 4) - 1) + m.slice(4), mm = ED.mLabel(ED.parseMonth(m));
+    const a = v(EDS.c, m), b = v(EDS.c, py), e = v('EU27', m);
+    const pct = (x, y) => { const p = 100 * (x / y - 1); return f0(Math.abs(p)) + '% ' + (p >= 0 ? 'above' : 'below'); };
+    let t = `${ED.name(EDS.c)}: day-ahead power averaged ${ED.f.n0(a)} €/MWh in ${mm}`;
+    if (Number.isFinite(b)) t += `, ${pct(a, b)} ${ED.mLabel(ED.parseMonth(py))}`;
+    if (EDS.c !== 'EU27' && Number.isFinite(e)) t += ` and ${pct(a, e)} the EU27 average`;
+    el.textContent = t + '.';
+  });
+  const f0 = ED.f.n0;
 
   dash.draw('price-daily', (el) => {
     const d = dash.data('prices_daily');
@@ -173,19 +213,16 @@ window.EDL = {
 (function () {
   const C = () => EDS.mix;
   const MIX = ['mix-country', 'ytd-period', 'pie-cur-title', 'pie-2021-title', 'pie-cur', 'pie-2021', 'mix-stack', 'load-chart'];
-  dash.draw('mix-select', (sel) => {
-    const d = dash.data('mix_monthly');
-    const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.country))) : ['EU27'];
-    cs.sort((a, b) => (a === 'EU27' ? -1 : b === 'EU27' ? 1 : ED.name(a).localeCompare(ED.name(b), 'en')));
-    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
-    sel.value = EDS.mix;
-    sel.onchange = () => { EDS.mix = sel.value; MIX.forEach((n) => dash.draw(n)); };
-  });
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   const ytdRows = () => { const a = dash.data('mix_ytd'); return a.status === 'ok' && Array.isArray(a.data) ? a.data.filter((r) => r.country === C()) : []; };
   const period = (r) => 'January–' + MONTHS[+r.last_month.slice(5) - 1];
 
-  dash.draw('mix-country', (el) => { el.textContent = ED.name(C()); });
+  dash.draw('tk-mix', (el) => {
+    const v = ytdRows(), r = v.find((x) => x.group === 'Renewables (total)');
+    if (!r || r.ycur === null) { el.textContent = ''; return; }
+    const was = r.y2021 !== null ? `, against ${ED.f.n0(r.y2021)}% in the same months of 2021` : '';
+    el.textContent = `Renewables produced ${ED.f.n0(r.ycur)}% of ${C() === 'EU27' ? 'the EU27' : ED.name(C())}'s electricity in ${period(r)} ${r.cur_year}${was}.`;
+  });
   dash.draw('mix-legend', (el) => {
     el.replaceChildren();
     ED.MIXORDER.forEach((g) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = ED.MIXC[g]; sp.append(i, document.createTextNode(g)); el.append(sp); });
@@ -257,13 +294,16 @@ window.EDL = {
     const ratio = Number.isFinite(a) && Number.isFinite(e) && e !== 0 ? a / e : NaN;
     return {...i, a, e, ratio, text: `${i.label}: ${ED.name(P())} ${Number.isFinite(a) ? i.fmt(a) : 'n/a'} · ${ED.name(R())} ${Number.isFinite(e) ? i.fmt(e) : 'n/a'} ${i.unit}`};
   });
-  const redraw = () => ['ref-select', 'ref-note', 'ind-chips', 'spider', 'spider-pick', 'ind-legend'].forEach((n) => dash.draw(n));
+  const redraw = () => ['ref-select', 'ref-note', 'tk-cmp', 'ind-chips', 'spider', 'spider-pick', 'ind-legend'].forEach((n) => dash.draw(n));
 
-  dash.draw('profile-select', (sel) => {
-    const cs = EDL.countries().filter((c) => c !== 'EU27');
-    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
-    sel.value = EDS.profile;
-    sel.onchange = () => { EDS.profile = sel.value; if (R() === sel.value) EDS.ref = 'EU27'; EDS.picked = null; redraw(); };
+  dash.draw('cmp-name', (el) => { el.textContent = P() === 'EU27' ? 'a country' : ED.name(P()); });
+  dash.draw('cmp-row', (el) => { el.style.display = P() === 'EU27' ? 'none' : ''; });
+  dash.draw('tk-cmp', (el) => {
+    if (P() === 'EU27') { el.textContent = 'Choose a country at the top of the page to compare it with the EU27 average or with another country.'; return; }
+    const a = axes().filter((x) => Number.isFinite(x.ratio)); if (a.length < 2) { el.textContent = ''; return; }
+    const hi = a.reduce((p, q) => (q.ratio > p.ratio ? q : p)), lo = a.reduce((p, q) => (q.ratio < p.ratio ? q : p));
+    const ref = R() === 'EU27' ? 'the EU27 average' : ED.name(R());
+    el.textContent = `Among the indicators shown, ${ED.name(P())} is furthest above ${ref} on ${hi.label.toLowerCase()} (${ED.f.n1(hi.ratio)}×) and furthest below on ${lo.label.toLowerCase()} (${ED.f.n1(lo.ratio)}×).`;
   });
 
   dash.draw('ref-select', (sel) => {
@@ -287,12 +327,13 @@ window.EDL = {
   dash.draw('spider', (el) => {
     const d = dash.data('profile');
     if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    if (P() === 'EU27') { ED.placeholder(el, 'empty', 'Choose a country at the top of the page.'); return; }
     ED.spider(el, axes(), {color: dash.colors[1], onPick: (a) => { EDS.picked = a.id; dash.draw('spider-pick'); }});
   });
 
   dash.draw('spider-pick', (el) => {
     const a = axes().find((x) => x.id === EDS.picked);
-    if (!a) { el.textContent = 'Click a point to see the values.'; return; }
+    if (!a) { el.textContent = P() === 'EU27' ? '' : 'Click a point to see the values.'; return; }
     const diff = Number.isFinite(a.ratio) ? ` (${ED.f.p0(100 * (a.ratio - 1))}% vs ${ED.name(R())})` : '';
     el.textContent = `${a.label} — ${ED.name(P())}: ${Number.isFinite(a.a) ? a.fmt(a.a) : 'n/a'} ${a.unit} · ${ED.name(R())}: ${Number.isFinite(a.e) ? a.fmt(a.e) : 'n/a'} ${a.unit}${diff}`;
   });
@@ -355,10 +396,8 @@ window.EDL = {
   const SEASONS = [['year', 'Whole year', null], ['spring', 'Spring', [3, 4, 5]], ['summer', 'Summer', [6, 7, 8]], ['autumn', 'Autumn', [9, 10, 11]], ['winter', 'Winter', [12, 1, 2]]];
   const SNAME = Object.fromEntries(SEASONS.map(([k, l]) => [k, l]));
   const COLS = ['price', 'load', 'solar', 'wind', 'gas', 'coal', 'nuclear', 'hydro', 'other', 'pumped_out', 'pumped_in', 'battery_out', 'battery_in'];
-  const PEAK = [['gas', 'Gas'], ['pumped_out', 'Pumped storage'], ['battery_out', 'Battery storage']];
   const MODES = [['years', 'Years'], ['countries', 'Countries'], ['seasons', 'Seasons']];
-  const ALL = ['dp-select', 'dp-season', 'dp-unit', 'dp-mode', 'dp-price-title', 'dp-years', 'dp-countries', 'dp-price', 'dp-note', 'dp-swing-title', 'dp-swing',
-    'dp-peak-years', 'dp-peak-legend', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'];
+  const ALL = ['dp-season', 'dp-unit', 'dp-mode', 'dp-price-title', 'dp-years', 'dp-countries', 'dp-price', 'dp-note', 'dp-swing-title', 'dp-swing'];
   const redraw = () => ALL.forEach((n) => dash.draw(n));
   const hourDate = (h) => new Date(Date.UTC(2000, 0, 1, h));
   const mode = () => EDS.dpMode || 'years';
@@ -406,12 +445,15 @@ window.EDL = {
   const areas = () => { const d = dash.data('day_profile'); const cs = d.status === 'ok' ? Array.from(new Set(d.data.map((r) => r.area))) : ['EU27'];
     return cs.sort((a, b) => (a === 'EU27' ? -1 : b === 'EU27' ? 1 : ED.name(a).localeCompare(ED.name(b), 'en'))); };
 
-  dash.draw('dp-select', (sel) => {
-    sel.replaceChildren(...areas().map((c) => new Option(ED.name(c), c)));
-    sel.value = EDS.dp;
-    sel.onchange = () => { EDS.dp = sel.value; EDS.dpYears = null; EDS.dpPeak = null; redraw(); };
+  dash.draw('tk-day', (el) => {
+    const p = prof(EDS.dp, 'last12')[0];
+    const v = p ? p.rows.filter((r) => Number.isFinite(r.v.price)) : [];
+    if (v.length < 20) { el.textContent = ''; return; }
+    const hi = v.reduce((a, b) => (b.v.price > a.v.price ? b : a)), lo = v.reduce((a, b) => (b.v.price < a.v.price ? b : a));
+    const hh = (h) => String(h).padStart(2, '0') + ':00–' + String(h + 1).padStart(2, '0') + ':00';
+    el.textContent = `Over the last 12 months, the dearest hour in ${ED.name(EDS.dp)} was ${hh(hi.h)} (${f.n0(hi.v.price)} €/MWh on average) and the cheapest ${hh(lo.h)} (${f.n0(lo.v.price)} €/MWh).`;
   });
-  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, l]) => chip(l, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; EDS.dpPeak = null; redraw(); }))); });
+  dash.draw('dp-season', (el) => { el.replaceChildren(...SEASONS.map(([k, l]) => chip(l, EDS.dpSeason === k, () => { EDS.dpSeason = k; EDS.dpYears = null; redraw(); }))); });
   dash.draw('dp-unit', (el) => { el.replaceChildren(chip('€/MWh', !EDS.dpRel, () => { EDS.dpRel = false; redraw(); }), chip('% of day average', EDS.dpRel, () => { EDS.dpRel = true; redraw(); })); });
   dash.draw('dp-mode', (el) => { el.replaceChildren(lab('Compare'), ...MODES.map(([k, l]) => chip(l, mode() === k, () => { EDS.dpMode = k; redraw(); }))); });
 
@@ -476,65 +518,6 @@ window.EDL = {
     ED.divBars(el, data, {unit: '%', noSign: true, fmt: f.n0});
   });
 
-  const legend = (el, items, demand) => {
-    el.replaceChildren();
-    items.forEach((k) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = k.color; if (k.neg) i.style.opacity = 0.55; sp.append(i, document.createTextNode(k.label)); el.append(sp); });
-    if (demand) { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.cssText = 'background:none;border-top:2px dashed var(--color-fg);height:0;margin-top:6px'; sp.append(i, document.createTextNode('Demand')); el.append(sp); }
-  };
-
-  // ---- Who covers the evening peak: gas and storage, two periods side by side ----
-  const peakPair = () => {
-    const ps = periods(); const lab2 = EDS.dpPeak || [];
-    const a = ps.find((p) => p.label === lab2[0]) || ps[ps.length - 2] || ps[0];
-    const b = ps.find((p) => p.label === lab2[1]) || ps[ps.length - 1];
-    return [a, b];
-  };
-  const peakKeys = () => PEAK.map(([key, label]) => ({key, label, color: ED.MIXC[label]}));
-  dash.draw('dp-peak-years', (el) => {
-    el.replaceChildren();
-    const ps = periods(), [a, b] = peakPair();
-    if (!ps.length) return;
-    const mk = (cur, i) => { const s = document.createElement('select'); s.className = 'dash-select'; s.setAttribute('aria-label', i ? 'Second period' : 'First period');
-      s.append(...ps.map((p) => new Option(p.full, p.label))); s.value = cur ? cur.label : ''; s.onchange = () => { const v = peakPair().map((p) => p && p.label); v[i] = s.value; EDS.dpPeak = v; ['dp-peak-years', 'dp-peak-a-title', 'dp-peak-a', 'dp-peak-b-title', 'dp-peak-b', 'dp-peak-warn'].forEach((n) => dash.draw(n)); }; return s; };
-    el.append(lab(ED.name(EDS.dp) + ', ' + SNAME[EDS.dpSeason].toLowerCase() + ':'), mk(a, 0), lab('compared with'), mk(b, 1));
-  });
-  const SOLAR = {key: 'solar', label: 'Solar', color: ED.MIXC['Solar']};
-  dash.draw('dp-peak-legend', (el) => {
-    legend(el, peakKeys(), false);
-    const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = SOLAR.color; i.style.opacity = 0.3;
-    sp.append(i, document.createTextNode('Solar (shape only, not to scale; hover for MW)')); el.append(sp);
-  });
-  const solarMax = () => d3.max(peakPair().filter(Boolean), (p) => d3.max(p.rows, (r) => r.v.solar)) || 1;
-  const peakMax = () => d3.max(peakPair().filter(Boolean), (p) => d3.max(p.rows, (r) => d3.sum(PEAK, ([k]) => Math.max(0, r.v[k] || 0)))) || 1;
-  const peakDraw = (i) => (el) => {
-    const d = dash.data('day_profile');
-    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
-    const p = peakPair()[i];
-    ED.hourStack(el, p ? p.rows : [], p ? peakKeys() : [], [], {height: 240, yMax: peakMax(), shade: {...SOLAR, max: solarMax()}, empty: 'No data for this period'});
-  };
-  dash.draw('dp-peak-a-title', (el) => { const p = peakPair()[0]; el.textContent = p ? p.full : '—'; });
-  dash.draw('dp-peak-b-title', (el) => { const p = peakPair()[1]; el.textContent = p ? p.full : '—'; });
-  dash.draw('dp-peak-a', peakDraw(0));
-  dash.draw('dp-peak-b', peakDraw(1));
-  dash.draw('dp-peak-warn', (el) => {
-    const [a, b] = peakPair(); el.replaceChildren(); el.style.display = 'none';
-    if (!a || !b) return;
-    const has = (p, k) => p.rows.some((r) => Number.isFinite(r.v[k]));
-    const msg = [];
-    if (EDS.dp === 'EU27') {
-      const rep = areas().filter((c) => c !== 'EU27' && prof(c, EDS.dpSeason).some((p) => p.label === b.label && has(p, 'battery_out')));
-      msg.push('EU27 batteries are the sum of the ' + rep.length + ' countries (out of ' + (areas().length - 1) + ') that report them to ENTSO-E' + (rep.length ? ': ' + rep.map(ED.name).join(', ') : '') + '. Countries that do not report batteries are not counted, so the EU27 total is understated.');
-    } else if (!has(a, 'battery_out') && !has(b, 'battery_out')) {
-      msg.push(ED.name(EDS.dp) + ' does not report batteries to ENTSO-E. The chart shows only gas and pumped storage: any batteries in the country are invisible here.');
-    } else if (!has(a, 'battery_out')) {
-      msg.push(ED.name(EDS.dp) + ' reports batteries only from ' + b.label + ' on, not in ' + a.label + ': part of the increase may reflect the start of reporting, not new batteries.');
-    } else {
-      msg.push(ED.name(EDS.dp) + ' reports batteries to ENTSO-E. Reporting may still be incomplete: compare with national sources before quoting the numbers.');
-    }
-    if (!has(a, 'pumped_out') && !has(b, 'pumped_out')) msg.push('No pumped storage reported.');
-    const b0 = document.createElement('strong'); b0.textContent = 'Data coverage: ';
-    el.append(b0, document.createTextNode(msg.join(' '))); el.style.display = '';
-  });
 })();
 
 // ---------- Cross-border flows ----------
@@ -545,7 +528,7 @@ window.EDL = {
     UA: 'Ukraine', MD: 'Moldova', BY: 'Belarus', RU: 'Russia', TR: 'Türkiye', MA: 'Morocco', AD: 'Andorra', NIE: 'Northern Ireland (UK)'};
   const nm = (c) => NM[c] || ED.name(c);
   const PERS = [['day', 'Day'], ['week', 'Week'], ['month', 'Month'], ['year', 'Year']];
-  const ALL = ['fl-select', 'fl-per', 'fl-period', 'fl-kpis', 'fl-legend', 'fl-map', 'fl-warn', 'fl-th-imp', 'fl-th-exp', 'fl-th-net', 'fl-table', 'fl-hours-title', 'fl-hours', 'fl-hours-note',
+  const ALL = ['tk-flows', 'fl-per', 'fl-period', 'fl-kpis', 'fl-legend', 'fl-map', 'fl-warn', 'fl-th-imp', 'fl-th-exp', 'fl-th-net', 'fl-table', 'fl-hours-title', 'fl-hours', 'fl-hours-note',
     'fl-when-name', 'fl-when-season', 'fl-when-month', 'fl-when-years', 'fl-when', 'fl-when-note'];
   const redraw = () => ALL.forEach((n) => dash.draw(n));
   const IMP = () => dash.colors[0], EXP = () => dash.colors[1];
@@ -606,13 +589,11 @@ window.EDL = {
     return {p, X, need, list, imp: d3.sum(list, (o) => o.imp), exp: d3.sum(list, (o) => o.exp)};
   }
 
-  dash.draw('fl-select', (sel) => {
-    const m = ok('flows_monthly') || [];
-    const have = new Set(m.flatMap((r) => [r.from, r.to]));
-    const cs = ['EU27'].concat(EU.filter((c) => have.has(c)).sort((a, b) => ED.name(a).localeCompare(ED.name(b), 'en')));
-    sel.replaceChildren(...cs.map((c) => new Option(ED.name(c), c)));
-    sel.value = EDS.fl || 'EU27';
-    sel.onchange = () => { EDS.fl = sel.value; redraw(); };
+  dash.draw('tk-flows', (el) => {
+    const v = view(); if (!v || !(v.imp + v.exp > 0)) { el.textContent = ''; return; }
+    const net = v.imp - v.exp, who = v.X === 'EU27' ? 'the EU27 (with non-EU countries)' : ED.name(v.X);
+    const big = v.list.flatMap((o) => [{t: 'imports from ' + nm(o.partner), g: o.imp}, {t: 'exports to ' + nm(o.partner), g: o.exp}]).reduce((a, b) => (b.g > a.g ? b : a));
+    el.textContent = `In ${v.p.label}, ${who} was a net ${net >= 0 ? 'importer' : 'exporter'} of ${fmt(Math.abs(net))} ${unit()} (${fmt(v.imp)} in, ${fmt(v.exp)} out). Largest flow: ${big.t}, ${fmt(big.g)} ${unit()}.`;
   });
   dash.draw('fl-per', (el) => {
     el.replaceChildren(...PERS.map(([k, l]) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = l; b.setAttribute('aria-pressed', String(per() === k)); b.onclick = () => { EDS.flPer = k; EDS.flSel = null; redraw(); }; return b; }));
@@ -698,7 +679,7 @@ window.EDL = {
     const gaps = v.list.filter((o) => (o.imp > 0.05 && o.dImp < v.need) || (o.exp > 0.05 && o.dExp < v.need) || (o.dImp === 0 && o.dExp === 0));
     if (!gaps.length) return;
     const b0 = document.createElement('strong'); b0.textContent = 'Data gaps: ';
-    el.append(b0, document.createTextNode('some days are missing for ' + gaps.map((o) => nm(o.partner)).join(', ') + '. Totals for these borders are understated; see the table.'));
+    el.append(b0, document.createTextNode('some days are missing for ' + gaps.map((o) => nm(o.partner)).join(', ') + '. Totals for these borders are understated; see the table under More detail.'));
     el.style.display = '';
   });
 
@@ -798,5 +779,116 @@ window.EDL = {
     const hh = (h) => String(h).padStart(2, '0') + ':00';
     el.textContent = p.full + ', average day: imports ' + f.n1(tot('imp')) + ' GWh, exports ' + f.n1(tot('exp')) + ' GWh. Highest net imports at ' + hh(imax.h) + ' (' + f.n0(imax.imp - imax.exp) + ' MW), lowest at ' + hh(imin.h) + ' (' + f.n0(imin.imp - imin.exp) + ' MW).' +
       (wseason().startsWith('m') ? '' : wseason() === 'winter' ? ' Winter runs from December of the year before to February.' : '');
+  });
+})();
+
+// ---------- Through the day: what covers demand (Power system tab) ----------
+(function () {
+  const {f} = ED;
+  const K = (key, label, color, op) => ({key, label, color, op});
+  const POS = [K('battery_out', 'Batteries', 'var(--c-bat)'), K('solar', 'Solar', 'var(--c-solar)'), K('wind', 'Wind', 'var(--c-wind)'), K('hydro', 'Hydro', 'var(--c-hydro)'),
+    K('pumped_out', 'Pumped storage', 'var(--c-pump)'), K('nuclear', 'Nuclear', 'var(--c-nuc)'), K('coal', 'Coal & lignite', 'var(--c-coal)'), K('gas', 'Gas', 'var(--c-gas)'),
+    K('other', 'Other', 'var(--c-other)'), K('imp', 'Imports', 'var(--c-imp)')];
+  const NEG = [K('battery_in', 'Batteries charging', 'var(--c-bat)', 0.5), K('pumped_in', 'Pumped storage pumping', 'var(--c-pump)', 0.5), K('exp', 'Exports', 'var(--c-exp)')];
+  const COLS = ['load'].concat(POS.map((k) => k.key), NEG.map((k) => k.key));
+  const SEAS = [['year', 'Whole year'], ['summer', 'Summer'], ['winter', 'Winter']];
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const ALL = ['dm-take', 'dm-season', 'dm-years', 'dm-legend', 'dm-a-title', 'dm-a', 'dm-b-title', 'dm-b', 'dm-warn'];
+  const redraw = () => ALL.forEach((n) => dash.draw(n));
+  const season = () => EDS.dmSeason || 'year';
+  const sname = (s) => (s.startsWith('m') ? MONTHS[+s.slice(1) - 1] : SEAS.find((x) => x[0] === s)[1]);
+
+  const memo = new Map();
+  function periods(area, s) {
+    const d = dash.data('day_mix'); if (d.status !== 'ok') return [];
+    const key = area + '|' + s + '|' + d.data.length; if (memo.has(key)) return memo.get(key);
+    const by = d3.group(d.data.filter((r) => r.area === area && r.season === s), (r) => r.period);
+    const out = Array.from(by, ([label, rs]) => ({label, title: sname(s) + ' ' + label + (rs[0].span ? ' (' + rs[0].span + ' only)' : ''),
+      rows: d3.range(24).map((h) => { const r = rs.find((z) => +z.hour === h) || {}; const v = {}; COLS.forEach((c) => { v[c] = ED.num(r[c]); }); return {h, v}; })}))
+      .sort((a, b) => (a.label < b.label ? -1 : 1));
+    memo.set(key, out); return out;
+  }
+  const ps = () => periods(EDS.c, season());
+  const pair = () => { const p = ps(), w = EDS.dmPair || [];
+    return [p.find((x) => x.label === w[0]) || p[p.length - 2] || p[0], p.find((x) => x.label === w[1]) || p[p.length - 1]]; };
+  const hasBat = (p) => !!p && p.rows.some((r) => Number.isFinite(r.v.battery_out));
+  const share = (p, h, k) => { const r = p && p.rows[h]; return r && r.v.load > 0 && Number.isFinite(r.v[k]) ? 100 * r.v[k] / r.v.load : NaN; };
+  const hh = (h) => String(h).padStart(2, '0') + ':00';
+  const pc = (v) => (v < 1 ? f.n2(v) : f.n1(v));
+  const tl = (p) => { const r = p.rows && p.title.match(/\((.*) only\)/); return season() === 'year' ? p.label + (r ? ' (' + r[1] + ')' : '') : season().startsWith('m') ? p.title.replace(' only', '') : p.title[0].toLowerCase() + p.title.slice(1).replace(' only', ''); };
+
+  const chip = (text, on, click) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = text; b.setAttribute('aria-pressed', String(on)); b.onclick = click; return b; };
+  dash.draw('dm-season', (el) => {
+    el.replaceChildren(...SEAS.map(([k, l]) => chip(l, season() === k, () => { EDS.dmSeason = k; EDS.dmPair = null; redraw(); })));
+    const sel = document.createElement('select'); sel.className = 'dash-select'; sel.setAttribute('aria-label', 'Month of the year');
+    sel.append(new Option('or a month…', ''), ...MONTHS.map((m, i) => new Option(m, 'm' + String(i + 1).padStart(2, '0'))));
+    sel.value = season().startsWith('m') ? season() : '';
+    sel.onchange = () => { if (sel.value) { EDS.dmSeason = sel.value; EDS.dmPair = null; redraw(); } };
+    el.append(sel);
+  });
+  dash.draw('dm-years', (el) => {
+    el.replaceChildren(); const p = ps(), [a, b] = pair(); if (!p.length) return;
+    const lab = (t) => { const s = document.createElement('span'); s.className = 'muted'; s.textContent = t; return s; };
+    const mk = (cur, i) => { const s = document.createElement('select'); s.className = 'dash-select'; s.setAttribute('aria-label', i ? 'Right panel' : 'Left panel');
+      s.append(...p.map((x) => new Option(x.label, x.label))); s.value = cur ? cur.label : '';
+      s.onchange = () => { const v = pair().map((x) => x && x.label); v[i] = s.value; EDS.dmPair = v; redraw(); }; return s; };
+    el.append(lab('Compare'), mk(a, 0), lab('with'), mk(b, 1));
+  });
+  dash.draw('dm-legend', (el) => {
+    el.replaceChildren();
+    POS.concat(NEG).forEach((k) => { const sp = document.createElement('span'); const i = document.createElement('i'); i.style.background = k.color; if (k.op) i.style.opacity = k.op; sp.append(i, document.createTextNode(k.label + (NEG.includes(k) ? ' (below 0)' : ''))); el.append(sp); });
+  });
+
+  // Both panels share the vertical scale and the marker
+  const yDomain = () => {
+    let lo = 0, hi = 100;
+    pair().filter(Boolean).forEach((p) => p.rows.forEach((r, h) => {
+      hi = Math.max(hi, d3.sum(POS, (k) => Math.max(0, share(p, h, k.key) || 0)));
+      lo = Math.min(lo, -d3.sum(NEG, (k) => Math.max(0, share(p, h, k.key) || 0)));
+    }));
+    return [lo, hi];
+  };
+  const panels = [null, null];
+  const onHover = (h) => { EDS.dmH = h; panels.forEach((x) => x && x.setH(h)); };
+  const panel = (i) => (el) => {
+    const d = dash.data('day_mix');
+    if (d.status !== 'ok') { ED.placeholder(el, d.status); return; }
+    const p = pair()[i];
+    panels[i] = ED.shareStack(el, p, POS, NEG, {yDomain: yDomain(), h: EDS.dmH, bat: hasBat(p), onHover, empty: 'No hourly data for this country and period'});
+  };
+  dash.draw('dm-a', panel(0));
+  dash.draw('dm-b', panel(1));
+  dash.draw('dm-a-title', (el) => { const p = pair()[0]; el.textContent = p ? ED.name(EDS.c) + ' · ' + p.title : '—'; });
+  dash.draw('dm-b-title', (el) => { const p = pair()[1]; el.textContent = p ? ED.name(EDS.c) + ' · ' + p.title : '—'; });
+
+  dash.draw('dm-take', (el) => {
+    const [a, b] = pair(); if (!b) { el.textContent = ''; return; }
+    const who = EDS.c === 'EU27' ? 'the EU27' : ED.name(EDS.c);
+    if (hasBat(b)) {
+      const h = d3.range(24).reduce((x, y) => ((share(b, y, 'battery_out') || 0) > (share(b, x, 'battery_out') || 0) ? y : x), 19);
+      const vb = share(b, h, 'battery_out'), va = hasBat(a) ? share(a, h, 'battery_out') : NaN;
+      let t = `In ${tl(b)}, batteries covered ${pc(vb)}% of ${who}'s demand at ${hh(h)}, their peak hour`;
+      if (a && a !== b) t += Number.isFinite(va) ? `, against ${pc(va)}% in ${tl(a)}` : `; none were reported in ${tl(a)}`;
+      el.textContent = t + '.' + (EDS.c === 'EU27' ? ' Only some countries report batteries (see below).' : '');
+      return;
+    }
+    const top = POS.filter((k) => k.key !== 'battery_out').map((k) => ({k, v: share(b, 19, k.key)})).filter((x) => Number.isFinite(x.v)).sort((x, y) => y.v - x.v)[0];
+    el.textContent = top ? `At 19:00 in ${tl(b)}, the largest source for ${who} was ${top.k.label.toLowerCase()} (${f.n0(top.v)}% of demand). ${ED.name(EDS.c)} does not report batteries to ENTSO-E.` : '';
+  });
+
+  dash.draw('dm-warn', (el) => {
+    el.replaceChildren(); el.style.display = 'none';
+    const [a, b] = pair(); if (!b) return;
+    let msg;
+    if (EDS.c === 'EU27') {
+      const rep = EDU.EU.filter((c) => hasBat(periods(c, season()).find((p) => p.label === b.label)));
+      msg = 'EU27 batteries are the sum of the ' + rep.length + ' countries (out of 27) that report them to ENTSO-E' + (rep.length ? ': ' + rep.map(ED.name).join(', ') : '') + '. The others are not counted, so the EU27 battery share is understated. Imports and exports here are with non-EU countries only.';
+    } else if (!hasBat(a) && !hasBat(b)) {
+      msg = ED.name(EDS.c) + ' does not report batteries to ENTSO-E. Batteries may well be operating, but they are not visible here: a missing band does not mean there are none.';
+    } else if (!hasBat(a)) {
+      msg = ED.name(EDS.c) + ' reports batteries only from ' + b.label + ' on: part of the change may reflect the start of reporting, not new batteries.';
+    } else return;
+    const s0 = document.createElement('strong'); s0.textContent = 'Data coverage: ';
+    el.append(s0, document.createTextNode(msg)); el.style.display = '';
   });
 })();

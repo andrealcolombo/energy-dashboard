@@ -8,6 +8,11 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 
 | Date | Requested by | Made by | Change |
 |---|---|---|---|
+| 2026-11-26 | Andrea | Claude | New chart: what covers demand hour by hour, with batteries, imports and exports |
+| 2026-11-26 | Andrea | Claude | Removed the gas-and-storage evening chart (replaced by the chart above) |
+| 2026-11-26 | Andrea | Claude | One country selector for all tabs; links like #IT/flows open a country and tab |
+| 2026-11-26 | Andrea | Claude | Tabs reorganised: Prices, Power system, Flows, Compare countries, Methods |
+| 2026-11-26 | Andrea | Claude | Secondary charts moved into "More detail" blocks; one-line takeaway above main charts |
 | 2026-11-25 | Andrea | Claude | DG ENER editions of 17 and 24 Nov added (TTF, storage, weekly indicators) |
 | 2026-11-25 | Andrea | Claude | Claude dashboard aligned with the site: news feed removed |
 | 2026-11-25 | Andrea | Claude | Country profile: imports and exports as % of demand (12 months) |
@@ -53,6 +58,17 @@ Git history has the line-by-line detail. Routine data updates are not listed.
 "Requested by: Claude" means a fix Claude found and made while working on another request.
 
 ## Details
+
+### 2026-11-26
+
+- **Daily mix chart** (asked by Andrea). New chart in Power system: share of demand covered by each source, hour by
+  hour, two periods side by side (whole year, summer, winter or a month). Gross imports above zero, exports and storage
+  charging below. It replaces the gas-and-storage evening chart, which said the same thing less completely.
+  New file `data/dashboard/day_mix.csv`, built from the day profiles and the hourly flow profiles.
+- **Reorganisation** (asked by Andrea). One country selector at the top applies to every tab; the address keeps the
+  choice (#IT/flows). Tabs by question: Latest, Prices, Power system, Cross-border flows, Compare countries, Methods.
+  Detail charts sit in "More detail" blocks, each main chart has a one-line takeaway computed from the data, and the
+  method notes are collected in the Methods tab. Aim: a dashboard that reads at a glance without losing content.
 
 ### 2026-11-25
 

@@ -169,7 +169,31 @@ def loadm() -> pd.DataFrame:
     return pd.concat([eu, l], ignore_index=True)[["country", "month", "gwh", "peak_mw"]]
 
 
+DAY_MW = ["load", "solar", "wind", "gas", "coal", "nuclear", "hydro", "other",
+          "pumped_out", "pumped_in", "battery_out", "battery_in"]
+
+
 def day_profile() -> pd.DataFrame:
+    """Average day per year and season, per country and EU27 (see day_monthly)."""
+    out = day_monthly()
+    return out if out.empty else periods(out, ["price"] + DAY_MW)
+
+
+def day_mix() -> pd.DataFrame:
+    """Hourly balance for the daily-mix chart: generation by source, storage, gross imports
+    and exports (MW), average day per year, summer, winter and month of the year.
+    EU27 imports and exports are with non-EU countries only."""
+    out, f = day_monthly(), DATA / "flows_profile.csv"
+    if out.empty or not f.exists():
+        return pd.DataFrame()
+    fl = by_area(pd.read_csv(f), ["month", "hour"], "mw")
+    out = out.drop(columns="price").merge(fl, on=["area", "month", "hour"], how="left")
+    seasons = {"year": None, "summer": [6, 7, 8], "winter": [12, 1, 2], **MONTH_SEASONS}
+    d = periods(out, DAY_MW + ["imp", "exp"], seasons)
+    return d[d["season"] != "last12"]
+
+
+def day_monthly() -> pd.DataFrame:
     """Average day by month and hour, per country and EU27 (from fetch_intraday.py).
 
     EU27: price weighted by each country's load in that hour; MW summed over countries.
@@ -196,8 +220,7 @@ def day_profile() -> pd.DataFrame:
     eu = eu.join(d.groupby(k)[mw].sum(min_count=1)).reset_index()
     eu["country"] = "EU27"
     out = pd.concat([eu, d], ignore_index=True)
-    out = out.rename(columns={"country": "area"})[["area", "month", "hour", "price"] + mw]
-    return periods(out, ["price"] + mw)
+    return out.rename(columns={"country": "area"})[["area", "month", "hour", "price"] + mw]
 
 
 SEASONS = {"year": None, "spring": [3, 4, 5], "summer": [6, 7, 8], "autumn": [9, 10, 11], "winter": [12, 1, 2]}
@@ -344,6 +367,9 @@ def main():
     dp = day_profile()
     if not dp.empty:
         dp.to_csv(OUT / "day_profile.csv", index=False)
+    dm = day_mix()
+    if not dm.empty:
+        dm.to_csv(OUT / "day_mix.csv", index=False)
     f = DATA / "oil_bulletin_weekly.csv"
     if f.exists():
         fu = pd.read_csv(f)
