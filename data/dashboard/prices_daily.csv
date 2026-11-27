@@ -1,5 +1,4 @@
 date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
-2025-05-27,EU27,EU27,EU,58.65,1.2,134.19,
 2025-05-28,EU27,EU27,EU,68.84,2.51,118.31,
 2025-05-29,EU27,EU27,EU,55.6,22.6725,91.67571428571429,
 2025-05-30,EU27,EU27,EU,52.99,13.129999999999999,116.39,
@@ -548,7 +547,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,EU27,EU27,EU,233.46,110.87,310.98,
 2026-11-26,EU27,EU27,EU,276.01,194.35,304.09,
 2026-11-27,EU27,EU27,EU,280.58,200.68,321.5,
-2025-05-27,AT,AT,country,71.09,0.2,150.49,0.0
+2026-11-28,EU27,EU27,EU,197.45,99.5,231.39,
 2025-05-28,AT,AT,country,89.25,55.81,159.68,0.0
 2025-05-29,AT,AT,country,58.84,-2.86,96.15,1.0
 2025-05-30,AT,AT,country,52.52,-0.77,150.47,1.0
@@ -1098,7 +1097,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,AT,AT,country,276.32,208.33,367.65,0.0
 2026-11-26,AT,AT,country,300.33,220.56,388.02,0.0
 2026-11-27,AT,AT,country,305.16,203.35,426.44,0.0
-2025-05-27,BE,BE,country,53.37,-0.07,127.52,2.0
+2026-11-28,AT,AT,country,217.79,193.99,255.15,0.0
 2025-05-28,BE,BE,country,74.8,31.86,178.5,0.0
 2025-05-29,BE,BE,country,59.37,-2.05,114.8,5.0
 2025-05-30,BE,BE,country,47.62,-3.11,145.48,6.0
@@ -1648,7 +1647,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,BE,BE,country,253.88,187.09,309.58,0.0
 2026-11-26,BE,BE,country,291.21,196.39,388.02,0.0
 2026-11-27,BE,BE,country,296.25,197.34,426.33,0.0
-2025-05-27,BG,BG,country,80.18,0.2,218.84,0.0
+2026-11-28,BE,BE,country,199.88,158.34,259.0,0.0
 2025-05-28,BG,BG,country,93.0,52.27,172.95,0.0
 2025-05-29,BG,BG,country,73.94,2.94,164.0,0.0
 2025-05-30,BG,BG,country,56.48,0.04,176.49,0.0
@@ -2198,7 +2197,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,BG,BG,country,265.46,199.02,374.66,0.0
 2026-11-26,BG,BG,country,290.5,215.52,360.96,0.0
 2026-11-27,BG,BG,country,302.58,203.35,400.01,0.0
-2025-05-27,CZ,CZ,country,72.68,0.16,182.47,0.0
+2026-11-28,BG,BG,country,210.59,176.31,255.92,0.0
 2025-05-28,CZ,CZ,country,90.77,57.86,159.1,0.0
 2025-05-29,CZ,CZ,country,61.22,0.23,121.25,0.0
 2025-05-30,CZ,CZ,country,54.96,-1.56,148.34,1.0
@@ -2748,7 +2747,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,CZ,CZ,country,278.33,207.03,378.94,0.0
 2026-11-26,CZ,CZ,country,298.51,205.6,388.02,0.0
 2026-11-27,CZ,CZ,country,305.95,203.35,426.47,0.0
-2025-05-27,DE,DE,country,61.85,0.02,137.6,0.0
+2026-11-28,CZ,CZ,country,204.22,160.89,243.03,0.0
 2025-05-28,DE,DE,country,84.19,42.1,139.91,0.0
 2025-05-29,DE,DE,country,56.29,-1.99,99.13,4.0
 2025-05-30,DE,DE,country,48.19,-3.1,145.89,6.0
@@ -3297,7 +3296,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,DE,DE,country,246.29,201.83,304.34,0.0
 2026-11-26,DE,DE,country,291.77,195.81,388.02,0.0
 2026-11-27,DE,DE,country,301.82,203.35,426.32,0.0
-2025-05-27,DK,DK,country,42.8,0.02,137.65,0.0
+2026-11-28,DE,DE,country,191.77,138.91,232.03,0.0
 2025-05-28,DK,DK,country,83.92,42.1,137.67,0.0
 2025-05-29,DK,DK,country,55.14,-1.09,99.16,1.5
 2025-05-30,DK,DK,country,31.49,-1.83,139.69,3.5
@@ -3847,7 +3846,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,DK,DK,country,254.42,199.53,368.49,0.0
 2026-11-26,DK,DK,country,293.76,193.15,391.48,0.0
 2026-11-27,DK,DK,country,307.71,203.32,436.08,0.0
-2025-05-27,EE,EE,country,55.03,0.01,189.96,0.0
+2026-11-28,DK,DK,country,190.02,132.78,231.97,0.0
 2025-05-28,EE,EE,country,88.13,5.51,204.71,0.0
 2025-05-29,EE,EE,country,73.39,10.52,108.9,0.0
 2025-05-30,EE,EE,country,21.95,0.1,68.38,0.0
@@ -4397,7 +4396,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,EE,EE,country,194.71,109.8,294.05,0.0
 2026-11-26,EE,EE,country,265.08,119.92,352.08,0.0
 2026-11-27,EE,EE,country,207.04,115.2,303.14,0.0
-2025-05-27,ES,ES,country,26.84,-0.01,111.16,7.0
+2026-11-28,EE,EE,country,137.01,53.0,195.02,0.0
 2025-05-28,ES,ES,country,27.78,-0.62,100.86,7.0
 2025-05-29,ES,ES,country,35.01,-0.9,134.99,5.0
 2025-05-30,ES,ES,country,43.96,-0.07,130.19,5.0
@@ -4947,7 +4946,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,ES,ES,country,110.87,5.83,240.0,0.0
 2026-11-26,ES,ES,country,194.35,110.0,283.02,0.0
 2026-11-27,ES,ES,country,221.92,173.5,283.67,0.0
-2025-05-27,FI,FI,country,1.2,-0.92,6.07,8.0
+2026-11-28,ES,ES,country,211.39,171.6,261.92,0.0
 2025-05-28,FI,FI,country,2.51,-2.04,8.06,6.0
 2025-05-29,FI,FI,country,34.67,5.67,81.39,0.0
 2025-05-30,FI,FI,country,13.41,0.36,44.18,0.0
@@ -5497,7 +5496,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,FI,FI,country,136.58,67.83,199.47,0.0
 2026-11-26,FI,FI,country,264.59,91.07,352.08,0.0
 2026-11-27,FI,FI,country,200.68,63.73,302.82,0.0
-2025-05-27,FR,FR,country,30.5,0.0,111.16,0.0
+2026-11-28,FI,FI,country,99.5,52.98,149.99,0.0
 2025-05-28,FR,FR,country,27.09,0.0,100.86,0.0
 2025-05-29,FR,FR,country,30.56,-0.9,79.39,5.0
 2025-05-30,FR,FR,country,42.03,-2.66,130.19,5.0
@@ -6046,7 +6045,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,FR,FR,country,255.17,182.48,312.59,0.0
 2026-11-26,FR,FR,country,289.44,198.21,388.02,0.0
 2026-11-27,FR,FR,country,299.05,203.35,426.34,0.0
-2025-05-27,GR,GR,country,79.2,1.32,218.84,0.0
+2026-11-28,FR,FR,country,201.26,171.6,250.89,0.0
 2025-05-28,GR,GR,country,82.92,15.64,172.95,0.0
 2025-05-29,GR,GR,country,67.59,2.94,110.03,0.0
 2025-05-30,GR,GR,country,41.26,0.04,85.0,0.0
@@ -6595,7 +6594,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,GR,GR,country,253.29,34.4,374.66,0.0
 2026-11-26,GR,GR,country,253.27,186.99,350.07,0.0
 2026-11-27,GR,GR,country,256.31,197.18,354.25,0.0
-2025-05-27,HR,HR,country,78.21,0.18,216.76,0.0
+2026-11-28,GR,GR,country,210.39,176.31,255.92,0.0
 2025-05-28,HR,HR,country,96.5,60.95,167.09,0.0
 2025-05-29,HR,HR,country,73.11,-0.05,172.61,1.0
 2025-05-30,HR,HR,country,54.49,0.12,163.22,0.0
@@ -7144,7 +7143,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,HR,HR,country,280.19,207.78,392.56,0.0
 2026-11-26,HR,HR,country,300.04,217.0,388.02,0.0
 2026-11-27,HR,HR,country,306.37,203.35,426.49,0.0
-2025-05-27,HU,HU,country,79.45,0.16,215.0,0.0
+2026-11-28,HR,HR,country,210.99,180.76,246.67,0.0
 2025-05-28,HU,HU,country,94.0,58.9,171.58,0.0
 2025-05-29,HU,HU,country,72.87,0.35,154.33,0.0
 2025-05-30,HU,HU,country,57.04,0.01,182.3,0.0
@@ -7693,7 +7692,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,HU,HU,country,286.6,207.63,413.83,0.0
 2026-11-26,HU,HU,country,301.07,215.99,388.02,0.0
 2026-11-27,HU,HU,country,307.68,203.35,426.52,0.0
-2025-05-27,IE,IE,country,134.19,74.0,237.39,0.0
+2026-11-28,HU,HU,country,212.04,176.83,255.0,0.0
 2025-05-28,IE,IE,country,118.31,88.03,175.0,0.0
 2025-05-29,IE,IE,country,65.71,5.96,124.46,0.0
 2025-05-30,IE,IE,country,112.41,50.42,166.15,0.0
@@ -8242,7 +8241,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IE,IE,country,285.59,217.32,381.5,0.0
 2026-11-26,IE,IE,country,217.39,194.84,260.37,0.0
 2026-11-27,IE,IE,country,279.6,204.1,364.95,0.0
-2025-05-27,IT,IT,country,111.71,0.0,150.49,0.0
+2026-11-28,IE,IE,country,207.71,177.44,248.12,0.0
 2025-05-28,IT,IT,country,108.79,10.0,159.68,0.0
 2025-05-29,IT,IT,country,91.68,5.0,162.0,0.0
 2025-05-30,IT,IT,country,79.87,0.0,154.0,0.0
@@ -8792,7 +8791,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT,IT,country,246.48,0.0,312.59,0.0
 2026-11-26,IT,IT,country,267.44,71.5,446.14,0.0
 2026-11-27,IT,IT,country,274.57,0.0,445.56,0.0
-2025-05-27,LT,LT,country,55.03,0.01,189.96,0.0
+2026-11-28,IT,IT,country,224.77,128.9,412.0,0.0
 2025-05-28,LT,LT,country,88.13,5.51,204.71,0.0
 2025-05-29,LT,LT,country,73.39,10.52,108.9,0.0
 2025-05-30,LT,LT,country,21.95,0.1,68.38,0.0
@@ -9342,7 +9341,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,LT,LT,country,270.76,197.62,373.79,0.0
 2026-11-26,LT,LT,country,304.09,200.16,397.96,0.0
 2026-11-27,LT,LT,country,321.5,195.9,464.65,0.0
-2025-05-27,LV,LV,country,55.03,0.01,189.96,0.0
+2026-11-28,LT,LT,country,218.58,116.86,490.0,0.0
 2025-05-28,LV,LV,country,88.13,5.51,204.71,0.0
 2025-05-29,LV,LV,country,73.39,10.52,108.9,0.0
 2025-05-30,LV,LV,country,21.95,0.1,68.38,0.0
@@ -9892,7 +9891,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,LV,LV,country,221.93,121.11,295.82,0.0
 2026-11-26,LV,LV,country,265.08,119.92,352.08,0.0
 2026-11-27,LV,LV,country,220.5,116.01,329.61,0.0
-2025-05-27,NL,NL,country,55.07,-0.19,141.14,2.0
+2026-11-28,LV,LV,country,154.06,99.05,282.22,0.0
 2025-05-28,NL,NL,country,82.78,36.73,166.83,0.0
 2025-05-29,NL,NL,country,59.99,-2.76,112.24,4.0
 2025-05-30,NL,NL,country,48.11,-3.19,150.18,6.0
@@ -10441,7 +10440,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,NL,NL,country,222.76,136.52,307.78,0.0
 2026-11-26,NL,NL,country,288.52,184.51,388.02,0.0
 2026-11-27,NL,NL,country,297.04,200.1,426.32,0.0
-2025-05-27,PL,PL,country,97.91,0.12,277.68,0.0
+2026-11-28,NL,NL,country,189.93,158.93,228.93,0.0
 2025-05-28,PL,PL,country,113.89,78.12,204.71,0.0
 2025-05-29,PL,PL,country,87.4,0.57,206.21,0.0
 2025-05-30,PL,PL,country,116.39,100.3,181.32,0.0
@@ -10991,7 +10990,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,PL,PL,country,310.98,143.28,535.58,0.0
 2026-11-26,PL,PL,country,302.98,158.77,388.02,0.0
 2026-11-27,PL,PL,country,310.41,151.61,454.63,0.0
-2025-05-27,PT,PT,country,30.92,9.51,111.16,0.0
+2026-11-28,PL,PL,country,231.39,158.53,503.76,0.0
 2025-05-28,PT,PT,country,33.7,9.51,100.86,0.0
 2025-05-29,PT,PT,country,40.18,9.51,134.99,0.0
 2025-05-30,PT,PT,country,49.98,15.43,130.19,0.0
@@ -11541,7 +11540,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,PT,PT,country,110.87,5.83,240.0,0.0
 2026-11-26,PT,PT,country,194.35,110.0,283.02,0.0
 2026-11-27,PT,PT,country,223.64,180.0,283.67,0.0
-2025-05-27,RO,RO,country,80.18,0.2,218.84,0.0
+2026-11-28,PT,PT,country,211.39,171.6,261.92,0.0
 2025-05-28,RO,RO,country,94.13,52.27,172.95,0.0
 2025-05-29,RO,RO,country,73.94,2.94,164.0,0.0
 2025-05-30,RO,RO,country,56.48,0.04,176.49,0.0
@@ -12090,7 +12089,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,RO,RO,country,281.63,180.34,415.46,0.0
 2026-11-26,RO,RO,country,300.95,215.62,388.02,0.0
 2026-11-27,RO,RO,country,307.78,203.35,426.53,0.0
-2025-05-27,SE,SE,country,18.01,-3.54,133.02,7.0
+2026-11-28,RO,RO,country,210.45,176.33,255.92,0.0
 2025-05-28,SE,SE,country,30.2,-4.14,148.74,3.0
 2025-05-29,SE,SE,country,22.67,1.49,87.67,0.0
 2025-05-30,SE,SE,country,13.13,-1.65,65.91,1.25
@@ -12640,7 +12639,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SE,SE,country,169.67,67.36,371.11,0.0
 2026-11-26,SE,SE,country,277.14,91.3,393.67,0.0
 2026-11-27,SE,SE,country,214.86,57.66,447.57,0.0
-2025-05-27,SI,SI,country,77.79,0.18,221.01,0.0
+2026-11-28,SE,SE,country,118.88,46.14,229.81,0.0
 2025-05-28,SI,SI,country,97.72,61.81,164.99,0.0
 2025-05-29,SI,SI,country,73.86,-0.2,185.12,1.0
 2025-05-30,SI,SI,country,53.87,0.11,158.03,0.0
@@ -13190,7 +13189,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SI,SI,country,278.8,207.87,383.71,0.0
 2026-11-26,SI,SI,country,299.79,217.16,388.02,0.0
 2026-11-27,SI,SI,country,305.92,203.35,426.47,0.0
-2025-05-27,SK,SK,country,81.02,0.16,220.84,0.0
+2026-11-28,SI,SI,country,212.61,182.83,244.16,0.0
 2025-05-28,SK,SK,country,93.81,57.86,176.37,0.0
 2025-05-29,SK,SK,country,70.2,0.6,157.37,0.0
 2025-05-30,SK,SK,country,55.43,-0.3,167.68,1.0
@@ -13739,7 +13738,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SK,SK,country,292.03,207.39,438.88,0.0
 2026-11-26,SK,SK,country,301.8,213.21,388.02,0.0
 2026-11-27,SK,SK,country,308.97,203.35,426.56,0.0
-2025-05-27,DK_1,DK,zone,37.24,0.02,137.6,0.0
+2026-11-28,SK,SK,country,210.61,171.1,264.43,0.0
 2025-05-28,DK_1,DK,zone,83.66,42.1,134.83,0.0
 2025-05-29,DK_1,DK,zone,53.44,-1.09,99.13,3.0
 2025-05-30,DK_1,DK,zone,39.51,-1.83,139.69,4.0
@@ -14289,7 +14288,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,DK_1,DK,zone,241.12,199.53,306.79,0.0
 2026-11-26,DK_1,DK,zone,290.79,193.15,388.02,0.0
 2026-11-27,DK_1,DK,zone,300.9,203.35,426.29,0.0
-2025-05-27,DK_2,DK,zone,48.37,0.02,137.65,0.0
+2026-11-28,DK_1,DK,zone,190.62,136.01,229.4,0.0
 2025-05-28,DK_2,DK,zone,84.17,43.46,137.67,0.0
 2025-05-29,DK_2,DK,zone,56.84,1.39,99.16,0.0
 2025-05-30,DK_2,DK,zone,23.47,-1.83,65.91,3.0
@@ -14839,7 +14838,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,DK_2,DK,zone,267.72,203.19,368.49,0.0
 2026-11-26,DK_2,DK,zone,296.74,197.29,391.48,0.0
 2026-11-27,DK_2,DK,zone,314.52,203.32,436.08,0.0
-2025-05-27,IT_CALA,IT,zone,115.95,79.0,150.49,0.0
+2026-11-28,DK_2,DK,zone,189.42,132.78,231.97,0.0
 2025-05-28,IT_CALA,IT,zone,110.3,66.63,159.68,0.0
 2025-05-29,IT_CALA,IT,zone,91.3,5.0,162.0,0.0
 2025-05-30,IT_CALA,IT,zone,74.7,0.0,154.0,0.0
@@ -15389,7 +15388,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_CALA,IT,zone,238.97,123.46,308.19,0.0
 2026-11-26,IT_CALA,IT,zone,247.62,185.47,352.56,0.0
 2026-11-27,IT_CALA,IT,zone,263.13,186.44,390.97,0.0
-2025-05-27,IT_CNOR,IT,zone,115.95,79.0,150.49,0.0
+2026-11-28,IT_CALA,IT,zone,235.95,128.9,412.0,0.0
 2025-05-28,IT_CNOR,IT,zone,110.3,66.63,159.68,0.0
 2025-05-29,IT_CNOR,IT,zone,93.75,22.83,162.0,0.0
 2025-05-30,IT_CNOR,IT,zone,92.26,31.0,154.0,0.0
@@ -15939,7 +15938,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_CNOR,IT,zone,263.12,208.33,312.59,0.0
 2026-11-26,IT_CNOR,IT,zone,285.14,208.83,352.56,0.0
 2026-11-27,IT_CNOR,IT,zone,295.19,203.35,402.52,0.0
-2025-05-27,IT_CSUD,IT,zone,115.95,79.0,150.49,0.0
+2026-11-28,IT_CNOR,IT,zone,219.21,176.75,255.15,0.0
 2025-05-28,IT_CSUD,IT,zone,110.3,66.63,159.68,0.0
 2025-05-29,IT_CSUD,IT,zone,91.3,5.0,162.0,0.0
 2025-05-30,IT_CSUD,IT,zone,75.24,0.0,154.0,0.0
@@ -16489,7 +16488,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_CSUD,IT,zone,255.96,208.33,308.19,0.0
 2026-11-26,IT_CSUD,IT,zone,251.91,200.0,352.56,0.0
 2026-11-27,IT_CSUD,IT,zone,263.35,203.35,353.0,0.0
-2025-05-27,IT_NORD,IT,zone,115.95,79.0,150.49,0.0
+2026-11-28,IT_CSUD,IT,zone,219.15,176.6,255.15,0.0
 2025-05-28,IT_NORD,IT,zone,110.3,66.63,159.68,0.0
 2025-05-29,IT_NORD,IT,zone,93.75,22.83,162.0,0.0
 2025-05-30,IT_NORD,IT,zone,92.26,31.0,154.0,0.0
@@ -17039,7 +17038,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_NORD,IT,zone,263.12,208.33,312.59,0.0
 2026-11-26,IT_NORD,IT,zone,285.14,208.83,352.56,0.0
 2026-11-27,IT_NORD,IT,zone,295.19,203.35,402.52,0.0
-2025-05-27,IT_SARD,IT,zone,86.29,0.0,150.49,0.0
+2026-11-28,IT_NORD,IT,zone,219.21,176.75,255.15,0.0
 2025-05-28,IT_SARD,IT,zone,99.75,10.0,159.68,0.0
 2025-05-29,IT_SARD,IT,zone,89.03,5.0,162.0,0.0
 2025-05-30,IT_SARD,IT,zone,75.2,0.0,154.0,0.0
@@ -17589,7 +17588,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_SARD,IT,zone,226.23,0.0,307.0,0.0
 2026-11-26,IT_SARD,IT,zone,241.7,71.5,352.56,0.0
 2026-11-27,IT_SARD,IT,zone,203.29,0.0,350.55,0.0
-2025-05-27,IT_SICI,IT,zone,115.95,79.0,150.49,0.0
+2026-11-28,IT_SARD,IT,zone,219.15,176.6,255.15,0.0
 2025-05-28,IT_SICI,IT,zone,110.3,66.63,159.68,0.0
 2025-05-29,IT_SICI,IT,zone,91.3,5.0,162.0,0.0
 2025-05-30,IT_SICI,IT,zone,74.7,0.0,154.0,0.0
@@ -18139,7 +18138,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_SICI,IT,zone,238.97,123.46,308.19,0.0
 2026-11-26,IT_SICI,IT,zone,311.65,199.75,446.14,0.0
 2026-11-27,IT_SICI,IT,zone,338.51,186.44,445.56,0.0
-2025-05-27,IT_SUD,IT,zone,115.95,79.0,150.49,0.0
+2026-11-28,IT_SICI,IT,zone,245.82,128.9,412.0,0.0
 2025-05-28,IT_SUD,IT,zone,110.3,66.63,159.68,0.0
 2025-05-29,IT_SUD,IT,zone,91.3,5.0,162.0,0.0
 2025-05-30,IT_SUD,IT,zone,74.7,0.0,154.0,0.0
@@ -18689,7 +18688,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,IT_SUD,IT,zone,238.97,123.46,308.19,0.0
 2026-11-26,IT_SUD,IT,zone,248.92,185.47,352.56,0.0
 2026-11-27,IT_SUD,IT,zone,263.35,203.35,353.0,0.0
-2025-05-27,SE_1,SE,zone,1.27,-0.96,6.04,10.0
+2026-11-28,IT_SUD,IT,zone,214.88,128.9,255.15,0.0
 2025-05-28,SE_1,SE,zone,2.58,-2.13,7.75,5.0
 2025-05-29,SE_1,SE,zone,7.28,2.23,12.93,0.0
 2025-05-30,SE_1,SE,zone,6.98,0.33,16.51,0.0
@@ -19239,7 +19238,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SE_1,SE,zone,96.16,67.36,129.36,0.0
 2026-11-26,SE_1,SE,zone,264.65,91.3,352.03,0.0
 2026-11-27,SE_1,SE,zone,132.34,63.99,228.75,0.0
-2025-05-27,SE_2,SE,zone,0.01,-3.54,4.92,16.0
+2026-11-28,SE_1,SE,zone,68.19,46.14,89.11,0.0
 2025-05-28,SE_2,SE,zone,1.32,-4.14,7.87,7.0
 2025-05-29,SE_2,SE,zone,5.75,2.14,14.79,0.0
 2025-05-30,SE_2,SE,zone,6.82,0.07,16.45,0.0
@@ -19789,7 +19788,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SE_2,SE,zone,95.1,71.75,130.99,0.0
 2026-11-26,SE_2,SE,zone,264.18,91.76,351.4,0.0
 2026-11-27,SE_2,SE,zone,134.63,57.66,257.31,0.0
-2025-05-27,SE_3,SE,zone,24.07,-0.08,59.82,2.0
+2026-11-28,SE_2,SE,zone,65.88,49.06,86.61,0.0
 2025-05-28,SE_3,SE,zone,34.73,24.35,50.57,0.0
 2025-05-29,SE_3,SE,zone,23.72,1.78,34.49,0.0
 2025-05-30,SE_3,SE,zone,15.66,-1.1,39.1,2.0
@@ -20339,7 +20338,7 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SE_3,SE,zone,218.5,143.54,311.68,0.0
 2026-11-26,SE_3,SE,zone,282.72,158.11,374.56,0.0
 2026-11-27,SE_3,SE,zone,276.6,169.6,398.8,0.0
-2025-05-27,SE_4,SE,zone,46.68,0.01,133.02,0.0
+2026-11-28,SE_3,SE,zone,154.8,102.63,197.8,0.0
 2025-05-28,SE_4,SE,zone,82.17,41.18,148.74,0.0
 2025-05-29,SE_4,SE,zone,53.94,1.49,87.67,0.0
 2025-05-30,SE_4,SE,zone,23.06,-1.65,65.91,3.0
@@ -20889,3 +20888,4 @@ date,area,country,level,avg_eur_mwh,min_eur_mwh,max_eur_mwh,negative_hours
 2026-11-25,SE_4,SE,zone,268.93,203.0,371.11,0.0
 2026-11-26,SE_4,SE,zone,297.03,196.93,393.67,0.0
 2026-11-27,SE_4,SE,zone,315.89,201.04,447.57,0.0
+2026-11-28,SE_4,SE,zone,186.64,125.67,229.81,0.0
