@@ -1,0 +1,311 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EU Energy Markets Dashboard</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%231f3a5f"/%3E%3Cpath d="M37 6 15 37h14l-4 21 24-33H35z" fill="%23f2b632"/%3E%3C/svg%3E"><meta name="description" content="EU27 electricity prices, generation mix, demand and fuel prices, updated daily from public data."><style>
+:root{--color-fg:#1f1e1d;--color-fg-muted:#5f5c56;--color-bg:#faf9f5;--color-panel:#fff;--color-border-line:#e5e2da;
+--color-ok:#2e7d32;--color-warn:#b7791f;--color-bad:#c62828;--font-anthropic-sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+--font-anthropic-serif:Georgia,"Times New Roman",serif;--cds-font-size-caption:12px;--cds-font-size-body:14px;--cds-font-size-heading:17px;
+--cds-font-size-title:26px;--cds-font-weight-medium:600;--cds-gap-xs:4px;--cds-gap-sm:8px;--cds-gap-md:16px;--cds-gap-lg:28px;
+--cds-pad-xs:4px;--cds-pad-sm:8px;--cds-pad-md:12px;--cds-pad-lg:16px;--cds-radius:8px;--cds-chart-muted:#b9b5ab;--cds-chart-grid:#ece9e2;
+--cds-chart-axis:#c9c5bc;--cds-chart-reference:#8a867d;--cds-text-secondary:#5f5c56;--cds-surface-popover:#fff;--cds-border:#ddd;
+--cds-shadow-popover:0 2px 8px rgba(0,0,0,.15);--s0:#2b6cb0;--s1:#d9653b;--s2:#2f855a;--s3:#805ad5;--s4:#b7791f;--s5:#c53030;--s6:#319795;--s7:#718096}
+@media (prefers-color-scheme: dark){:root{--color-fg:#ecebe8;--color-fg-muted:#a9a59d;--color-bg:#1d1c1a;--color-panel:#262522;
+--color-border-line:#3a3833;--cds-chart-grid:#33312d;--cds-chart-axis:#4a4741;--cds-chart-muted:#6d6a63;--cds-chart-reference:#8f8b83;
+--cds-text-secondary:#a9a59d;--cds-surface-popover:#2c2b28;--cds-border:#44423d;--s0:#63a4e8;--s1:#f08a5d;--s2:#5cbf8a;--s3:#a98ae6}}
+body{background:var(--color-bg);color:var(--color-fg);margin:0}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.ed .site-bar{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12px;color:var(--color-fg-muted);margin:0 0 var(--cds-gap-md)}
+.ed .site-bar a{color:inherit}
+main .ed .lede,main .ed details.note,main .ed details.note p,main .ed .disclaimer{max-width:none}
+.ed h1 .bolt{height:.9em;width:auto;vertical-align:-.08em;margin-right:.3em}
+.ed .disclaimer{font-size:11px;color:var(--color-fg-muted);margin-top:var(--cds-gap-lg)}
+</style><script src="https://cdn.jsdelivr.net/npm/d3@7"></script><script>window.SITE_DATA={"prices_daily": "data/prices_daily.csv", "prices_monthly": "data/prices_monthly.csv", "mix_monthly": "data/mix_monthly.csv", "mix_weekly": "data/mix_weekly.csv", "load_monthly": "data/load_monthly.csv", "fuels_weekly": "data/fuels_weekly.csv", "retail_semiannual": "data/retail_semiannual.csv", "day_profile": "data/day_profile.csv", "day_mix": "data/day_mix.csv", "flows_daily": "data/flows_daily.csv", "flows_monthly": "data/flows_monthly.csv", "flows_hours_profile": "data/flows_hours_profile.csv", "flows_hours_recent": "data/flows_hours_recent.csv", "geo_europe": "data/geo_europe.csv", "dgener_weekly": "data/gas_weekly.csv"};</script><script src="runtime.js"></script></head><body><main><style>
+  .ed { --c-solar:#E3A008; --c-wind:#3B82C4; --c-hydro:#1F6F8B; --c-bio:#4C9A52; --c-nuc:#8E6BBF; --c-gas:#D9653B; --c-coal:#5B5550; --c-oil:#9C3D54; --c-pump:#7FB3C8; --c-bat:#2BB3A3; --c-other:#A8A29E; }
+  .ed { font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+  .ed h1 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); margin: 0 0 var(--cds-gap-xs); }
+  .ed h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-lg) 0 var(--cds-gap-xs); }
+  .ed h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: var(--cds-gap-md) 0 var(--cds-gap-xs); }
+  .ed .lede { color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); max-width: none; }
+  .ed .muted { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .ed .note { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: var(--cds-gap-xs) 0 0; max-width: none; }
+  .ed .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--cds-gap-sm); }
+  .ed .ti { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
+  .ed .ti .lab { font-size: 11px; line-height: 1.3; color: var(--color-fg-muted); }
+  .ed .ti .v { font-family: var(--font-anthropic-serif); font-size: 22px; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ed .ti .u { font-size: 11px; color: var(--color-fg-muted); margin-left: 2px; font-family: var(--font-anthropic-sans); }
+  .ed .ti .c { font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ed .tabs { display:flex; gap: var(--cds-gap-xs); flex-wrap: wrap; padding: 0 0 var(--cds-pad-xs); margin-bottom: var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
+  .ed .tab, .ed .chip { border: 1px solid var(--color-border-line); background: var(--color-panel); color: var(--color-fg); border-radius: 999px; padding: 4px 12px; font: inherit; font-size: var(--cds-font-size-caption); cursor: pointer; }
+  .ed .tab[aria-selected="true"], .ed .chip[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); border-color: var(--color-fg); }
+  .ed .chip.sel::after { content: " ×"; opacity: .7; }
+  .ed .row { display:flex; gap: var(--cds-gap-xs); flex-wrap: wrap; align-items:center; margin: var(--cds-gap-sm) 0; }
+  .ed .grid2 { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-md); }
+  .ed .card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md); min-width: 0; }
+  .ed .chart { position: relative; min-height: 260px; width: 100%; }
+  .ed .chart.short { min-height: 200px; }
+  .ed .chart.bars { min-height: 60px; }
+  .ed .chart.map { min-height: 420px; }
+  .ed .chart.map svg text { font-size: 11px; }
+  .ed .chart.map .lbl { font-weight: 600; paint-order: stroke; stroke: var(--color-bg, #fff); stroke-width: 3px; }
+  .ed .chart svg text { font-size: 11px; fill: var(--cds-text-secondary); }
+  .ed .legend { display:flex; flex-wrap:wrap; gap: 4px 12px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0 0 4px; min-height: 18px; }
+  .ed .legend i { display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:4px; vertical-align:-1px; }
+  .ed .tip { position:absolute; pointer-events:none; background: var(--cds-surface-popover); border:1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: 6px; padding: 6px 8px; font-size: 12px; white-space: nowrap; z-index: 5; font-variant-numeric: tabular-nums; }
+  .ed .tablewrap { overflow-x:auto; }
+  .ed table { border-collapse: collapse; width: 100%; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .ed th, .ed td { text-align: right; padding: 5px 8px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .ed th:first-child, .ed td:first-child { text-align: left; }
+  .ed th { color: var(--color-fg-muted); font-weight: var(--cds-font-weight-medium); }
+  .ed .up { color: var(--color-bad); } .ed .down { color: var(--color-ok); } .ed .flat { color: var(--color-fg-muted); }
+  .ed .notes { columns: 340px; column-gap: var(--cds-gap-lg); }
+  .ed .notes p { margin: 0 0 var(--cds-gap-sm); line-height: 1.5; break-inside: avoid; }
+  .ed .notes b { font-weight: var(--cds-font-weight-medium); }
+  .ed select.dash-select { background-color: var(--color-panel); }
+  .ed [data-dash-source-state=refreshing] { opacity: .5; }
+  .ed .pick { font-size: var(--cds-font-size-body); margin: var(--cds-gap-xs) 0 0; min-height: 22px; }
+  .ed .defs { margin: 0; font-size: var(--cds-font-size-caption); display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--cds-gap-sm); }
+  .ed .defs > div { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 8px 10px; }
+  .ed .defs dt { font-weight: var(--cds-font-weight-medium); }
+  .ed .note.wide { max-width: none; }
+  .ed .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--cds-gap-md); }
+  .ed .pair h4 { margin: var(--cds-gap-sm) 0 0; font-size: var(--cds-font-size-body); }
+  .ed .warn { margin: var(--cds-gap-sm) 0 0; padding: var(--cds-gap-sm) var(--cds-gap-md); border-left: 3px solid var(--color-warning, #b7791f); background: var(--color-bg-subtle, rgba(183,121,31,.08)); font-size: var(--cds-font-size-caption); }
+  .ed .news { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: var(--cds-gap-sm); }
+  .ed .news article { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 10px 12px; min-width: 0; }
+  .ed .news .meta { font-size: 11px; color: var(--color-fg-muted); margin: 0 0 4px; }
+  .ed .tag.beta { font-size: 11px; font-weight: var(--cds-font-weight-medium); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 1px 7px; vertical-align: 3px; color: var(--color-fg-muted); }
+  .ed .news .tag { display: inline-block; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 0 6px; margin-right: 4px; }
+  .ed .news h4 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 0 0 4px; line-height: 1.35; }
+  .ed .news h4 a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 2px; }
+  .ed .news p { margin: 0; font-size: var(--cds-font-size-caption); line-height: 1.45; color: var(--color-fg-muted); }
+  .ed .changes td, .ed .changes th { text-align: left; }
+  .ed .changes td:last-child { white-space: normal; }
+  .ed .defs dd { margin: 0; color: var(--color-fg-muted); }
+  .ed { --c-imp:#CDBFAE; --c-exp:#8E9AA6; }
+  .ed .topbar { position: sticky; top: 0; z-index: 20; background: var(--color-bg, #fff); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--cds-gap-sm); padding: var(--cds-gap-xs) 0; margin-bottom: var(--cds-gap-sm); border-bottom: 1px solid var(--color-border-line); }
+  .ed .topbar .tabs { border-bottom: 0; margin: 0; padding: 0; }
+  .ed .topbar .gc { display: flex; align-items: center; gap: var(--cds-gap-xs); }
+  .ed .topbar .gc select { font-weight: var(--cds-font-weight-medium); min-height: 34px; font-size: 16px; padding: 2px 8px; }
+  @media (max-width: 640px) { .ed .topbar { flex-direction: column-reverse; align-items: stretch; } .ed .topbar .gc select { flex: 1; } }
+  .ed .dl { display: block; text-align: right; font-size: 11px; margin: 2px 0 0; }
+  .ed .dl a { color: var(--color-fg-muted); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+  .ed .take { font-size: var(--cds-font-size-heading); line-height: 1.4; margin: var(--cds-gap-xs) 0 var(--cds-gap-sm); }
+  .ed .take:empty { display: none; }
+  .ed details.more { margin: var(--cds-gap-md) 0 0; border-top: 1px dashed var(--color-border-line); padding-top: var(--cds-gap-xs); }
+  .ed details.more > summary { cursor: pointer; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); padding: 4px 0; }
+  .ed details.more[open] > summary { margin-bottom: var(--cds-gap-sm); }
+  .ed .methods h3 { margin-top: var(--cds-gap-lg); }
+  .ed .methods p { max-width: 900px; line-height: 1.55; margin: 0 0 var(--cds-gap-sm); }
+  .ed .dm-panel h4 { margin: var(--cds-gap-sm) 0 0; font-size: var(--cds-font-size-body); }
+</style>
+
+<div class="ed">
+  <h1><svg class="bolt" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#1f3a5f"/><path d="M37 6 15 37h14l-4 21 24-33H35z" fill="#f2b632"/></svg>EU Energy Markets Dashboard</h1>
+  <p class="lede" data-draw="headline">—</p>
+  <div class="site-bar"><span>Updated daily · page built 28 Nov 2026, 00:59 UTC</span><a href="data/energy_dashboard_data.xlsx">Download all data (Excel)</a><a href="https://github.com/andrealcolombo/energy-dashboard">Code and CSV files (GitHub)</a></div>
+
+  <div class="topbar">
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" data-tab="latest" aria-selected="true">Latest</button>
+      <button class="tab" role="tab" data-tab="prices" aria-selected="false">Prices</button>
+      <button class="tab" role="tab" data-tab="mix" aria-selected="false">Power system</button>
+      <button class="tab" role="tab" data-tab="flows" aria-selected="false">Cross-border flows</button>
+      <button class="tab" role="tab" data-tab="profile" aria-selected="false">Compare countries</button>
+      <button class="tab" role="tab" data-tab="methods" aria-selected="false">Methods</button>
+      </nav>
+    <div class="gc">
+      <label class="muted" for="gc-select">Country</label>
+      <select id="gc-select" class="dash-select" data-draw="global-country" aria-label="Country shown in every tab"></select>
+    </div>
+  </div>
+
+  <!-- ============ LATEST ============ -->
+  <section id="latest" data-section>
+    <h3 id="latest-elec">Electricity · wholesale (day-ahead) and household</h3>
+    <div class="kpis">
+      <div class="ti" id="t-whole"><div class="lab">Day-ahead · <span data-draw="t-whole-date">—</span></div><div class="v"><span data-draw="t-whole" data-source="kpi_power" data-field="last_day" data-where="area=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-whole-chg">—</div></div>
+      <div class="ti" id="t-w7"><div class="lab">7-day average · <span data-draw="t-w7-per">—</span></div><div class="v"><span data-draw="t-w7" data-source="kpi_power" data-field="avg7" data-where="area=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-w7-chg">—</div></div>
+      <div class="ti" id="t-relec"><div class="lab">Household · <span data-draw="t-relec-per">—</span></div><div class="v"><span data-draw="t-relec" data-source="retail_latest" data-field="elec_eur_mwh" data-where="geo=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-relec-chg">—</div></div>
+    </div>
+
+    <h3 id="latest-gas">Gas · wholesale (TTF), storage and household</h3>
+    <div class="kpis">
+      <div class="ti" id="t-ttf"><div class="lab">TTF · EU · <span data-draw="t-ttf-per">—</span></div><div class="v"><span data-draw="t-ttf" data-source="nl_latest" data-field="value" data-where="indicator=gas_ttf">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-ttf-chg">—</div></div>
+      <div class="ti" id="t-sto"><div class="lab">Storage · EU · <span data-draw="t-sto-per">—</span></div><div class="v"><span data-draw="t-sto" data-source="nl_latest" data-field="value" data-where="indicator=gas_storage">—</span><span class="u">% full</span></div><div class="c" data-draw="t-sto-chg">—</div></div>
+      <div class="ti" id="t-rgas"><div class="lab">Household · <span data-draw="t-rgas-per">—</span></div><div class="v"><span data-draw="t-rgas" data-source="retail_latest" data-field="gas_eur_mwh" data-where="geo=EU27">—</span><span class="u">€/MWh</span></div><div class="c" data-draw="t-rgas-chg">—</div></div>
+    </div>
+
+    <h3 id="latest-fuels">Road fuels, pump price with taxes</h3>
+    <div class="kpis">
+      <div class="ti" id="t-dsl"><div class="lab">Diesel · <span data-draw="t-dsl-per">—</span></div><div class="v"><span data-draw="t-dsl" data-source="fuels_latest" data-field="diesel" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-dsl-chg">—</div></div>
+      <div class="ti" id="t-pet"><div class="lab">Petrol 95 · <span data-draw="t-pet-per">—</span></div><div class="v"><span data-draw="t-pet" data-source="fuels_latest" data-field="petrol_95" data-where="country=EU">—</span><span class="u">€/l</span></div><div class="c" data-draw="t-pet-chg">—</div></div>
+    </div>
+    <p class="note wide">▲▼ change on: the previous day (d/d) for the day-ahead price; the previous week (w/w) for 7-day averages, TTF, storage and pump prices; the same half-year a year earlier (y/y) for household prices. Red = higher price. w/e = week ending. TTF and gas storage are EU-wide.</p>
+
+    <h2 id="latest-mix">Generation mix · last 7 days <span class="muted" data-draw="wk-period">—</span></h2>
+    <div class="grid2">
+      <div class="chart short" data-draw="week-pie" data-source="mix_weekly" role="img" aria-label="Generation mix over the last 7 days"></div>
+      <div><div class="legend" data-draw="wk-legend"></div><p class="note" data-draw="week-note">—</p></div>
+    </div>
+  </section>
+
+  <!-- ============ PRICES ============ -->
+  <section id="prices" data-section hidden>
+    <h2 id="prices-areas">Wholesale electricity prices</h2>
+    <p class="take" data-draw="tk-prices" data-source="prices_monthly"></p>
+    <div class="row" data-draw="area-chips" data-source="prices_daily"></div>
+    <div class="row">
+      <button class="chip" data-range="90" aria-pressed="false">90 days</button>
+      <button class="chip" data-range="365" aria-pressed="true">12 months</button>
+      <button class="chip" data-range="550" aria-pressed="false">18 months</button>
+    </div>
+    <h3 id="prices-daily">Daily day-ahead price (€/MWh)</h3>
+    <div class="chart" data-draw="price-daily" data-source="prices_daily" role="img" aria-label="Daily day-ahead prices for the selected areas"></div>
+
+    <h3 id="prices-monthly">Monthly average since 2021 (€/MWh)</h3>
+    <div class="chart" data-draw="price-monthly" data-source="prices_monthly" role="img" aria-label="Monthly day-ahead prices since 2021 for the selected areas"></div>
+    <p class="note">Dashed line: EU27 average in the first half of 2021, before the crisis.</p>
+
+    <details class="more">
+      <summary>More detail · hours with negative prices</summary>
+      <h3 id="prices-neg">Hours with negative prices, by month</h3>
+      <div class="chart short" data-draw="price-neg" data-source="prices_monthly" role="img" aria-label="Monthly hours with negative day-ahead prices for the selected areas"></div>
+      <p class="note">For countries with several zones (Italy, Denmark, Sweden) this is the average of the zones; add single zones for detail.</p>
+    </details>
+
+    <h2 id="prices-day">Prices through the day</h2>
+    <p class="take" data-draw="tk-day" data-source="day_profile"></p>
+    <div class="row">
+      <span data-draw="dp-season"></span>
+      <span data-draw="dp-unit"></span>
+    </div>
+    <div class="row" data-draw="dp-mode"></div>
+    <h3><span data-draw="dp-price-title" data-source="day_profile">Average price by hour</span></h3>
+    <div class="row" data-draw="dp-years" data-source="day_profile"></div>
+    <div class="row" data-draw="dp-countries" data-source="day_profile"></div>
+    <div class="chart" data-draw="dp-price" data-source="day_profile" role="img" aria-label="Average day-ahead price by hour of the day"></div>
+    <p class="note" data-draw="dp-note" data-source="day_profile"></p>
+
+    <details class="more">
+      <summary>More detail · daily price swing</summary>
+      <h3 data-draw="dp-swing-title">Daily price swing · highest hour minus lowest hour, % of the day's average</h3>
+      <div class="chart bars" data-draw="dp-swing" data-source="day_profile" role="img" aria-label="Gap between the most and the least expensive hour of the average day"></div>
+      <p class="note">Measured on the average day of each period: the regular daily pattern, not single extreme days. A smaller swing means a flatter day.</p>
+    </details>
+  </section>
+
+  <!-- ============ POWER SYSTEM ============ -->
+  <section id="mix" data-section hidden>
+    <h2 id="mix-ytd">Generation mix · <span data-draw="ytd-period">—</span>: this year vs 2021</h2>
+    <p class="take" data-draw="tk-mix" data-source="mix_ytd"></p>
+    <div class="legend" data-draw="mix-legend"></div>
+    <div class="grid2">
+      <div><h3 data-draw="pie-cur-title">—</h3><div class="chart short" data-draw="pie-cur" data-source="mix_ytd" role="img" aria-label="Generation mix, this year to date"></div></div>
+      <div><h3 data-draw="pie-2021-title">—</h3><div class="chart short" data-draw="pie-2021" data-source="mix_ytd" role="img" aria-label="Generation mix, same months of 2021"></div></div>
+    </div>
+    <p class="note">Same months in both years, up to the last complete month. Hover the pies for exact shares.</p>
+
+    <h2 id="mix-monthly">Monthly evolution · share by source (%)</h2>
+    <div class="chart" data-draw="mix-stack" data-source="mix_monthly" role="img" aria-label="Monthly generation shares by source"></div>
+
+    <h2 id="mix-day">Through the day · what covers demand, hour by hour</h2>
+    <p class="take" data-draw="dm-take" data-source="day_mix"></p>
+    <div class="row" data-draw="dm-season" data-source="day_mix"></div>
+    <div class="row" data-draw="dm-years" data-source="day_mix"></div>
+    <div class="legend" data-draw="dm-legend"></div>
+    <div class="pair">
+      <div class="dm-panel"><h4 data-draw="dm-a-title" data-source="day_mix">—</h4><div class="chart" data-draw="dm-a" data-source="day_mix" role="img" aria-label="Share of demand covered by each source, hour by hour, first period"></div></div>
+      <div class="dm-panel"><h4 data-draw="dm-b-title" data-source="day_mix">—</h4><div class="chart" data-draw="dm-b" data-source="day_mix" role="img" aria-label="Share of demand covered by each source, hour by hour, second period"></div></div>
+    </div>
+    <p class="warn" data-draw="dm-warn" data-source="day_mix"></p>
+    <p class="note">Share of demand, average day. Above zero: generation and imports. Below zero: exports, batteries charging and pumping. Hover to move the marker. Why the total can pass 100: see Methods.</p>
+  </section>
+
+  <!-- ============ FLOWS ============ -->
+  <section id="flows" data-section hidden>
+    <h2>Cross-border flows of electricity</h2>
+    <p class="take" data-draw="tk-flows" data-source="flows_daily"></p>
+    <div class="row">
+      <span data-draw="fl-per"></span>
+      <select class="dash-select" data-draw="fl-period" data-source="flows_daily" aria-label="Period"></select>
+    </div>
+    <div class="kpis" data-draw="fl-kpis" data-source="flows_daily"></div>
+    <div class="legend" data-draw="fl-legend"></div>
+    <div class="chart map" data-draw="fl-map" data-source="geo_europe" role="img" aria-label="Map of the selected country with arrows for electricity imported from and exported to each neighbour"></div>
+    <p class="warn" data-draw="fl-warn" data-source="flows_daily"></p>
+    <h3>By border</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Partner</th><th data-draw="fl-th-imp">Imports</th><th data-draw="fl-th-exp">Exports</th><th data-draw="fl-th-net">Net</th><th>Days with data</th></tr></thead>
+      <tbody data-draw="fl-table" data-source="flows_daily"></tbody>
+    </table></div>
+
+    <h2>When does <span data-draw="fl-when-name" data-source="flows_hours_profile">the country</span> import or export during the day?</h2>
+    <p class="note">Net imports by hour: above zero the country imports more than it exports in that hour, below zero it exports more. One line per year.</p>
+    <div class="row">
+      <span data-draw="fl-when-season"></span>
+      <select class="dash-select" data-draw="fl-when-month" aria-label="Month of the year"></select>
+    </div>
+    <div class="row" data-draw="fl-when-years" data-source="flows_hours_profile"></div>
+    <div class="chart" data-draw="fl-when" data-source="flows_hours_profile" role="img" aria-label="Average net imports by hour of the day, one line per year"></div>
+    <p class="note" data-draw="fl-when-note" data-source="flows_hours_profile"></p>
+
+    <details class="more">
+      <summary>More detail · a single day hour by hour</summary>
+      <h3 data-draw="fl-hours-title" data-source="flows_hours_recent">Hour by hour</h3>
+      <div class="chart short" data-draw="fl-hours" data-source="flows_hours_recent" role="img" aria-label="Imports and exports of the selected country hour by hour"></div>
+      <p class="note" data-draw="fl-hours-note" data-source="flows_hours_recent"></p>
+    </details>
+    <p class="note">Source: ENTSO-E, physical flows. For the EU27, only flows with non-EU countries count. Map: Natural Earth. Method and data gaps: see Methods.</p>
+  </section>
+
+  <!-- ============ COMPARE COUNTRIES ============ -->
+  <section id="profile" data-section hidden>
+    <h2 id="profile-pick">Compare <span data-draw="cmp-name">—</span> with other countries</h2>
+    <div class="row" data-draw="cmp-row">
+      <label class="muted" for="profile-ref">compared with</label>
+      <select id="profile-ref" class="dash-select" data-draw="ref-select" data-source="profile" aria-label="Country or average to compare with"></select>
+      <span class="muted" data-draw="ref-note">—</span>
+    </div>
+    <p class="take" data-draw="tk-cmp" data-source="profile"></p>
+    <h3>Indicators</h3>
+    <div class="row" data-draw="ind-chips" data-source="profile"></div>
+    <div class="chart" data-draw="spider" data-source="profile" role="img" aria-label="Country indicators relative to the chosen comparison"></div>
+    <p class="pick" data-draw="spider-pick">—</p>
+    <p class="note wide">Outside the grey shape: above the comparison on that indicator; inside: below. Rings at 0.5×, 1.5×, 2× and 2.5×.</p>
+    <details class="more">
+      <summary>More detail · what each indicator measures</summary>
+      <dl class="defs" data-draw="ind-legend" data-source="profile"></dl>
+    </details>
+  </section>
+
+  <!-- ============ METHODS ============ -->
+  <section id="methods" data-section hidden class="methods">
+    <h2>Methods and sources</h2>
+
+    <h3>Sources</h3>
+    <p>Day-ahead prices (updated daily), generation by source, demand and cross-border physical flows: ENTSO-E Transparency Platform. Household prices: Eurostat (nrg_pc_204, nrg_pc_202), half-yearly, all taxes included. Pump prices: European Commission Weekly Oil Bulletin. TTF day-ahead (weekly average) and EU gas storage: internal elaborations of the European Commission (DG ENER), updated weekly. Country borders on the map: Natural Earth.</p>
+
+    <h3>Prices</h3>
+    <p>Daily averages are weighted by interval length (hourly until September 2025, 15-minute after). Days and months follow Brussels time. Country price for countries with several zones (Italy, Denmark, Sweden): simple mean of the zones, not the PUN. EU27 price: country prices weighted by monthly demand; by hour, weighted by each country's demand in that hour. Cyprus and Malta have no coupled day-ahead market.</p>
+    <p>Prices through the day: each point is the average of that hour over all days of the period. Solar pushes prices down around midday; when the sun sets, demand is still high and the price rises. "% of day average" removes the price level (gas, CO2), so only the shape of the day is compared. Storage, demand response, interconnections and the mix all affect the shape: these data alone cannot separate their effects.</p>
+
+    <h3>Generation mix and demand</h3>
+    <p>ENTSO-E actual generation per production type and actual load. Some countries report with gaps; Malta does not report generation by source. The running month is left out of the mix and demand.</p>
+
+    <h3>Through the day: what covers demand</h3>
+    <p>The chart is an hourly balance. Above zero: everything that enters the system in that hour, that is generation by source plus imports. Below zero: what is not consumed in the country in that hour: exports, power charging batteries and power pumping water into reservoirs. Above minus below equals demand, so the part above zero passes 100% by as much as the part below zero goes under zero. Imports and exports are gross, summed over all borders: a country can import on one border and export on another in the same hour, for example when power transits through it.</p>
+    <p>The balance never closes exactly, for three reasons: measured demand (ENTSO-E "actual load") does not always cover self-consumption and small plants; grid losses; and gaps in the data for some sources, borders or hours. The gap is a few points for most countries and larger for some, Germany included.</p>
+    <p>Batteries are what ENTSO-E reports as "Energy storage", available from 2025 and only for some countries; pumped hydro is shown separately. Many countries, Germany included, do not report batteries: a missing band does not mean there are no batteries. The EU27 battery figure is the sum of the reporting countries and is understated. For the EU27, imports and exports are with non-EU countries only. Winter runs from December of the year before to February.</p>
+
+    <h3>Cross-border flows</h3>
+    <p>Physical flows are what actually crossed the border, including power in transit and loop flows; they differ from the commercial exchanges agreed in the market. Daily totals in Brussels time. Days with more than four missing hours are left out, so totals for periods with gaps are understated: the table "By border" shows the days with data. Hour-by-hour data for single days are kept for the last 35 days.</p>
+
+    <h3>Compare countries</h3>
+    <p>Each axis is the country value divided by the value of the comparison (the EU27 average or another country). The grey shape is the comparison (1×). Values above 2.5× are capped (▲). Indicators based on imports and exports use the simple mean of member states for the EU27, because flows between EU countries cancel out in an EU total.</p>
+  </section>
+
+
+  <p class="disclaimer">Independent prototype built from public data (ENTSO-E Transparency Platform, Eurostat, European Commission Weekly Oil Bulletin) and internal elaborations of the European Commission for TTF and gas storage. Not an official publication of the European Commission.</p>
+</div>
+
+<script src="ed-core.js"></script>
+<script src="ed-calcs.js"></script>
+<script src="ed-ui.js"></script>
+</main></body></html>
